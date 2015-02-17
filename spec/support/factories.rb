@@ -1,4 +1,8 @@
 FactoryGirl.define do
+  factory :vote do
+    user
+  end
+
   factory :lesson do
     type "article"
     sequence(:title) { |n| "Article #{n}" }

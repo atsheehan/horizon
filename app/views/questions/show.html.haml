@@ -6,9 +6,14 @@
   %li.current= link_to @question.title, question_path(@question)
 
 #question
-  %h2.title
-    = @question.title
-    = @question.queue_status
+  .question-title
+    .question-votes
+      = @question.upvote
+      = @question.display_total_votes
+      = @question.downvote
+    %h2.title
+      = @question.title
+      = @question.queue_status
   %hr
   .row
     .small-8.columns
@@ -51,6 +56,9 @@
       .row.answer{ class: @question.accepted_answer_id == answer.id ? 'accepted-answer' : ''  }
         .small-8.columns
           %p.body~ render_safe_markdown(answer.body)
+          = link_to "Upvote", answer_upvotes_path(answer), method: :post
+          = link_to "Downvote", answer_downvotes_path(answer), method: :post
+          = answer.total_votes
           - if answer.user == current_user
             = link_to "Edit Answer", edit_question_answer_path(@question, answer), class: "button tiny success"
             = link_to "Delete Answer", question_answer_path(@question, answer), method: :delete, class: "button tiny alert"

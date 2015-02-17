@@ -35,4 +35,58 @@ describe QuestionDecorator do
       end
     end
   end
+
+  describe '#display_total_votes' do
+    let(:question) { FactoryGirl.create(:question).decorate }
+
+    it 'should display total votes' do
+      result = question.display_total_votes
+      markup = Capybara.string(result)
+      expect(markup.text).to eql "0"
+    end
+  end
+
+  describe '#upvote' do
+    let(:question) { FactoryGirl.create(:question).decorate }
+
+    context 'authorized user' do
+      it 'displays link with arrow up' do
+        allow(helpers).to receive(:current_user).and_return(FactoryGirl.
+              create(:user))
+        result = question.upvote
+        markup = Capybara.string(result)
+        expect(markup).to have_selector('i.upvote')
+      end
+    end
+
+    context 'unauthorized user' do
+      it 'displays empty <i> tag' do
+        result = question.upvote
+        markup = Capybara.string(result)
+        expect(markup).to have_selector('i.mam')
+      end
+    end
+  end
+
+  describe '#downvote' do
+    let(:question) { FactoryGirl.create(:question).decorate }
+
+    context 'authorized user' do
+      it 'displays link with arrow down' do
+        allow(helpers).to receive(:current_user).and_return(FactoryGirl.
+              create(:user))
+        result = question.downvote
+        markup = Capybara.string(result)
+        expect(markup).to have_selector('i.downvote')
+      end
+    end
+
+    context 'unauthorized user' do
+      it 'displays empty <i> tag' do
+        result = question.downvote
+        markup = Capybara.string(result)
+        expect(markup).to have_selector('i.mam')
+      end
+    end
+  end
 end
