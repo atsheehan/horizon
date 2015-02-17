@@ -2,7 +2,7 @@
 
 ## Week 1: HTTP, Sinatra, Databases
 
-* 02/15: Monday
+* 02/17: Tuesday
   * 9:40 AM - Introductions, administrivia, key fobs
   * 11 AM - Launch Tools (Vikram, DT, Spencer)
   * 12:00 PM - Lunch
