@@ -3,12 +3,14 @@
 ## Week 1: HTTP, Sinatra, Databases
 
 * 02/17: Tuesday
-  * 9:40 AM - Introductions, administrivia, key fobs
-  * 11 AM - Launch Tools (Vikram, DT, Spencer)
-  * 12:00 PM - Lunch
-  * 1:30 PM - Breaking Down Problems (Omid), Office Hours Details (Adam)
-  * 2:00 PM - HTTP (Adam)
-  * 3:00 PM - Mentor Group Assignment & Presentations
+  * 9:40am through 10:45am - Introductions, administrivia, key fobs
+  * 10:45 through 11:15am - Launch Tools (Vikram, DT, Spencer), Office Hours Details
+  * 11:15am through 12:45pm - Lunch
+  * 12:45 through 1:45pm - Mentor Group Assignment & Presentations ([Topics](https://gist.github.com/omidbachari/8a752e31cf00364f3e71))
+  * 2:00pm through 2:15 PM - Breaking Down Problems (Omid)
+  * 2:15 PM - HTTP (Adam)
+  * Released Evening Exercise: [Veggie Recipe Printer](https://horizon.launchacademy.com/lessons/evening-veggie-recipe-printer) and associated readings: [HTTP](https://horizon.launchacademy.com/lessons/http) and [Dynamic Views & ERB](https://horizon.launchacademy.com/lessons/dynamic-web-pages).
+
   * 3:45 PM - Cultural Agreement Presentation (Spencer, Omid)
 
 ## General Resources
