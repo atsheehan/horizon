@@ -10,7 +10,6 @@
   * 2:00pm through 2:15 PM - Breaking Down Problems (Omid)
   * 2:15 PM - HTTP (Adam)
   * Released Evening Exercise: [Veggie Recipe Printer](https://horizon.launchacademy.com/lessons/evening-veggie-recipe-printer) and associated readings: [HTTP](https://horizon.launchacademy.com/lessons/http) and [Dynamic Views & ERB](https://horizon.launchacademy.com/lessons/dynamic-web-pages).
-
   * 3:45 PM - Cultural Agreement Presentation (Spencer, Omid)
 
 ## General Resources
