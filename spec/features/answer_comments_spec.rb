@@ -7,7 +7,6 @@ feature 'answer comments' do
     let(:question) { FactoryGirl.create(:question) }
     let!(:answer) { FactoryGirl.create(:answer, question: question) }
 
-
     scenario 'I can create a comment on an answer' do
       sign_in_as user
       visit question_path(question)

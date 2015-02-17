@@ -25,7 +25,7 @@ class AnswerCommentsController < ApplicationController
   private
 
   def question_id
-    params[:answer_comment].try(:[],:question_id)
+    params[:answer_comment].try(:[], :question_id)
   end
 
   def answer_params

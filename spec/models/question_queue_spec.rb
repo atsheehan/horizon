@@ -12,7 +12,8 @@ describe QuestionQueue do
     context 'status is in-progress' do
       it "returns 'Assigned to <user name>'" do
         user = FactoryGirl.create(:user, name: 'David Tengdin')
-        question_queue = FactoryGirl.create(:question_queue, user: user, status: 'in-progress')
+        question_queue = FactoryGirl.
+          create(:question_queue, user: user, status: 'in-progress')
         expect(question_queue.status_text).to eq 'Assigned to David Tengdin'
       end
     end

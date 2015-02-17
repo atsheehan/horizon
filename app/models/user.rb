@@ -69,17 +69,19 @@ class User < ActiveRecord::Base
 
   def latest_announcements(count)
     announcements.
-      joins("LEFT JOIN announcement_receipts ON announcements.id = announcement_receipts.announcement_id AND announcement_receipts.user_id = #{id}").
+      joins("LEFT JOIN announcement_receipts ON announcements.id = \
+        announcement_receipts.announcement_id AND \
+        announcement_receipts.user_id = #{id}").
       where("announcement_receipts.id IS NULL").
       order(created_at: :desc).limit(count)
   end
 
   def core_assignments
-     assignments.where(required: true).order(due_on: :asc)
+    assignments.where(required: true).order(due_on: :asc)
   end
 
   def non_core_assignments
-     assignments.where(required: false).order(due_on: :asc)
+    assignments.where(required: false).order(due_on: :asc)
   end
 
   private

@@ -38,10 +38,12 @@ feature "view dashboard calendar" do
       visit dashboard_path
       expect(page).to have_content("Monday, February 9 at 7:00 PM")
       expect(page).to have_link("Community: Boston MySQL Monthly Meetup")
-      expect(page.all("table.calendar tr a").first[:href]).to include 'www.google.com/calendar'
+      expect(page.all("table.calendar tr a").first[:href]).
+        to include 'www.google.com/calendar'
     end
 
-    scenario "events that have already started have a class of '.past-event'" do
+    scenario %"events that have already started have a class of
+      '.past-event'" do
       sign_in_as(user)
       visit dashboard_path
       expect(page).to have_css("table.calendar tr.past-event")
@@ -72,9 +74,9 @@ def stub_calendar_start_and_end_time(datetime_string)
   start_time = datetime.beginning_of_day
   end_time = datetime.end_of_day + 1.day
 
-  allow_any_instance_of(Calendar).to receive(:default_start_time)
-    .and_return(start_time)
+  allow_any_instance_of(Calendar).to receive(:default_start_time).
+    and_return(start_time)
 
-  allow_any_instance_of(Calendar).to receive(:default_end_time)
-    .and_return(end_time)
+  allow_any_instance_of(Calendar).to receive(:default_end_time).
+    and_return(end_time)
 end

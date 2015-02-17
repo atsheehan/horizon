@@ -12,14 +12,17 @@ describe QuestionDecorator do
       context 'user owns question' do
         it 'should return true' do
           allow(helpers).to receive(:current_user).and_return(author)
-          expect(question.accepted_answer_owned_by_current_user?(answer)).to eq true
+          expect(question.accepted_answer_owned_by_current_user?(answer)).
+            to eq true
         end
       end
 
       context 'user does not own question' do
         it 'should return false' do
-          allow(helpers).to receive(:current_user).and_return(FactoryGirl.create(:user))
-          expect(question.accepted_answer_owned_by_current_user?(answer)).to eq false
+          allow(helpers).to receive(:current_user).and_return(FactoryGirl.
+              create(:user))
+          expect(question.accepted_answer_owned_by_current_user?(answer)).
+            to eq false
         end
       end
     end
@@ -27,9 +30,9 @@ describe QuestionDecorator do
     context 'answer is not accepted' do
       it 'should return false' do
         answer = double(accepted?: false)
-        expect(question.accepted_answer_owned_by_current_user?(answer)).to eq false
+        expect(question.accepted_answer_owned_by_current_user?(answer)).
+          to eq false
       end
     end
   end
 end
-

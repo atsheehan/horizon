@@ -40,7 +40,8 @@ describe Question do
       question.accepted_answer = accepted_answer
       question.save!
 
-      expect(question.sorted_answers).to eq([accepted_answer, unaccepted_answer])
+      expect(question.sorted_answers).
+        to eq([accepted_answer, unaccepted_answer])
     end
   end
 
@@ -55,19 +56,20 @@ describe Question do
 
     context '#question_queue does not already exist for the question' do
       it 'creates a single question_queue' do
-        expect{
+        expect {
           question.queue
-        }.to change{QuestionQueue.count}.by(1)
+        }.to change { QuestionQueue.count }.by(1)
       end
     end
 
     context '#question_queue already exists for the question' do
       it 'updates that question_queue' do
         question.queue
-        question.question_queue.update_attributes(status: 'done', no_show_counter: 3)
-        expect{
+        question.
+          question_queue.update_attributes(status: 'done', no_show_counter: 3)
+        expect {
           question.queue
-        }.to change{QuestionQueue.count}.by(0)
+        }.to change { QuestionQueue.count }.by(0)
         expect(question.question_queue.status).to eq 'open'
         expect(question.question_queue.no_show_counter).to eq 0
       end

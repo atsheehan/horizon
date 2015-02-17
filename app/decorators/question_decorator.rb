@@ -6,7 +6,7 @@ class QuestionDecorator < Draper::Decorator
   end
 
   def queue_progress
-    'queue-number' + (object.question_queue.status == 'in-progress' ? ' in-progress' : '' )
+    'queue-number' + (object.question_queue.status == 'in-progress' ? ' in-progress' : '')
   end
 
   def assignee

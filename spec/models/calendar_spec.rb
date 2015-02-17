@@ -16,18 +16,19 @@ describe Calendar do
           {
             "summary" => "some summary",
             "htmlLink" => "some link",
-            "start" => {"date" => Date.today},
-            "end" => {"date" => Date.today}
+            "start" => { "date" => Date.today },
+            "end" => { "date" => Date.today }
           }
         ].to_json
       )
-      allow(CalendarEvent).to receive(:new).with({
-            url: "some link",
-            summary: "some summary",
-            end_time: Date.today,
-            start_time: Date.today,
-      }).and_return(ce1)
-      expect(Calendar.new(cid: 'cid', name: 'name').events).to match_array([ce1])
+      allow(CalendarEvent).to receive(:new).with(
+        url: "some link",
+        summary: "some summary",
+        end_time: Date.today,
+        start_time: Date.today,
+      ).and_return(ce1)
+      expect(Calendar.
+        new(cid: 'cid', name: 'name').events).to match_array([ce1])
     end
   end
 

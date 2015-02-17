@@ -13,8 +13,8 @@ class Calendar < ActiveRecord::Base
     end
 
     # fetch events and store in redis
-    result = GoogleCalendarAdapter.new(cid)
-      .fetch_events(default_start_time, default_end_time)
+    result = GoogleCalendarAdapter.new(cid).
+      fetch_events(default_start_time, default_end_time)
     redis.set(cid, result.to_json)
     redis.expire(cid, 15.minutes)
 
@@ -65,8 +65,6 @@ class Calendar < ActiveRecord::Base
       Date.parse(json[key]["date"])
     elsif json[key]["dateTime"]
       DateTime.parse(json[key]["dateTime"])
-    else
-      nil
     end
   end
 end

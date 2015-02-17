@@ -11,8 +11,10 @@ feature "announcements" do
     end
 
     scenario "view latest 5 announcements on dashboard" do
-      old_announcements = FactoryGirl.create_list(:announcement, 2, team: team, created_at: 1.day.ago)
-      recent_announcements = FactoryGirl.create_list(:announcement, 5, team: team)
+      old_announcements = FactoryGirl.
+        create_list(:announcement, 2, team: team, created_at: 1.day.ago)
+      recent_announcements = FactoryGirl.
+        create_list(:announcement, 5, team: team)
 
       visit dashboard_path
 
@@ -43,7 +45,8 @@ feature "announcements" do
 
     scenario "there is a link to announcements page from dashboard" do
       announcement1 = FactoryGirl.create(:announcement, team: team)
-      announcement2 = FactoryGirl.create(:announcement, team: team, title: "This is an announcement")
+      announcement2 = FactoryGirl.
+        create(:announcement, team: team, title: "This is an announcement")
 
       visit dashboard_path
       button = "Read all announcements for " + team.name

@@ -13,7 +13,8 @@ class Question < ActiveRecord::Base
 
   scope :queued, ->() {
     joins(:question_queue).
-    where("questions.question_queue_id IS NOT NULL AND question_queues.status NOT LIKE '%done%'")
+      where("questions.question_queue_id IS NOT NULL AND \
+        question_queues.status NOT LIKE '%done%'")
   }
 
   def accepted_answer_belongs_to_question

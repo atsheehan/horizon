@@ -38,7 +38,6 @@ Rails.application.configure do
     from: "test@example.com"
   }
 
-
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
