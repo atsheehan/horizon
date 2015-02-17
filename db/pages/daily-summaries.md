@@ -7,7 +7,7 @@
   * 10:45 through 11:15am - Launch Tools (Vikram, DT, Spencer), Office Hours Details
   * 11:15am through 12:45pm - Lunch
   * 12:45 through 1:45pm - Mentor Group Assignment & Presentations ([Topics](https://gist.github.com/omidbachari/8a752e31cf00364f3e71))
-  * 2:00pm through 2:15 PM - Breaking Down Problems (Omid)
+  * 2:00pm through 2:15 PM - Breaking Down Problems (Omid) and [The Path to Answers](https://gist.github.com/vikram7/1b839675f547f76bf507)
   * 2:15 PM - HTTP (Adam)
   * Released Evening Exercise: [Veggie Recipe Printer](https://horizon.launchacademy.com/lessons/evening-veggie-recipe-printer) and associated readings: [HTTP](https://horizon.launchacademy.com/lessons/http) and [Dynamic Views & ERB](https://horizon.launchacademy.com/lessons/dynamic-web-pages).
   * 3:45 PM - Cultural Agreement Presentation (Spencer, Omid)
