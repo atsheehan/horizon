@@ -15,9 +15,8 @@ class Comment < ActiveRecord::Base
 
   include Feedster::Subject
   generates_feed_item :create,
-    actor: ->(c){ c.user },
-    recipients: ->(c){ [c.submission.user] }
-
+    actor: ->(c) { c.user },
+    recipients: ->(c) { [c.submission.user] }
 
   def self.pending
     where(delivered: false)

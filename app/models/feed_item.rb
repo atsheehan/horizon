@@ -3,12 +3,12 @@ class FeedItem < ActiveRecord::Base
     polymorphic: true
 
   belongs_to :recipient,
-    foreign_key: 'recipient_id',
-    class_name: 'User'
+    foreign_key: "recipient_id",
+    class_name: "User"
 
   belongs_to :actor,
-    foreign_key: 'actor_id',
-    class_name: 'User'
+    foreign_key: "actor_id",
+    class_name: "User"
 
   validates :subject,
     presence: true

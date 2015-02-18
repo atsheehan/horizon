@@ -27,7 +27,7 @@ In order to take advantage of Recipient related functions do the following in yo
 
 ```ruby
 class User < ActiveRecord::Base
-  include Feedster::Recipient.
+  include Feedster::Recipient
 end
 ```
 
