@@ -28,6 +28,7 @@
 - [LaunchVotes](http://launchvotes.herokuapp.com). Nominate your fellow cohortmates for awards.
 - [SuggestionOx](http://www.suggestionox.com/response/zLQXp6). We always want feedback about your experience at Launch.
 - [Horizon's Github Issues](https://github.com/LaunchAcademy/event_horizon/issues). If you come across any suggestions for improving Horizon, submit them here.
+- [Mission Control Guidelines](https://docs.google.com/a/launchacademy.co/document/d/10a7gcRMEacNDiKw8itvSrN7Wp13_70gtrJqDktQbxvg)
 
 #### Ruby
 - [Launchcop](https://github.com/LaunchAcademy/launchcop)
@@ -69,6 +70,7 @@
 - [What a Web Developer Should Know](https://gist.github.com/atsheehan/5673edcd03fadb4e9108)
 - [Launch's Collection of Interview Questions](https://gist.github.com/vikram7/363d7944b4f483125599)
 - [Front-end Job Interview Questions](https://github.com/h5bp/Front-end-Developer-Interview-Questions)
+- [Career Education Timeline](https://docs.google.com/a/launchacademy.co/document/d/1o14rEwel94w_TOzxrkISfa1csXjwQLns-nuCCFb7gC8)
 
 #### Other
 - [Chrome Video Speed Controller](https://chrome.google.com/webstore/detail/video-speed-controller/nffaoalbilbmmfgbnbgppjihopabppdk?hl=en)
