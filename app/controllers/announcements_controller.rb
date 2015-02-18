@@ -1,6 +1,6 @@
 class AnnouncementsController < ApplicationController
   before_action :authenticate_user!
-  before_action :authorize_admin!, except: [:index]
+  before_action :authorize_admin!, except: [:index, :show]
 
   def index
     @team = Team.find(params[:team_id])
@@ -21,7 +21,7 @@ class AnnouncementsController < ApplicationController
   end
 
   def show
-    @announcement = Announcement.find(params[:id])
+    @announcement = current_user.announcements.find(params[:id])
   end
 
   def destroy

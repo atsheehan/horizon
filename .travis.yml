@@ -1,5 +1,15 @@
 language: ruby
 rvm:
-  - 2.1.3
+- 2.1.5
+services:
+- redis-server
+before_install:
+- openssl aes-256-cbc -k "$GOOGLE_P12_PEM_PASSWORD" -in google_api.p12.enc -out google_api.p12 -d
 before_script:
-  - psql -c 'CREATE DATABASE event_horizon_test;' -U postgres
+- psql -c 'CREATE DATABASE event_horizon_test;' -U postgres
+env:
+  global:
+  - secure: jJ7V0MVFVU0z4jF9DM0gnpotLhFVG/VDrUaF7nCkw6s7lLwT5Hr10vpPAJ0rwCjqvZFCrLm0nTEqZ3li6oAxi4boBWp6WfFDQ3hAqlK3lnx2xFDk98vUrM2i/ufLsdfxoKsQSdMfE3fCXXuAt0jdR8HAGwdQzmtDXljuMDJtV60=
+  - secure: fgx0HsmmUjdr55mKj48/9xfjbBuyN5nJ7zftaYrT9ifWmL9aPt7xRfJrd1kfAacsAsSr+w5auCHGPEqLvlXAty9Znq72lU0FcB5vxtzj/s4/uBwedou7KsZ5/A5W8IBD/Wwryys9HHWCMwco16C1b2mkEF/Mnf6kLJBGrSIGc5A=
+  - secure: BGQDu6a767ZXmhvuSNCu3xYVmDpPOUAO5Bh0yEq/hauLJ87V+ryoPA2J3gMptnwUWiRICBqXp9W7OpVKAegYjV+GdAZJJvxxsjnR3dbuWUKx1i++1HA68V7ayHCbbvo88DhQEGreRACqf8b6T4Xj3QwuZlHTkxE7UjgZqX9MX5Q=
+  - secure: So5wq2llK9VOkCnjlVfLXSocgnSnbfZVWoazTEGjkuYAJC5dZSaFeivVuTDx9MwN4MVsLsNb1fpqd0fCu+jIfEhqznJIuD6RR1zOVzTszTiVhppN6OrmzCN/nCk7LaMq8hZiKflBvmIuuIEfT2JzWRkVHfFfWvP6+PheOQOXHl4=

@@ -15,8 +15,20 @@
   padding: 1em;
 }
 
-.attribute-box {
+dl.attribute-box {
   border: 1px solid $border-color;
   border-radius: 3px;
   padding: 0.4em;
+  width: 100%;
+  overflow: hidden;
+
+  dt {
+    float: left;
+    width: 50%;
+  }
+
+  dd {
+    float: left;
+    width: 50%;
+  }
 }

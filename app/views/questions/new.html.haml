@@ -1,0 +1,27 @@
+- content_for(:title) do
+  Ask New Question - Launch Academy
+
+%ul.breadcrumbs
+  %li= link_to "Questions", questions_path
+  %li.current= link_to "New Question", new_question_path
+
+%h2 Ask Question
+
+#new-question
+  = form_for @question do |f|
+    = field_set_tag "Ask Question" do
+
+      = f.label :title, "Title"
+      = f.text_field :title
+
+      = f.label :body, "Body"
+      = f.text_area :body, rows: 15
+
+      = f.submit "Ask Question", class: "button"
+
+
+%p
+  Questions support markdown.  For more information on Markdown syntax, click <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Here-Cheatsheet">here</a>.
+
+= render 'markdown'
+

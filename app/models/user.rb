@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+<<<<<<< HEAD
   has_many :submissions,
     dependent: :destroy
 
@@ -16,6 +17,13 @@ class User < ActiveRecord::Base
 
   has_many :announcements,
     through: :teams
+
+  has_many :assigned_lessons, through: :assignments, source: :lesson
+  has_many :answers
+  has_many :questions
+
+  has_many :announcement_receipts
+  has_many :question_queues
 
   include Feedster::Actor
   include Feedster::Recipient
@@ -81,6 +89,29 @@ class User < ActiveRecord::Base
     else
       github_orgs(oauth_token).any? { |org| org["login"] == organization }
     end
+  end
+
+  def calendars
+    result = []
+    teams.each do |team|
+      result << team.calendar if team.calendar
+    end
+    result.uniq
+  end
+
+  def latest_announcements(count)
+    announcements.
+      joins("LEFT JOIN announcement_receipts ON announcements.id = announcement_receipts.announcement_id AND announcement_receipts.user_id = #{id}").
+      where("announcement_receipts.id IS NULL").
+      order(created_at: :desc).limit(count)
+  end
+
+  def core_assignments
+     assignments.where(required: true).order(due_on: :asc)
+  end
+
+  def non_core_assignments
+     assignments.where(required: false).order(due_on: :asc)
   end
 
   private

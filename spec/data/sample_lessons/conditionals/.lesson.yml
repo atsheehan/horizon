@@ -3,4 +3,4 @@ title: "Conditionals"
 type: "article"
 description: "Describe how conditional expressions can be used to make decisions in our programs."
 depends: "data-types"
-position: 50
+visibility: "public"

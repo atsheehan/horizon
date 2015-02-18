@@ -1,4 +1,5 @@
 namespace :horizon do
+  desc "Import lessons from the curriculum repo on GitHub"
   task import_lessons: :environment do
     if ENV["CURRICULUM_DIR"]
       curriculum_dir = ENV["CURRICULUM_DIR"]

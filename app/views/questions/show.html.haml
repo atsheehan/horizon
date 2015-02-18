@@ -1,0 +1,64 @@
+- content_for(:title) do
+  = "#{@question.title} - Launch Academy"
+
+%ul.breadcrumbs
+  %li= link_to "Questions", questions_path
+  %li.current= link_to @question.title, question_path(@question)
+
+#question
+  %h2.title
+    = @question.title
+    = @question.queue_status
+  .row
+    .small-8.columns
+      %p.body~ render_safe_markdown(@question.body)
+    .small-4.columns
+      .user
+        = link_to @question.user.username, user_path(@question.user)
+        asked on
+        .created_at= format_datetime(@question.created_at)
+        - if @question.user == current_user
+          = link_to "Edit Question", edit_question_path(@question)
+          %br
+          = link_to "Delete question", question_path(@question), method: :delete
+
+#answers
+  %h3.answer-count= pluralize(@question.answers.count, "answer")
+
+  - @question.sorted_answers.each do |answer|
+    - if answer.persisted?
+      .row.answer{ class: @question.accepted_answer_id == answer.id ? 'accepted-answer' : ''  }
+        .small-8.columns
+          %p.body~ render_safe_markdown(answer.body)
+          - if answer.user == current_user
+            = link_to "Edit Answer", edit_question_answer_path(@question, answer), class: "button tiny success"
+            = link_to "Delete Answer", question_answer_path(@question, answer), method: :delete, class: "button tiny alert"
+
+        .small-4.columns
+          .user
+            = link_to answer.user.username, user_path(answer.user)
+            answered on
+            .answered_at= format_datetime(answer.created_at)
+          - if answer.accepted?
+            .accepted
+              %i.fi-check.large
+              accepted answer
+              = form_for @question do |f|
+                = f.hidden_field :accepted_answer_id, value: nil
+                = f.submit "Unaccept answer", class: "tiny button", id: "unaccept-answer"
+          - elsif @question.user == current_user
+            .accept-form
+              = form_for @question do |f|
+                = f.hidden_field :accepted_answer_id, value: answer.id
+                = f.submit "Accept Answer", class: "tiny button"
+
+#new-answer
+  = form_for [@question, @answer] do |f|
+    = field_set_tag "Answer Question" do
+
+      = f.label :body, "Answer"
+      = f.text_area :body, rows: 10
+
+      = f.submit "Submit Answer", class: "button"
+      - if current_user.try(:role) == 'admin'
+        = link_to "Let's Talk!", question_queues_path(question_id: @question), method: :post, class: "button alert"

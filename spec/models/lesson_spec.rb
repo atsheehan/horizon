@@ -87,6 +87,7 @@ describe Lesson do
       expect(lesson.title).to eq("Expressions")
       expect(lesson.type).to eq("article")
       expect(lesson.description).to eq("bloop.")
+      expect(lesson.visibility).to eq("assign")
       expect(lesson.body).to eq("beep boop i'm an expression\n")
     end
 

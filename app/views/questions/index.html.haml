@@ -1,0 +1,43 @@
+- content_for(:title) do
+  Questions - Launch Academy
+
+%ul.breadcrumbs
+  %li.current= link_to "Questions", questions_path
+
+#new-question
+  = link_to "Ask A Question", new_question_path, class: "button success"
+
+%dl.sub-nav
+  %dt Filter:
+  %dd{ class: ("active" if @filter == "newest") }= link_to "Newest", questions_path
+  %dd{ class: ("active" if @filter == "unanswered") }= link_to "Unanswered", questions_path(query: "unanswered")
+  %dd{ class: ("active" if @filter == "queued") }= link_to "Question Queue", questions_path(query: "queued")
+
+%h2= questions_header(@filter)
+
+.questions
+  - @questions.each_with_index do |question, index|
+    - if question.in_queue?
+      .question-queue{id: question.queue_id}
+        %div.row
+          %div.large-2.columns
+            %div{ class: question.queue_progress }= index + 1
+            %p
+          %div.large-10.columns
+            %h3= question.user.name
+            = link_to question.title, question_path(question)
+            - if question.in_progress?
+              %h5.assignee= question.assignee
+            %div.queue-buttons
+              - if question.admin_access?
+                = question_queue_update_button(question.question_queue)
+                - if question.open?
+                  = link_to "No Show", question_queue_path(id: question.question_queue, question_queue: { status: "no-show"}), method: :patch, class: "ee-button no-show"
+    - elsif @filter != 'queued'
+      .question.box
+        %span
+          %h3.title
+            = link_to question.title, question
+            = question.queue_status
+        %p.answer_count= pluralize question.answers_count, "answer"
+

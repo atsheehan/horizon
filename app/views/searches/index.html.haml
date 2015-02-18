@@ -1,0 +1,33 @@
+%h1 Search Results
+
+%ul.breadcrumbs
+  %li.current Search
+
+
+- if params[:query]
+  .result-count
+    - if @lessons.empty? && @questions.empty?
+      = "No results found for \"#{params[:query]}\"."
+    - else
+      = "Found #{@results} result(s) for \"#{params[:query]}\"."
+
+- if @lessons.present?
+  %h2 Lessons:
+  .lessons
+    - @lessons.each do |lesson|
+      .lesson
+        .lesson-type{ class: lesson.type }= lesson.type
+        %h3.title= link_to lesson.title, lesson
+        .description
+          = lesson.description
+
+- if @questions.present?
+  %h2 Questions:
+  .questions
+    - @questions.each do |question|
+      .question.box
+        %span
+          %h3.title
+            = link_to question.title, question
+        %p.answer_count= pluralize question.answers_count, "answer"
+

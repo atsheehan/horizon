@@ -7,3 +7,22 @@
     color: green;
   }
 }
+
+.submitted-assignment {
+  background: #DFF0D8 !important;
+}
+
+.todo-assignment {
+  background: #FCF8E3 !important;
+}
+
+.late-assignment {
+  background: #F2DEDE !important;
+}
+
+.core-assignments a {
+  color: black;
+  &:hover {
+    border-bottom: 2px solid black;
+  }
+}

@@ -45,11 +45,16 @@ AWS_SECRET_KEY=
 S3_BUCKET=
 RACK_ENV=development
 PORT=3000
+DEFAULT_GOOGLE_CALENDAR_ID=
+GOOGLE_SERVICE_ACCOUNT_EMAIL=
+GOOGLE_P12_PEM=
 ```
 
 The `GITHUB_KEY` and `GITHUB_SECRET` are required for user authentication via GitHub OAuth. If you have access to the [Launch Academy application settings][launch-github-apps], you can find these values in the `horizon-dev` application. If you don't have access, you can create your own application in your [GitHub application settings][personal-github-apps].
 
 The `AWS_ACCESS_KEY`, `AWS_SECRET_KEY`, and `S3_BUCKET` are used when uploading challenges and submissions to Amazon S3. These are not required in test and development modes unless you explicitly change the [CarrierWave configuration file][carrierwave-config] to use `storage :fog`.
+
+The `DEFAULT_GOOGLE_CALENDAR_ID`, `GOOGLE_SERVICE_ACCOUNT_EMAIL`, and `GOOGLE_P12_PEM` variables are used for the Calendar on the Horizon Dashboard.
 
 At this point you should be able to start the web server and visit the application at [http://localhost:3000][localhost]:
 
@@ -98,6 +103,29 @@ To restore the snapshot to your local database, run the following command:
 $ pg_restore --verbose --clean --no-acl --no-owner -d event_horizon_development db/dumps/latest.dump
 ```
 
+## Calendar
+
+The Calendar feature makes use of redis to cache data. `brew install redis` and follow the instructions to start redis on system start.
+
+A `rake horizon:create_calendar` rake task exists to create a default calendar, and populate the calendar_id field for each team if it is nil. Set the DEFAULT_GOOGLE_CALENDAR_ID in the environment before running.
+
+## Inserting a Google PKCS12 Keyfile into the Environment (for Heroku)
+```
+require "google/api_client"
+
+key = Google::APIClient::KeyUtils.load_from_pkcs12(
+  "./HorizonDashboard-xxxxxxx.p12",
+  "notasecret"
+)
+
+key.to_pem => ""-----BEGIN RSA PRIVATE KEY-----\nMIICXQIB..."
+```
+
+Save the return value of `key.to_pem` to the ENV as `GOOGLE_P12_PEM`.
+
+## Encrypting a Google PKCS12 Keyfile (for Travis-CI)
+Travis-CI does not like the method above for storing private keys. Encrypting the private key was the solution. Directions, [here](travis-ci-encrypting-files).
+
 [horizon-production]: https://horizon.launchacademy.com/
 [horizon-staging]: http://event-horizon-staging.herokuapp.com/
 [curriculum-repo]: https://github.com/LaunchAcademy/curriculum
@@ -107,3 +135,4 @@ $ pg_restore --verbose --clean --no-acl --no-owner -d event_horizon_development 
 [personal-github-apps]: https://github.com/settings/applications
 [carrierwave-config]: https://github.com/LaunchAcademy/event_horizon/blob/master/config/initializers/carrierwave.rb
 [localhost]: http://localhost:3000
+[travis-ci-encrypting-files]: http://docs.travis-ci.com/user/encrypting-files/#Using-OpenSSL

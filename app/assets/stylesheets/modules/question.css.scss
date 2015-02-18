@@ -1,0 +1,14 @@
+@import "globals/colors";
+
+.queued {
+  background: white; // #DFF0D8;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 3em;
+  font-size: 1em;
+  color: black;
+  border: 1px solid $border-color;
+  font-family: "Arial Black", Gadget, sans-serif;
+}

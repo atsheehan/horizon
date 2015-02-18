@@ -8,4 +8,5 @@
 
 %ul.block#teams
   - @teams.each do |team|
-    %li= link_to(team.name, team)
+    %li{ id: "team_#{team.id}"}
+      = link_to(team.name, team)

@@ -10,7 +10,7 @@ feature "announcements" do
       sign_in_as(team_member.user)
     end
 
-    scenario "view latest announcements on dashboard" do
+    scenario "view latest 5 announcements on dashboard" do
       old_announcements = FactoryGirl.create_list(:announcement, 2, team: team, created_at: 1.day.ago)
       recent_announcements = FactoryGirl.create_list(:announcement, 5, team: team)
 
@@ -33,6 +33,38 @@ feature "announcements" do
       announcements.each do |announcement|
         expect(page).to have_content(announcement.title)
       end
+    end
+
+    scenario "notified if no announcements exist" do
+      visit dashboard_path
+
+      expect(page).to have_content("No new announcements")
+    end
+
+    scenario "there is a link to announcements page from dashboard" do
+      announcement1 = FactoryGirl.create(:announcement, team: team)
+      announcement2 = FactoryGirl.create(:announcement, team: team, title: "This is an announcement")
+
+      visit dashboard_path
+      button = "Read all announcements for " + team.name
+
+      click_on button
+
+      expect(page).to have_content(announcement1.title)
+      expect(page).to have_content(announcement2.title)
+    end
+
+    scenario "marking assignment read removes it from dashboard" do
+      announcement = FactoryGirl.create(:announcement, team: team)
+
+      visit dashboard_path
+      expect(page).to have_content(announcement.title)
+
+      click_link announcement.title
+      click_on "Got It"
+
+      expect(page).to_not have_content(announcement.title)
+      expect(page).to have_content("Dashboard")
     end
   end
 
@@ -66,6 +98,7 @@ feature "announcements" do
     end
 
     scenario "remove an existing announcement" do
+      FactoryGirl.create(:team_membership, user: admin, team: team)
       announcement = FactoryGirl.create(:announcement, team: team)
 
       visit announcement_path(announcement)

@@ -3,6 +3,6 @@ title: "Rock, Paper, Scissors"
 type: "challenge"
 description: "Pit human vs. machine in this riveting, command-line version of the classic game of chance."
 depends: "data-types, conditionals"
-position: 5
+visibility: "assign"
 ignore:
 - "rock-paper-scissors.md"

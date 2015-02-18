@@ -11,6 +11,18 @@ class Assignment < ActiveRecord::Base
     lesson.submissions.where(user: user).count > 0
   end
 
+  def late?
+    Time.zone.now > due_on
+  end
+
+  def core
+    where(required: true)
+  end
+
+  def non_core
+    where(required: false)
+  end
+
   def reviewed?(user)
     Comment.count_by_sql([ADMIN_COMMENT_COUNT, lesson.id, user.id]) > 0
   end

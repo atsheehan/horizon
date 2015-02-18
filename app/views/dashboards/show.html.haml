@@ -3,39 +3,66 @@
 
 %h2 Dashboard
 
-%h3 Announcements
+.row
+  .large-8.columns
+    = render template: "calendar/show"
 
-%table.tablesorter
-  %thead
-    %tr
-      %th Team
-      %th Title
-      %th Description
-      %th
+  .large-4.columns
+    %h3 Latest Announcements
 
-  %tbody
-    - @announcements.each do |announcement|
-      %tr
-        %td= link_to(announcement.team.name, announcement.team)
-        %td= announcement.title.truncate(35)
-        %td= announcement.description.truncate(50)
-        %td= link_to("show", announcement)
+    %table.table-announcement
+      %tbody
+        - if !@latest_announcements.empty?
+          - @latest_announcements.each do |announcement|
+            %tr.panel.callout.latest-announcement
+              %td
+                %h4= link_to announcement.title, announcement_path(announcement), id: announcement.id
+                %p= announcement.description.truncate(40)
+        - else
+          %tr
+            %td.panel.callout.latest-announcement
+              %p No new announcements
 
+    - @teams.each do |team|
+      %div
+        = link_to "Read all announcements for #{team.name}", team_announcements_path(team), class: "button small alert"
 
-%h3 Upcoming Assignments
+%h3 Core Assignments
 
-%table.tablesorter
+%table.tablesorter.core-assignments
   %thead
     %tr
       %th Team
       %th Lesson
-      %th Due Date
+      %th Due date
       %th Required
       %th Submitted
       %th Reviewed
 
   %tbody
-    - @upcoming_assignments.each do |assignment|
+    - @upcoming_core_assignments.each do |assignment|
+      %tr{ class: assignment_state(assignment, current_user) }
+        %td= link_to(assignment.team.name, assignment.team)
+        %td= link_to(assignment.lesson.title, assignment.lesson)
+        %td= format_datetime(assignment.due_on)
+        %td.required= assignment.required ? "yes" : "no"
+        %td.submitted= assignment.submitted?(current_user) ? "yes" : "no"
+        %td.reviewed= assignment.reviewed?(current_user) ? "yes" : "no"
+
+%h3 Non-core Assignments
+
+%table.tablesorter.non-core-assignments
+  %thead
+    %tr
+      %th Team
+      %th Lesson
+      %th Due date
+      %th Required
+      %th Submitted
+      %th Reviewed
+
+  %tbody
+    - @upcoming_noncore_assignments.each do |assignment|
       %tr
         %td= link_to(assignment.team.name, assignment.team)
         %td= link_to(assignment.lesson.title, assignment.lesson)

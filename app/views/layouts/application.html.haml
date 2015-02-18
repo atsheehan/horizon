@@ -23,17 +23,21 @@
         %section.top-bar-section
           %ul.right
             - if user_signed_in?
+              %li= link_to "Dashboard", dashboard_path
+              %li= link_to "Questions", questions_path
               - if current_user.admin?
                 %li.has-dropdown
                   %a(href="#") Admin
                   %ul.dropdown
                     %li= link_to "Users", users_path
                     %li= link_to "Teams", teams_path
-              %li= link_to "Dailies", dailies_path
-              %li= link_to "Dashboard", dashboard_path
-              %li
-                = link_to "Signed in as #{current_user.username}", user_path(current_user)
-              %li= link_to "Sign Out", session_path, method: :delete
+              %li.has-dropdown
+                %a(href="#") Account
+                %ul.dropdown
+                  %li
+                    = link_to "Signed in as #{current_user.username}", user_path(current_user)
+                  %li= link_to "Sign Out", session_path, method: :delete
+                  %li= link_to "Dailies", dailies_path
             - else
               %li= link_to "Sign In With GitHub", new_session_path
 
@@ -42,7 +46,7 @@
             %li= link_to "Getting Started", start_path
             %li.has-form
               .row.collapse
-                = form_tag lessons_path, method: :get do
+                = form_tag searches_path, method: :get do
                   .large-8.small-9.columns
                     = text_field_tag :query, params[:query]
                   .large-4.small-3.columns
