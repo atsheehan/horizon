@@ -11,6 +11,16 @@
   * 2:15 PM - HTTP (Adam)
   * Released Evening Exercise: [Veggie Recipe Printer](https://horizon.launchacademy.com/lessons/evening-veggie-recipe-printer) and associated readings: [HTTP](https://horizon.launchacademy.com/lessons/http) and [Dynamic Views & ERB](https://horizon.launchacademy.com/lessons/dynamic-web-pages).
   * 3:45 PM - Cultural Agreement Presentation (Spencer, Omid)
+  
+#
+* 02/18: Wednesday
+  * 9:40am - Mentor groups go over recipe printer evening exercise
+  * 10:30am - Dynamic Views & ERB (Richard)
+  * 11:30am - Androgogy (Dan)
+  * Daily Challenge Released: [Kickball Site](https://horizon.launchacademy.com/lessons/kickball-site)
+  * 3:00pm - Clinic: Intro to Rack (Omid)
+  * 4:00pm - Clinic: Word Counter Live Code (Spencer)
+  * 4:30pm - Evening exercise released: [Need the Ingredients](https://horizon.launchacademy.com/lessons/evening-need-the-ingredients)
 
 ## General Resources
 
