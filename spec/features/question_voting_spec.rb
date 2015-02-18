@@ -57,10 +57,10 @@ feature "question voting" do
       expect(page).to_not have_selector('#downvote')
     end
 
-    # scenario "I do not see total votes a question has" do
-      # visit question_path(question)
+    scenario "I can see total votes a question has" do
+      visit question_path(question)
 
-      # expect(page).to have_selector('.total_votes')
-    # end
+      expect(page).to have_selector('.total_votes')
+    end
   end
 end
