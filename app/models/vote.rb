@@ -19,7 +19,9 @@ class Vote < ActiveRecord::Base
   end
 
   def update_vote_cache
-    votable.vote_cache = votable.total_votes
-    votable.save
+    if score_changed?
+      votable.vote_cache = votable.total_votes
+      votable.save
+    end
   end
 end
