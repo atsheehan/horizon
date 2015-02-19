@@ -383,7 +383,8 @@ CREATE TABLE questions (
     accepted_answer_id integer,
     answers_count integer DEFAULT 0 NOT NULL,
     searchable tsvector,
-    question_queue_id integer
+    question_queue_id integer,
+    visible boolean DEFAULT true
 );
 
 
@@ -1231,4 +1232,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150212145738');
 INSERT INTO schema_migrations (version) VALUES ('20150214174452');
 
 INSERT INTO schema_migrations (version) VALUES ('20150215023727');
+
+INSERT INTO schema_migrations (version) VALUES ('20150219185122');
 

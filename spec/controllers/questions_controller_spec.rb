@@ -3,6 +3,18 @@ require "rails_helper"
 describe QuestionsController do
   let(:user) { FactoryGirl.create(:user) }
 
+  describe "#destroy" do
+    let(:question) { FactoryGirl.create(:question) }
+
+    it 'sets the question visible attribute to false' do
+      session[:user_id] = question.user.id
+      expect(question.visible).to eq true
+
+      delete :destroy, id: question.id
+      expect(question.reload.visible).to eq false
+    end
+  end
+
   describe "#index" do
     context 'query param is unanswered' do
       it 'only returns unanswered questions and sets filter to unanswered' do

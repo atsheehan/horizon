@@ -19,6 +19,11 @@ module AuthenticationHelper
     click_link "Sign In With GitHub"
   end
 
+  def sign_out
+    click_link "Account"
+    click_link "Sign Out"
+  end
+  
   def set_auth_headers_for(user)
     credentials = Base64.strict_encode64("#{user.username}:#{user.token}")
     request.env["HTTP_AUTHORIZATION"] = "Basic #{credentials}"
