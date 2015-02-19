@@ -13,7 +13,13 @@ class Vote < ActiveRecord::Base
       Question.find(params[:question_id])
     elsif params[:answer_id].present?
       Answer.find(params[:answer_id])
+    else
+      raise Vote::UnknownVotable
+    end
+  end
 
-      votable.save
+  def update_vote_cache
+    votable.vote_cache = votable.total_votes
+    votable.save
   end
 end

@@ -12,4 +12,29 @@ feature "view questions" do
       expect(page).to have_link(question.title, href: question_path(question))
     end
   end
+
+  context "on index page" do
+    scenario "question displays default 0 votes" do
+      FactoryGirl.create(:question)
+
+      visit questions_path
+
+      within '.question-votes' do
+        expect(page).to have_content("0")
+      end
+    end
+
+    scenario "questions display number of upvotes on index page" do
+      user = FactoryGirl.create(:user)
+      question_with_vote = FactoryGirl.create(:question)
+      question_with_vote.increment_vote(user)
+      question_with_vote.reload
+
+      visit questions_path
+
+      within '.question-votes' do
+        expect(page).to have_content("1")
+      end
+    end
+  end
 end
