@@ -6,14 +6,14 @@ class Vote < ActiveRecord::Base
 
   validates_uniqueness_of :user, scope: [:votable_id, :votable_type]
 
+  after_update :update_vote_cache
+
   def self.derive_votable(params)
     if params[:question_id].present?
       Question.find(params[:question_id])
     elsif params[:answer_id].present?
       Answer.find(params[:answer_id])
-    else
-      raise Vote::UnknownVotable
-    end
-  end
 
+      votable.save
+  end
 end

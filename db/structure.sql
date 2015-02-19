@@ -138,7 +138,8 @@ CREATE TABLE answers (
     body text NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    searchable tsvector
+    searchable tsvector,
+    vote_cache integer DEFAULT 0
 );
 
 
@@ -383,7 +384,8 @@ CREATE TABLE questions (
     accepted_answer_id integer,
     answers_count integer DEFAULT 0 NOT NULL,
     searchable tsvector,
-    question_queue_id integer
+    question_queue_id integer,
+    vote_cache integer DEFAULT 0
 );
 
 
@@ -1282,4 +1284,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150214174452');
 INSERT INTO schema_migrations (version) VALUES ('20150215023727');
 
 INSERT INTO schema_migrations (version) VALUES ('20150216231227');
+
+INSERT INTO schema_migrations (version) VALUES ('20150219181529');
+
+INSERT INTO schema_migrations (version) VALUES ('20150219184301');
 
