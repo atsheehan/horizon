@@ -24,6 +24,10 @@ class Question < ActiveRecord::Base
     end
   end
 
+  def has_accepted_answer?
+    accepted_answer_id ? true : false
+  end
+
   def sorted_answers
     answers.sort_by { |answer| answer.accepted? ? 0 : 1 }
   end
@@ -49,4 +53,5 @@ class Question < ActiveRecord::Base
   def create_question_queue
     update_attributes(question_queue: QuestionQueue.create)
   end
+
 end

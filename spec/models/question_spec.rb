@@ -75,4 +75,20 @@ describe Question do
       end
     end
   end
+
+  describe "#has_accepted_answer?" do
+    let(:question) { FactoryGirl.create(:question) }
+    let!(:answer) { FactoryGirl.create(:answer, question: question) }
+
+    it 'returns true with accepted answer' do
+      question.accepted_answer_id = answer.id
+      question.save
+
+      expect(question.has_accepted_answer?).to eq true
+    end
+
+    it 'returns false with no accepted answer' do
+      expect(question.has_accepted_answer?).to eq false
+    end
+  end
 end

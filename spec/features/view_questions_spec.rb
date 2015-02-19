@@ -19,7 +19,7 @@ feature "view questions" do
 
       visit questions_path
 
-      within '.question-votes' do
+      within '.vote-count' do
         expect(page).to have_content("0")
       end
     end
@@ -32,7 +32,7 @@ feature "view questions" do
 
       visit questions_path
 
-      within '.question-votes' do
+      within '.vote-count' do
         expect(page).to have_content("1")
       end
     end

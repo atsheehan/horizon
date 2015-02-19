@@ -41,9 +41,9 @@
         .row
           .large-2.columns
             %span
-              %p.answer_count= pluralize question.answers_count, "answer"
-              .question-votes
-                = question.vote_cache
+              %p.answer-count{ class: ('accepted' if question.has_accepted_answer?) }
+                = pluralize question.answers_count, "answer"
+              %p.vote-count= pluralize question.vote_cache, "vote"
           .large-10.columns
             %h3.title
               = link_to question.title, question

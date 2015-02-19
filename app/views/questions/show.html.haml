@@ -62,9 +62,6 @@
               = display_downvote(current_user, answer)
 
             %p.body~ render_safe_markdown(answer.body)
-            - if answer.user == current_user
-              = link_to "Edit Answer", edit_question_answer_path(@question, answer), class: "button tiny success"
-              = link_to "Delete Answer", question_answer_path(@question, answer), method: :delete, class: "button tiny alert"
 
           %ul.answer-comments
             - if answer.answer_comments.present?
@@ -104,6 +101,9 @@
               = form_for @question do |f|
                 = f.hidden_field :accepted_answer_id, value: answer.id
                 = f.submit "Accept Answer", class: "tiny button"
+          - if answer.user == current_user
+            = link_to "Edit Answer", edit_question_answer_path(@question, answer), class: "button tiny success"
+            = link_to "Delete Answer", question_answer_path(@question, answer), method: :delete, class: "button tiny alert"
 
 #new-answer
   = form_for [@question, @answer] do |f|
