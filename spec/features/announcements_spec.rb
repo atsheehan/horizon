@@ -78,7 +78,7 @@ feature "announcements" do
       sign_in_as(admin)
     end
 
-    scenario "create a new announcement" do
+    scenario "create a new announcement", :vcr do
       visit team_announcements_path(team)
 
       fill_in "Title", with: "Free donuts on the counter."
