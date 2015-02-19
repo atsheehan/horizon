@@ -3,4 +3,4 @@ title: "Expressions"
 type: "article"
 description: "bloop."
 tags: "expressions, variables, constants"
-position: 1
+visibility: "assign"

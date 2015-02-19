@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "2.1.3"
+ruby "2.1.5"
 
 gem "rails", "4.1.4"
 
@@ -21,6 +21,9 @@ gem "fog"
 gem "sidekiq"
 gem "newrelic_rpm"
 gem "flowdock"
+gem "google-api-client"
+gem "redis"
+gem 'draper', '~> 1.3'
 
 group :development do
   gem "spring"
@@ -34,6 +37,7 @@ group :development, :test do
   gem "factory_girl_rails"
   gem "pry-rails"
   gem "vcr"
+  gem "shoulda-matchers"
 end
 
 group :test do
@@ -41,6 +45,7 @@ group :test do
   gem "launchy", require: false
   gem "mocha", require: false
   gem "webmock"
+  gem "database_cleaner"
 end
 
 group :production do

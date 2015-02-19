@@ -1,0 +1,25 @@
+<%-
+
+items = [
+  "*italics*",
+  "**bold**",
+  "[link](http://launchacademy.com)",
+  "* item 1\n* item 2\n* item 3",
+  "```ruby\nrequire 'pry'\n```"
+]
+
+%>
+
+<table class="table--bordered">
+  <tr>
+    <th>syntax</th>
+    <th>rendered as</th>
+  </tr>
+
+  <%- items.each do |item| %>
+    <tr>
+      <td><p><%= item.gsub("\n", "<br/>").html_safe %>
+      <td><%= render_safe_markdown(item) %>
+    </tr>
+  <% end %>
+</table>

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Notifications::FlowDock do
+describe Notifications::FlowDock, :vcr do
   describe '#initialize' do
     it 'creates a FlowDock::Flow' do
       Flowdock::Flow.expects(:new).with(

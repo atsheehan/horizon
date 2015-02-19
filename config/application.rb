@@ -15,6 +15,9 @@ Bundler.require(*Rails.groups)
 
 module EventHorizon
   class Application < Rails::Application
+    # load everything in the 'lib' folder.
+    config.autoload_paths << Rails.root.join("lib")
+
     # Settings in config/environments/* take precedence over those
     # specified here.  Application configuration should go into files
     # in config/initializers -- all .rb files in that directory are
@@ -34,5 +37,11 @@ module EventHorizon
     # Preserves the trigger for updating the assignments searchable column
     # as well as any other PostgreSQL-specific settings.
     config.active_record.schema_format = :sql
+
+    # Disable factory_girl generators, since we are using
+    # 'spec/support/factories.rb' for our factory definitions.
+    config.generators do |g|
+      g.factory_girl false
+    end
   end
 end

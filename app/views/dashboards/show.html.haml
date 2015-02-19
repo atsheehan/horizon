@@ -4,8 +4,10 @@
 %h2 Dashboard
 
 .row
-  .large-4.columns.large-offset-8
+  .large-8.columns
+    = render template: "calendar/show"
 
+  .large-4.columns
     %h3 Latest Announcements
 
     %table.table-announcement
@@ -22,7 +24,8 @@
               %p No new announcements
 
     - @teams.each do |team|
-      %div= link_to "Read all announcements for #{team.name}", team_announcements_path(team), class: "button small alert"
+      %div
+        = link_to "Read all announcements for #{team.name}", team_announcements_path(team), class: "button small alert"
 
 %h3 Core Assignments
 
@@ -67,4 +70,3 @@
         %td.required= assignment.required ? "yes" : "no"
         %td.submitted= assignment.submitted?(current_user) ? "yes" : "no"
         %td.reviewed= assignment.reviewed?(current_user) ? "yes" : "no"
-

@@ -32,7 +32,8 @@ feature "assignment status is displayed on dashboard", %q{
   end
 
   scenario "user comments on a submission, not counted as reviewed" do
-    user_comment = FactoryGirl.create(:comment, user: user,
+    user_comment = FactoryGirl.create(:comment,
+      user: user,
       submission: user.submissions.first)
 
     visit dashboard_path
@@ -43,8 +44,10 @@ feature "assignment status is displayed on dashboard", %q{
   end
 
   scenario "admin reviews assignment" do
-    admin_comment = FactoryGirl.create(:comment, user: admin,
-      submission: user.submissions.first)
+    admin_comment = FactoryGirl.create(:comment,
+      user: admin,
+      submission: user.submissions.first
+      )
 
     visit dashboard_path
 

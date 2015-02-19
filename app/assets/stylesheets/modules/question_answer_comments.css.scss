@@ -1,0 +1,42 @@
+@import 'globals/colors';
+
+.question-comments, .answer-comments {
+  list-style: none;
+}
+
+.qa-comment {
+  border-bottom: 2px solid $border-color;
+  font-size: 0.75em;
+  margin: 0.5em 0;
+  padding: 1em 0;
+  padding-left: 2em;
+}
+
+.qa-comment:first-child {
+  border-top: 2px solid $border-color;
+}
+
+.comment-user {
+  font-size: 0.6em;
+  font-style: italic;
+  font-weight: bold;
+}
+
+p.add-question-comment, p.add-answer-comment {
+  margin-left: 10px;
+  a {
+    color: #808080;
+    &:hover {
+      color: $link-blue;
+    }
+  }
+}
+
+.fi-x.delete-comment, .fi-pencil.edit-comment {
+  float: right;
+  margin: 0 0.5em;
+  color: #000;
+  line-height: 1;
+  font-size: 1.5em;
+}
+

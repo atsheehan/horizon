@@ -1,0 +1,19 @@
+%h3 Calendar
+
+%table.calendar
+  %thead
+    %tr
+      %th Start Time
+      %th End Time
+      %th Title
+
+  %tbody
+    - @calendar_events.each do |event|
+      %tr{ class: ("past-event" if event.start_time < DateTime.now) }
+        %td= event.start_time.to_formatted_s(:agenda)
+        %td= event.end_time.to_formatted_s(:agenda)
+        %td= link_to(event.summary, event.url, target: '_blank')
+
+    - if @calendar_events.empty?
+      %tr{ class: "no-events" }
+        %td{ colspan: 3 }= "No upcoming events"

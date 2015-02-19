@@ -8,6 +8,9 @@ AccessorMethodName:
 Alias:
   Enabled: false
 
+AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+
 ArrayJoin:
   Enabled: false
 

@@ -3,7 +3,7 @@
 ## Week 1: Ruby Fundamentals
 
 * Monday
-  * 10 AM - introductions, administrivia, key fobs, mentor group assignments
+  * 10 AM - Introductions, administrivia, key fobs, mentor group assignments
   * 11 AM - Mentor Group presentations
   * 12:15 PM - LUNCH
   * 1:30 PM -
@@ -291,12 +291,56 @@
   * **Other:** [Tony Eng](https://www.linkedin.com/pub/tony-eng/0/3b3/407)'s presentation on Public Speaking and Pitches
   * **Group Project Peer Evaluations:** [Evaluation Form Here](https://docs.google.com/forms/d/1NO0Gdrv98BFcQoSfKLpNSx6NdTNIw8ZSPDVyPAKcxYo/viewform)
 
+#
 * Tuesday
   * 9:24: Career Day Presentation Prep
-  * **Lectures:** Inheritance (Adam), Open Work Day
+  * **Lectures:** Inheritance (Adam), Breakable Toy Open Work Day
   * **Other:** Lightning Talks -- Baking (Liz), Grilling (Nick), Loyalty Metrics (Judy), Kidney Transplants (Kerron), Medivacs (Steve Rogers), Beer (Jason)
 
+#
+* Wednesday
+  * 9:24: Career Day Presentation Prep
+  * **Lectures:** Big O Notation (Adam), Breakable Toy Open Work Day
+
+#
+* Thursday
+  * 9:24: Career Day Presentation Prep
+  * Breakable Toy Open Work Day
+
+#
+* Friday
+  * 9:24: Career Day Presentation Prep
+  * **Lectures:** Linked Lists (Adam), Breakable Toy Open Work Day
+
 ## Week 10:  Breakable Toy (Week 2)
+
+#
+* Monday
+  * 9:24: Career Day Presentation Prep, link to [Prior Presentations](https://www.dropbox.com/sh/vag59p1gvpqkn80/AABDT7_RUUI_x4_IttHMFuqaa?dl=0)
+  * Breakable Toy Open Work Day
+
+#
+* Tuesday
+  * 9:24: Career Day Presentation Prep
+  * Breakable Toy Open Work Day
+  * **Other:** Mike Hebert career presentation. Available on Twitter at @mhebertglo and mhebert100@gmail.com
+
+#
+* Wednesday
+  * 9:24: Career Day Presentation Prep
+  * **Lectures:** How Career Day is Going to Work (Dan)
+  * Breakable Toy Open Work Day
+  * [Link](https://www.dropbox.com/sh/xvahmwiaw31lkim/AAA8k_MS0tG_TqcUwMl4A0M4a?dl=0) to Dropbox for Student Career Day Screencasts
+
+#
+* Thursday
+  * 9:24: Career Day Presentation Prep with Screencasts
+  * Breakable Toy Open Work Day
+
+#
+* Friday
+  * 9:24: Career Day Presentation Prep with Screencasts
+  * Breakable Toy Open Work Day / Due date (styled, deployed & feature complete)
 
 ## General Resources
 
@@ -326,24 +370,30 @@
 - [Railscasts](https://gorails.com/)
 
 #### Git
+- [github cheat sheet](https://github.com/tiimgreen/github-cheat-sheet)
 - [git game](https://github.com/hgarc014/git-game)
 - [gitignore](https://help.github.com/articles/ignoring-files/)
+- [githug](https://github.com/Gazler/githug)
 
 #### Computer Science
 - [A giant list of CS Courses](https://github.com/prakhar1989/awesome-courses)
 
-#### Design
+#### Design / Front-end
 - [Typecast](http://typecast.com/)
 - [Type Genius](http://www.typegenius.com/)
 - [CSS font stack](http://www.cssfontstack.com/)
 - [dribbble](https://dribbble.com/)
+- [Hover](http://ianlunn.github.io/Hover/), a collection of CSS3 powered hover effects to be applied to links, buttons, logos, SVG, featured images and so on.
 
 #### Career
 - [What a Web Developer Should Know](https://gist.github.com/atsheehan/5673edcd03fadb4e9108)
+- [Launch's Collection of Interview Questions](https://gist.github.com/vikram7/363d7944b4f483125599)
+- [Front-end Job Interview Questions](https://github.com/h5bp/Front-end-Developer-Interview-Questions)
 
 #### Other
 - [Chrome Video Speed Controller](https://chrome.google.com/webstore/detail/video-speed-controller/nffaoalbilbmmfgbnbgppjihopabppdk?hl=en)
 - [Explore Github](https://github.com/explore) to see what repos are trending or find some interesting open source projects you can join!
+- ["What happens when you type google.com into your browser and press enter?"](https://github.com/alex/what-happens-when)
 
 ## Books We Recommend
 ###(yes, not everything you need is on a website)

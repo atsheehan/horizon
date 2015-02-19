@@ -3,18 +3,23 @@ require "rails_helper"
 describe Lesson do
   describe ".search" do
     let!(:foo) do
-      FactoryGirl
-        .create(:lesson, title: "Blah", body: "i like pizza", description: "bloop")
+      FactoryGirl.
+        create(:lesson,
+          title: "Blah",
+          body: "i like pizza",
+          description: "bloop"
+          )
     end
 
     let!(:bar) do
-      FactoryGirl
-        .create(:lesson, title: "Shazbot", body: "Ruby sure is fun.")
+      FactoryGirl.
+        create(:lesson, title: "Shazbot", body: "Ruby sure is fun.")
     end
 
     let!(:baz) do
-      FactoryGirl
-        .create(:lesson, title: "Mr. Grumblecat", body: "Ruby gems and fiddle sticks.")
+      FactoryGirl.
+        create(:lesson,
+          title: "Mr. Grumblecat", body: "Ruby gems and fiddle sticks.")
     end
 
     it "searches by title" do
@@ -87,6 +92,7 @@ describe Lesson do
       expect(lesson.title).to eq("Expressions")
       expect(lesson.type).to eq("article")
       expect(lesson.description).to eq("bloop.")
+      expect(lesson.visibility).to eq("assign")
       expect(lesson.body).to eq("beep boop i'm an expression\n")
     end
 

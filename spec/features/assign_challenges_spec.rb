@@ -33,7 +33,6 @@ feature "assign challenges" do
     end
 
     scenario "re-render form when missing info" do
-      challenge = FactoryGirl.create(:challenge, title: "FizzBuzz")
 
       visit team_assignments_path(team)
 

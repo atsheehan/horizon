@@ -32,8 +32,10 @@ describe CommentNotifier do
       user = FactoryGirl.create(:user)
       submission_a = FactoryGirl.create(:submission, user: user)
       submission_b = FactoryGirl.create(:submission, user: user)
-      comment_a = FactoryGirl.create(:comment, submission: submission_a, delivered: false)
-      comment_b = FactoryGirl.create(:comment, submission: submission_b, delivered: false)
+      comment_a = FactoryGirl.
+        create(:comment, submission: submission_a, delivered: false)
+      comment_b = FactoryGirl.
+        create(:comment, submission: submission_b, delivered: false)
 
       notifier.perform(comment_a.id)
       notifier.perform(comment_b.id)

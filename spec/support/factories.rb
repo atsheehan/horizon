@@ -6,6 +6,7 @@ FactoryGirl.define do
     description "Describes the article."
     body "# Article Foo\n\nThis is an article."
     sequence(:position) { |n| n }
+    visibility "public"
 
     factory :article do
       type "article"
@@ -39,7 +40,7 @@ FactoryGirl.define do
   factory :submission do
     association :lesson, factory: :challenge
     user
-    self.public false
+    public false
 
     archive do
       Rack::Test::UploadedFile.new(Rails.root.join("spec/data/one_file.tar.gz"))
@@ -107,18 +108,30 @@ FactoryGirl.define do
 
     factory :user_with_assignment_submission do
       after(:create) do |user|
-        team_membership = create(:team_membership , user: user)
+        team_membership = create(:team_membership, user: user)
         assignment = create(:assignment, team: team_membership.team)
         create(:submission, lesson: assignment.lesson, user: user)
       end
     end
 
+    ignore do
+      calendar_args nil
+    end
+
+    factory :user_with_calendar do
+      after(:create) do |user, evaluator|
+        calendar = build(:calendar, evaluator.calendar_args)
+        team = create(:team, calendar: calendar)
+        create(:team_membership, team: team, user: user)
+      end
+    end
+
     factory :user_with_multiple_assignment_submissions do
       after(:create) do |user|
-        team_membership = create(:team_membership , user: user)
+        team_membership = create(:team_membership, user: user)
         core = create(:assignment, team: team_membership.team)
         create(:assignment, required: false, team: team_membership.team)
-        variable = create(:submission, lesson: core.lesson, user: user)
+        create(:submission, lesson: core.lesson, user: user)
       end
     end
   end
@@ -141,7 +154,28 @@ FactoryGirl.define do
 
   factory :announcement do
     sequence(:title) { |n| "Announcement #{n}" }
-    description "Here is a very nice description for a very nice announcement. The students shall cheer and rejoice when they see it."
+    description %"Here is a very nice description for a very nice announcement.
+      The students shall cheer and rejoice when they see it."
     team
+  end
+
+  factory :calendar do
+    sequence(:name) { |n| "Calendar #{n}" }
+    sequence(:cid) { |n| "calendar-reference-email#{n}@gmail.com" }
+  end
+
+  factory :question do
+    sequence(:title) { |n| "Question #{n}" }
+    body "This is definitely a question."
+    user
+  end
+
+  factory :question_queue do
+  end
+
+  factory :answer do
+    question
+    user
+    sequence(:body) { |n| "This is definitely the right answer #{n}." }
   end
 end

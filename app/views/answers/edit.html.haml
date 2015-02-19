@@ -1,0 +1,28 @@
+- content_for(:title) do
+  = "Edit Answer - Launch Academy"
+
+%ul.breadcrumbs
+  %li= link_to "Questions", questions_path
+  %li= link_to @question.title, question_path(@question)
+  %li.current Edit Answer
+
+#question
+  %h2.title= @question.title
+  = link_to "Edit Question", edit_question_path(@question)
+  .row
+    .small-8.columns
+      %p.body= @question.body
+    .small-4.columns
+      .user
+        = link_to @question.user.username, user_path(@question.user)
+        asked on
+        .created_at= format_datetime(@question.created_at)
+
+#edit-answer
+  = form_for [@question, @answer] do |f|
+    = field_set_tag "Edit Answer" do
+
+      = f.label :body, "Answer"
+      = f.text_area :body
+
+      = f.submit "Update Answer", class: "button"

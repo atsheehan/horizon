@@ -6,10 +6,16 @@ class Markdown
   end
 
   def self.render_safe(content)
-    Sanitize.fragment(renderer.render(content), Sanitize::Config::BASIC)
+    Sanitize.fragment(renderer.render(content), sanitizer_config)
   end
 
   private
+
+  def self.sanitizer_config
+    Sanitize::Config.merge(Sanitize::Config::BASIC,
+      elements: Sanitize::Config::BASIC[:elements] + ["span"],
+      attributes: { "span" => ["class"], "code" => ["class"] })
+  end
 
   def self.renderer
     Redcarpet::Markdown.new(HighlightingRenderer,
