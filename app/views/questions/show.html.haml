@@ -55,16 +55,16 @@
     - if answer.persisted?
       .row.answer{ class: @question.accepted_answer_id == answer.id ? 'accepted-answer' : ''  }
         .small-8.columns
-          .answer-votes
-            = link_to "Upvote", answer_upvotes_path(answer), method: :post, id: 'upvote'
-            = link_to "Downvote", answer_downvotes_path(answer), method: :post, id: 'downvote'
-            .total_votes
-              = answer.total_votes
+          .answer-container
+            .answer-votes
+              = display_upvote(current_user, answer)
+              = display_total_votes(answer)
+              = display_downvote(current_user, answer)
 
-          %p.body~ render_safe_markdown(answer.body)
-          - if answer.user == current_user
-            = link_to "Edit Answer", edit_question_answer_path(@question, answer), class: "button tiny success"
-            = link_to "Delete Answer", question_answer_path(@question, answer), method: :delete, class: "button tiny alert"
+            %p.body~ render_safe_markdown(answer.body)
+            - if answer.user == current_user
+              = link_to "Edit Answer", edit_question_answer_path(@question, answer), class: "button tiny success"
+              = link_to "Delete Answer", question_answer_path(@question, answer), method: :delete, class: "button tiny alert"
 
           %ul.answer-comments
             - if answer.answer_comments.present?

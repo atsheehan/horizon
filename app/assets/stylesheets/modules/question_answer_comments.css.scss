@@ -10,6 +10,7 @@
   margin: 0.5em 0;
   padding: 1em 0;
   padding-left: 2em;
+  display: block;
 }
 
 .qa-comment:first-child {
@@ -32,7 +33,7 @@ p.add-question-comment, p.add-answer-comment {
   }
 }
 
-.fi-x.delete-comment, .fi-pencil.edit-comment {
+.fi-x.delete-comment {
   float: right;
   margin: 0 0.5em;
   color: #000;
