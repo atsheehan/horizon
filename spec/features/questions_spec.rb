@@ -109,8 +109,6 @@ feature "questions" do
       expect(page).to have_content(body)
     end
 
-    scenario "comment on a question"
-
     scenario "only original asker can accept answer" do
       question = FactoryGirl.create(:question)
       FactoryGirl.create(:answer, question: question)
