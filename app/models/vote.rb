@@ -24,4 +24,20 @@ class Vote < ActiveRecord::Base
       votable.save!
     end
   end
+
+  def increment
+    upvote_cast? ? update_attributes(score: self.score += 1) : false
+  end
+
+  def upvote_cast?
+    score <= 0
+  end
+
+  def decrement
+    downvote_cast? ? update_attributes(score: self.score -= 1) : false
+  end
+
+  def downvote_cast?
+    score >= 0
+  end
 end

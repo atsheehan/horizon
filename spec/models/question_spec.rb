@@ -1,6 +1,8 @@
 require "rails_helper"
 
 describe Question do
+  it_behaves_like "a votable object"
+
   describe 'scopes' do
     describe 'queued' do
       it 'returns questions that are in the question_queue and not done' do

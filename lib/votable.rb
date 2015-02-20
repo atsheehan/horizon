@@ -12,36 +12,24 @@ module Votable
   end
 
   def increment_vote(user)
-    vote = votes.find_or_create_by(user: user,
-                            votable_id: self.id,
-                            votable_type: self.class.to_s)
-    if vote.score <= 0
-      vote.score += 1
-      vote.save
-      true
-    else
-      false
-    end
+    fetch_vote(user).increment
   end
 
   def decrement_vote(user)
-    vote = votes.find_or_create_by(user: user,
-                            votable_id: self.id,
-                            votable_type: self.class.to_s)
-    if vote.score >= 0 && vote.score <= 1
-      vote.score -= 1
-      vote.save
-      true
-    else
-      false
-    end
+    fetch_vote(user).decrement
   end
 
   def vote_question
-    if self.class.to_s == "Question"
-      self
-    else
-      question
-    end
+    is_question? ? self : question
+  end
+
+  private
+
+  def fetch_vote(user)
+    votes.find_or_create_by(user: user, votable_id: self.id, votable_type: self.class.to_s)
+  end
+
+  def is_question?
+    self.class.to_s == "Question"
   end
 end
