@@ -37,7 +37,7 @@
                   %li
                     = link_to "Signed in as #{current_user.username}", user_path(current_user)
                   %li= link_to "Sign Out", session_path, method: :delete
-                  %li= link_to "Dailies", dailies_path
+                  %li= link_to "Dailies", "https://gist.github.com/vikram7/9ef873367000e7caae9e"
             - else
               %li= link_to "Sign In With GitHub", new_session_path
 
