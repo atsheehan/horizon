@@ -80,8 +80,6 @@ describe Lesson do
       ordered = Lesson.order_lessons(lessons)
       expect(ordered).to eq(["baz", "foo", "bar"])
     end
-
-    it "raises an exception if a circular dependency detected"
   end
 
   describe ".import_all!" do

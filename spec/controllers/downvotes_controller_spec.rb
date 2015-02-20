@@ -3,16 +3,16 @@ require 'rails_helper'
 describe DownvotesController do
   describe '#create' do
     let(:user) { FactoryGirl.create(:user) }
-    let(:votable) { double }
+    let(:votable) { stub }
     let(:already_voted) { true }
     let(:question) { FactoryGirl.create(:question) }
 
     context 'authenticated user' do
       before do
         session[:user_id] = user.id
-        allow(Vote).to receive(:derive_votable).and_return(votable)
-        allow(votable).to receive(:decrement_vote).with(user).and_return(already_voted)
-        allow(votable).to receive(:vote_question).and_return(question)
+        Vote.stubs(:derive_votable).returns(votable)
+        votable.stubs(:decrement_vote).with(user).returns(already_voted)
+        votable.stubs(:vote_question).returns(question)
       end
 
       context 'has already voted' do

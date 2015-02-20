@@ -69,4 +69,8 @@ class QuestionDecorator < Draper::Decorator
   def accepted_answer_owned_by_current_user?(answer)
     answer.accepted? && object.user == h.current_user
   end
+
+  def show?
+    object.visible || h.current_user.try(:admin?)
+  end
 end

@@ -6,32 +6,28 @@ describe QuestionDecorator do
   describe '#accepted_answer_owned_by_current_user?' do
     let(:author) { FactoryGirl.create(:user) }
     let(:question) { FactoryGirl.create(:question, user: author).decorate }
-    let(:answer) { double(accepted?: true) }
+    let(:answer) { stub(accepted?: true) }
 
     context 'answer is accepted' do
       context 'user owns question' do
         it 'should return true' do
-          allow(helpers).to receive(:current_user).and_return(author)
-          expect(question.accepted_answer_owned_by_current_user?(answer)).
-            to eq true
+          helpers.stubs(:current_user).returns(author)
+          expect(question.accepted_answer_owned_by_current_user?(answer)).to eq true
         end
       end
 
       context 'user does not own question' do
         it 'should return false' do
-          allow(helpers).to receive(:current_user).and_return(FactoryGirl.
-              create(:user))
-          expect(question.accepted_answer_owned_by_current_user?(answer)).
-            to eq false
+          helpers.stubs(:current_user).returns(FactoryGirl.create(:user))
+          expect(question.accepted_answer_owned_by_current_user?(answer)).to eq false
         end
       end
     end
 
     context 'answer is not accepted' do
       it 'should return false' do
-        answer = double(accepted?: false)
-        expect(question.accepted_answer_owned_by_current_user?(answer)).
-          to eq false
+        answer = stub(accepted?: false)
+        expect(question.accepted_answer_owned_by_current_user?(answer)).to eq false
       end
     end
   end
@@ -51,8 +47,7 @@ describe QuestionDecorator do
 
     context 'authorized user' do
       it 'displays link with arrow up' do
-        allow(helpers).to receive(:current_user).and_return(FactoryGirl.
-              create(:user))
+        helpers.stubs(:current_user).returns(FactoryGirl.create(:user))
         result = question.upvote
         markup = Capybara.string(result)
         expect(markup).to have_selector('i.upvote')
@@ -73,8 +68,7 @@ describe QuestionDecorator do
 
     context 'authorized user' do
       it 'displays link with arrow down' do
-        allow(helpers).to receive(:current_user).and_return(FactoryGirl.
-              create(:user))
+        helpers.stubs(:current_user).returns(FactoryGirl.create(:user))
         result = question.downvote
         markup = Capybara.string(result)
         expect(markup).to have_selector('i.downvote')

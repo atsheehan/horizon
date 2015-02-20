@@ -1,6 +1,6 @@
 require "rails_helper"
 
-feature "view dashboard calendar" do
+feature "view dashboard calendar", :vcr do
   # As a user on my dashboard
   # I want to see upcoming events
   # So that I can be informed about the happenings of the cohort.
@@ -74,9 +74,7 @@ def stub_calendar_start_and_end_time(datetime_string)
   start_time = datetime.beginning_of_day
   end_time = datetime.end_of_day + 1.day
 
-  allow_any_instance_of(Calendar).to receive(:default_start_time).
-    and_return(start_time)
+  Calendar.any_instance.stubs(:default_start_time).returns(start_time)
 
-  allow_any_instance_of(Calendar).to receive(:default_end_time).
-    and_return(end_time)
+  Calendar.any_instance.stubs(:default_end_time).returns(end_time)
 end

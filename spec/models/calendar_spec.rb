@@ -8,10 +8,10 @@ describe Calendar do
 
   describe "events" do
     it 'returns an array of CalendarEvents' do
-      ce1 = double(start_time: Time.now, end_time: Time.now + 1.hour)
-      redis_db = double
-      allow(Redis).to receive(:current).and_return(redis_db)
-      allow(redis_db).to receive(:get).and_return(
+      ce1 = stub(start_time: Time.now, end_time: Time.now + 1.hour)
+      redis_db = stub
+      Redis.stubs(:current).returns(redis_db)
+      redis_db.stubs(:get).returns(
         [
           {
             "summary" => "some summary",
@@ -21,14 +21,14 @@ describe Calendar do
           }
         ].to_json
       )
-      allow(CalendarEvent).to receive(:new).with(
+      CalendarEvent.stubs(:new).with(
         url: "some link",
         summary: "some summary",
         end_time: Date.today,
         start_time: Date.today,
-      ).and_return(ce1)
-      expect(Calendar.
-        new(cid: 'cid', name: 'name').events).to match_array([ce1])
+      ).returns(ce1)
+
+      expect(Calendar.new(cid: 'cid', name: 'name').events).to match_array([ce1])
     end
   end
 

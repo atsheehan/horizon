@@ -22,9 +22,9 @@ describe QuestionQueuesController do
       end
 
       it 'calls the queue method on the question' do
-        question = double(id: 1)
-        allow(Question).to receive(:find).and_return(question)
-        expect(question).to receive(:queue)
+        question = stub(id: 1)
+        Question.stubs(:find).returns(question)
+        question.expects(:queue)
 
         post :create, question_id: question.id
       end
@@ -60,10 +60,9 @@ describe QuestionQueuesController do
     end
 
     it 'calls update_in_queue with proper args' do
-      question_queue = double(id: 1)
-      allow(QuestionQueue).to receive(:find).and_return(question_queue)
-      expect(question_queue).
-        to receive(:update_in_queue).with('no-show', experience_engineer)
+      question_queue = stub(id: 1)
+      QuestionQueue.stubs(:find).returns(question_queue)
+      question_queue.expects(:update_in_queue).with('no-show', experience_engineer)
 
       patch :update,
         id: question_queue.id,
