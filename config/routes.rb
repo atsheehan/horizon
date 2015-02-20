@@ -49,5 +49,4 @@ Rails.application.routes.draw do
   get "/auth/failure", to: "sessions#failure"
 
   get "/start", to: "static_pages#start"
-  get "/dailies", to: "static_pages#dailies"
 end
