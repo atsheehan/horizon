@@ -1,6 +1,8 @@
 require "rails_helper"
 
 describe Question do
+  it_behaves_like "a votable object"
+
   describe 'scopes' do
     describe 'queued' do
       it 'returns questions that are in the question_queue and not done' do
@@ -73,6 +75,22 @@ describe Question do
         expect(question.question_queue.status).to eq 'open'
         expect(question.question_queue.no_show_counter).to eq 0
       end
+    end
+  end
+
+  describe "#has_accepted_answer?" do
+    let(:question) { FactoryGirl.create(:question) }
+    let!(:answer) { FactoryGirl.create(:answer, question: question) }
+
+    it 'returns true with accepted answer' do
+      question.accepted_answer_id = answer.id
+      question.save
+
+      expect(question.has_accepted_answer?).to eq true
+    end
+
+    it 'returns false with no accepted answer' do
+      expect(question.has_accepted_answer?).to eq false
     end
   end
 end

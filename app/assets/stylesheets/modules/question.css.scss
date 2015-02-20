@@ -8,7 +8,52 @@
   text-align: center;
   line-height: 3em;
   font-size: 1em;
-  color: black;
+  color: #000;
   border: 1px solid $border-color;
   font-family: "Arial Black", Gadget, sans-serif;
+}
+
+.question-title {
+  clear: both;
+}
+
+.question-title .question-votes {
+  float: left;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.question-title h2.title {
+  float: left;
+}
+
+.upvote, .downvote {
+  display: block;
+  font-size: 1.3em;
+  color: #000;
+}
+
+.total_votes {
+  font-family: "Arial Black", Gadget, sans-serif;
+  color: #000;
+}
+
+.answer-count, .vote-count {
+  color: gray;
+  font-size: 1.2em;
+  font-style: italic;
+  text-align: center;
+}
+
+.vote-count {
+  border-top: 2px solid $border-color;
+  padding-top: .5em;
+}
+
+#answers .answer-count {
+  text-align: left;
+}
+
+.accepted {
+  color: $article-color;
 }
