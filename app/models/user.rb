@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   has_many :question_queues, dependent: :destroy
   has_many :question_comments, dependent: :destroy
   has_many :answer_comments, dependent: :destroy
+  has_many :votes
 
   validates :username, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true

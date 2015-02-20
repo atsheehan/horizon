@@ -19,25 +19,31 @@ class Vote < ActiveRecord::Base
   end
 
   def update_vote_cache
-    if score_changed?
-      votable.vote_cache = votable.total_votes
-      votable.save!
-    end
+    votable.vote_cache = votable.total_votes
+    votable.save!
   end
 
   def increment
-    upvote_cast? ? update_attributes(score: self.score += 1) : false
-  end
-
-  def upvote_cast?
-    score <= 0
+    can_upvote? ? update_attributes(score: self.score += 1) : false
   end
 
   def decrement
-    downvote_cast? ? update_attributes(score: self.score -= 1) : false
+    can_downvote? ? update_attributes(score: self.score -= 1) : false
+  end
+
+  def upvote_cast?
+    score == 1
   end
 
   def downvote_cast?
-    score >= 0
+    score == -1
+  end
+
+  def can_upvote?
+    score <= 0
+  end
+
+  def can_downvote?
+    score >= 0 && score <= 1
   end
 end

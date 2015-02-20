@@ -8,7 +8,7 @@ class QuestionDecorator < Draper::Decorator
   def upvote
     if h.current_user
       h.link_to(h.question_upvotes_path(object), method: :post, id: "upvote") do
-        h.content_tag(:i, '', class: 'fi-arrow-up upvote')
+        h.content_tag(:i, '', class: "fi-arrow-up upvote #{upvote_cast?}")
       end
     else
       h.content_tag(:i, '', class: 'mam')
@@ -18,7 +18,7 @@ class QuestionDecorator < Draper::Decorator
   def downvote
     if h.current_user
       h.link_to(h.question_downvotes_path(object), method: :post, id: "downvote") do
-        h.content_tag(:i, '', class: 'fi-arrow-down downvote')
+        h.content_tag(:i, '', class: "fi-arrow-down downvote #{downvote_cast?}")
       end
     else
       h.content_tag(:i, '', class: 'mam')
@@ -72,5 +72,17 @@ class QuestionDecorator < Draper::Decorator
 
   def show?
     object.visible || h.current_user.try(:admin?)
+  end
+
+  private
+
+  def upvote_cast?
+    vote = h.current_user.votes.find_by(votable_id: object.id, votable_type: "Question")
+    vote.try(:upvote_cast?) ? "cast" : ""
+  end
+
+  def downvote_cast?
+    vote = h.current_user.votes.find_by(votable_id: object.id, votable_type: "Question")
+    vote.try(:downvote_cast?) ? "cast" : ""
   end
 end
