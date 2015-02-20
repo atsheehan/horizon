@@ -51,15 +51,15 @@
 #answers
   %h3.answer-count= pluralize(@question.answers.count, "answer")
 
-  - @question.sorted_answers.each do |answer|
+  - @answers.each do |answer|
     - if answer.persisted?
       .row.answer{ class: @question.accepted_answer_id == answer.id ? 'accepted-answer' : ''  }
         .small-8.columns
           .answer-container
             .answer-votes
-              = display_upvote(current_user, answer)
-              = display_total_votes(answer)
-              = display_downvote(current_user, answer)
+              = answer.display_upvote
+              = answer.display_total_votes
+              = answer.display_downvote
 
             %p.body~ render_safe_markdown(answer.body)
 

@@ -15,6 +15,7 @@ class QuestionsController < ApplicationController
 
   def show
     @question = Question.find(params[:id]).decorate
+    @answers = AnswerDecorator.decorate_collection(@question.sorted_answers)
     @answer = Answer.new
     @question_comment = QuestionComment.new
     @question_comments = @question.question_comments.limit(30)

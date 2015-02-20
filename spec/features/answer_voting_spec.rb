@@ -56,8 +56,10 @@ feature 'answer voting' do
     end
 
     scenario 'I do not see upvote/downvote arrows' do
+      visit question_path(question)
 
+      expect(page).to_not have_selector('.upvote')
+      expect(page).to_not have_selector('.downvote')
     end
   end
-
 end
