@@ -25,4 +25,112 @@ describe Vote do
       end
     end
   end
+
+  describe 'vote helpers' do
+    let(:vote) { FactoryGirl.create(:vote, score: score, votable_id: question.id, votable_type: "Question") }
+
+    describe "upvote_cast?" do
+      context 'downvote cast' do
+        let(:score) { -1 }
+
+        it 'returns false' do
+          expect(vote.upvote_cast?).to eq false
+        end
+      end
+
+      context 'no vote cast' do
+        let(:score) { 0 }
+
+        it 'returns false' do
+          expect(vote.upvote_cast?).to eq false
+        end
+      end
+
+      context 'upvote cast' do
+        let(:score) { 1 }
+
+        it 'returns true' do
+          expect(vote.upvote_cast?).to eq true
+        end
+      end
+    end
+
+    describe "downvote_cast?" do
+      context 'downvote cast' do
+        let(:score) { -1 }
+
+        it 'returns true' do
+          expect(vote.downvote_cast?).to eq true
+        end
+      end
+
+      context 'no vote cast' do
+        let(:score) { 0 }
+
+        it 'returns false' do
+          expect(vote.downvote_cast?).to eq false
+        end
+      end
+
+      context 'upvote cast' do
+        let(:score) { 1 }
+
+        it 'returns false' do
+          expect(vote.downvote_cast?).to eq false
+        end
+      end
+    end
+
+    describe "#can_upvote?" do
+      context 'downvote cast' do
+        let(:score) { -1 }
+
+        it 'returns true' do
+          expect(vote.can_upvote?).to eq true
+        end
+      end
+
+      context 'no vote cast' do
+        let(:score) { 0 }
+
+        it 'returns true' do
+          expect(vote.can_upvote?).to eq true
+        end
+      end
+
+      context 'upvote cast' do
+        let(:score) { 1 }
+
+        it 'returns false' do
+          expect(vote.can_upvote?).to eq false
+        end
+      end
+    end
+
+    describe "#can_downvote?" do
+      context 'downvote cast' do
+        let(:score) { -1 }
+
+        it 'returns false' do
+          expect(vote.can_downvote?).to eq false
+        end
+      end
+
+      context 'no vote cast' do
+        let(:score) { 0 }
+
+        it 'returns true' do
+          expect(vote.can_downvote?).to eq true
+        end
+      end
+
+      context 'upvote cast' do
+        let(:score) { 1 }
+
+        it 'returns true' do
+          expect(vote.can_downvote?).to eq true
+        end
+      end
+    end
+  end
 end

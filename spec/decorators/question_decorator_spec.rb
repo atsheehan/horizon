@@ -46,11 +46,27 @@ describe QuestionDecorator do
     let(:question) { FactoryGirl.create(:question).decorate }
 
     context 'authorized user' do
-      it 'displays link with arrow up' do
-        helpers.stubs(:current_user).returns(FactoryGirl.create(:user))
-        result = question.upvote
-        markup = Capybara.string(result)
-        expect(markup).to have_selector('i.upvote')
+      context 'user has voted' do
+        it 'displays link with arrow up' do
+          user = FactoryGirl.create(:user)
+          FactoryGirl.create(:vote, score: 1, user: user, votable_id: question.id, votable_type: "Question")
+          helpers.stubs(:current_user).returns(user)
+
+          result = question.upvote
+          markup = Capybara.string(result)
+          expect(markup).to have_selector('i.upvote')
+          expect(markup).to have_selector('i.upvote.cast')
+        end
+      end
+
+      context 'user has not voted' do
+        it 'displays link with arrow up' do
+          helpers.stubs(:current_user).returns(FactoryGirl.create(:user))
+          result = question.upvote
+          markup = Capybara.string(result)
+          expect(markup).to have_selector('i.upvote')
+          expect(markup).to_not have_selector('i.upvote.cast')
+        end
       end
     end
 
@@ -67,11 +83,27 @@ describe QuestionDecorator do
     let(:question) { FactoryGirl.create(:question).decorate }
 
     context 'authorized user' do
-      it 'displays link with arrow down' do
-        helpers.stubs(:current_user).returns(FactoryGirl.create(:user))
-        result = question.downvote
-        markup = Capybara.string(result)
-        expect(markup).to have_selector('i.downvote')
+      context 'user has downvoted' do
+        it 'displays link with arrow down' do
+          user = FactoryGirl.create(:user)
+          FactoryGirl.create(:vote, score: -1, user: user, votable_id: question.id, votable_type: "Question")
+          helpers.stubs(:current_user).returns(user)
+
+          result = question.downvote
+          markup = Capybara.string(result)
+          expect(markup).to have_selector('i.downvote')
+          expect(markup).to have_selector('i.downvote.cast')
+        end
+      end
+
+      context 'user has not voted' do
+        it 'displays link with arrow down' do
+          helpers.stubs(:current_user).returns(FactoryGirl.create(:user))
+          result = question.downvote
+          markup = Capybara.string(result)
+          expect(markup).to have_selector('i.downvote')
+          expect(markup).to_not have_selector('i.downvote.cast')
+        end
       end
     end
 
