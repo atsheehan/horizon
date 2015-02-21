@@ -385,8 +385,8 @@ CREATE TABLE questions (
     answers_count integer DEFAULT 0 NOT NULL,
     searchable tsvector,
     question_queue_id integer,
-    visible boolean DEFAULT true,
-    vote_cache integer DEFAULT 0
+    vote_cache integer DEFAULT 0,
+    visible boolean DEFAULT true
 );
 
 
