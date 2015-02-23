@@ -47,9 +47,14 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    @question = current_user.questions.find(params[:id])
-    @question.update_attributes(visible: false)
-    redirect_to questions_path, info: "Successfully deleted question"
+    @question = Question.find(params[:id])
+
+    if @question.destroyable_by?(current_user)
+      @question.update_attributes(visible: false)
+      redirect_to questions_path, info: "Successfully deleted question"
+    else
+      redirect_to questions_path, alert: "You don't have access to delete this."
+    end
   end
 
   def edit

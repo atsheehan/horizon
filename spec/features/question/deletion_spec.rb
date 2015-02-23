@@ -17,7 +17,16 @@ feature 'Students deletes a question' do
     sign_out
     sign_in_as experience_engineer
     visit questions_path
-    
+
+    expect(page).to have_content "Question Header"
+  end
+
+  scenario 'EE can delete a question that a student created' do
+    sign_in_as experience_engineer
+    visit question_path(question)
+
+    click_on "Delete question"
+    expect(page).to have_selector(".deleted-question")
     expect(page).to have_content "Question Header"
   end
 end

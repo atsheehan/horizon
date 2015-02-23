@@ -93,4 +93,29 @@ describe Question do
       expect(question.has_accepted_answer?).to eq false
     end
   end
+
+  describe "#destroyable_by?" do
+    let(:author) { FactoryGirl.create(:user) }
+    let(:student) { FactoryGirl.create(:user) }
+    let(:question) { FactoryGirl.create(:question, user: author) }
+    let(:ee) { FactoryGirl.create(:user, role: "admin") }
+
+    context "admin" do
+      it 'returns true' do
+        expect(question.destroyable_by?(ee)).to be true
+      end
+    end
+
+    context "student who wrote question" do
+      it 'returns true' do
+        expect(question.destroyable_by?(author)).to be true
+      end
+    end
+
+    context "student who didn't write question" do
+      it 'returns false' do
+        expect(question.destroyable_by?(student)).to be false
+      end
+    end
+  end
 end
