@@ -43,7 +43,7 @@
         = link_to @question.user.username, user_path(@question.user)
         asked on
         .created_at= format_datetime(@question.created_at)
-        - if @question.user == current_user
+        - if @question.user == current_user || current_user.admin?
           %br
           = link_to "Edit Question", edit_question_path(@question), class: "button success tiny"
           = link_to "Delete question", question_path(@question),

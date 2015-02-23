@@ -38,9 +38,9 @@
                   - if question.open?
                     = link_to "No Show", question_queue_path(id: question.question_queue, question_queue: { status: "no-show"}), method: :patch, class: "ee-button no-show"
       - elsif @filter != 'queued'
-        .question.box
+        .question.box{ class: ('deleted-question' if !question.visible) }
           .row
-            .large-2.columns
+            .large-2.columns.question-data
               %span
                 %p.answer-count{ class: ('accepted' if question.has_accepted_answer?) }
                   = pluralize question.answers_count, "answer"
