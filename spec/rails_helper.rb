@@ -26,6 +26,10 @@ RSpec.configure do |config|
     ActionMailer::Base.deliveries.clear
   end
 
+  RSpec.configure do |config|
+  config.fuubar_progress_bar_options = { :format => 'Horizon: <%B> %p%% %a' }
+end
+
   config.include ApplicationHelper
   config.include AuthenticationHelper
   config.include ArchiveHelper

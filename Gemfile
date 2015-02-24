@@ -38,6 +38,7 @@ group :development, :test do
   gem "pry-rails"
   gem "vcr"
   gem "shoulda-matchers"
+  gem "fuubar"
 end
 
 group :test do

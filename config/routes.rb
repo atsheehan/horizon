@@ -31,7 +31,7 @@ Rails.application.routes.draw do
     resources :question_comments, only: [:create, :destroy]
     resources :upvotes, only: :create
     resources :downvotes, only: :create
-    resources :watchings, only: [:create, :destroy], controller: "question_watchings"
+    resource :watching, only: [:create, :destroy], controller: "question_watchings"
   end
 
   resources :answers, only: [] do

@@ -52,12 +52,11 @@
             .large-2.columns
               - if question.watched_by?(current_user)
                 = link_to "Stop Watching",
-                  question_watching_path(question, "me"),
+                  question_watching_path(question),
                   method: :delete,
                   class: "button alert tiny"
-                Watching
               - else
-                = link_to "Watch Question", question_watchings_path(question),
+                = link_to "Watch Question", question_watching_path(question),
                   class: "button success tiny",
                   method: :post
 
