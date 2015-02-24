@@ -27,8 +27,8 @@ RSpec.configure do |config|
   end
 
   RSpec.configure do |config|
-  config.fuubar_progress_bar_options = { :format => 'Horizon: <%B> %p%% %a' }
-end
+    config.fuubar_progress_bar_options = { :format => 'Horizon: <%B> %p%% %a' }
+  end
 
   config.include ApplicationHelper
   config.include AuthenticationHelper

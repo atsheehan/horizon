@@ -47,6 +47,5 @@ end
 def watch_question
   question = FactoryGirl.create(:question)
   visit questions_path
-
   click_on 'Watch Question'
 end

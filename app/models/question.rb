@@ -50,15 +50,11 @@ class Question < ActiveRecord::Base
   end
 
   def watch_question(user)
-    # put bang here because it might silently fail, don't think its possible for
-    # it to though since we have validations on the controller for a
-    # current_user
     QuestionWatching.create!(user: user, question: self)
   end
 
   def watched_by?(user)
-    # could probably be refactored to use associations better
-    QuestionWatching.where(user: user, question: self).present?
+    QuestionWatching.find_by(user: user, question: self).present?
   end
 
   private
