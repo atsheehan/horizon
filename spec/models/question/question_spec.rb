@@ -33,6 +33,32 @@ describe Question do
     end
   end
 
+  describe "#watch_question" do
+    it "successfully creates a QuestionWatching associated with question" do
+      user = FactoryGirl.create(:user)
+      question = FactoryGirl.create(:question)
+      expect(QuestionWatching.count).to eq 0
+
+      question.watch_question(user)
+      expect(QuestionWatching.count).to eq 1
+    end
+  end
+
+  describe "#watched_by?" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:question) { FactoryGirl.create(:question) }
+
+    it "returns true if user is watching question" do
+      QuestionWatching.create(user: user, question: question)
+      expect(question.watched_by?(user)).to eq true
+    end
+
+
+    it "returns false if user is not watching this question" do
+      expect(question.watched_by?(user)).to eq false
+    end
+  end
+
   describe "#sorted_answers" do
     it "returns accepted answers before others" do
       question = FactoryGirl.create(:question)

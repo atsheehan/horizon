@@ -45,7 +45,21 @@
                 %p.answer-count{ class: ('accepted' if question.has_accepted_answer?) }
                   = pluralize question.answers_count, "answer"
                 %p.vote-count= pluralize question.vote_cache, "vote"
-            .large-10.columns
+            .large-8.columns
               %h3.title
                 = link_to question.title, question
                 = question.queue_status
+            .large-2.columns
+              - if question.watched_by?(current_user)
+                = link_to "Stop Watching",
+                  question_watching_path(question, "me"),
+                  method: :delete,
+                  class: "button alert tiny"
+                Watching
+              - else
+                = link_to "Watch Question", question_watchings_path(question),
+                  class: "button success tiny",
+                  method: :post
+
+
+

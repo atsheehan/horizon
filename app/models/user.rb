@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   has_many :question_comments, dependent: :destroy
   has_many :answer_comments, dependent: :destroy
   has_many :votes
+  has_many :question_watchings, dependent: :destroy
 
   validates :username, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true

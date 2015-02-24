@@ -4,6 +4,7 @@ class Question < ActiveRecord::Base
   belongs_to :accepted_answer, class_name: "Answer"
   has_many :answers, dependent: :destroy
   has_many :question_comments, dependent: :destroy
+  has_many :question_watchings, dependent: :destroy
   include Votable
 
   validates :title, presence: true, length: { in: 10..200 }
@@ -46,6 +47,18 @@ class Question < ActiveRecord::Base
 
   def destroyable_by?(user)
     self.user == user || user.admin?
+  end
+
+  def watch_question(user)
+    # put bang here because it might silently fail, don't think its possible for
+    # it to though since we have validations on the controller for a
+    # current_user
+    QuestionWatching.create!(user: user, question: self)
+  end
+
+  def watched_by?(user)
+    # could probably be refactored to use associations better
+    QuestionWatching.where(user: user, question: self).present?
   end
 
   private
