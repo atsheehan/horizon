@@ -45,13 +45,19 @@ class Question < ActiveRecord::Base
   end
 
   def destroyable_by?(user)
-    return false if user.nil?
-    self.user == user || user.admin?
+    if user
+      self.user == user || user.admin?
+    else
+      false
+    end
   end
 
   def editable_by?(user)
-    return false if user.nil?
-    self.user == user
+    if user
+      self.user == user
+    else
+      false
+    end
   end
 
   private
