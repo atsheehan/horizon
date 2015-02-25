@@ -50,11 +50,11 @@ class Question < ActiveRecord::Base
   end
 
   def watch_question(user)
-    QuestionWatching.create!(user: user, question: self)
+    question_watchings.create!(user: user)
   end
 
   def watched_by?(user)
-    QuestionWatching.find_by(user: user, question: self).present?
+    question_watchings.find_by(user: user).present?
   end
 
   private

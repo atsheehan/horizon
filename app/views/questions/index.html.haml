@@ -49,7 +49,7 @@
               %h3.title
                 = link_to question.title, question
                 = question.queue_status
-            .large-2.columns.watch-buttons
+            .large-2.columns.watch-buttons.text-center
               - if question.watched_by?(current_user)
                 = link_to "Stop Watching",
                   question_watching_path(question),
