@@ -93,4 +93,73 @@ describe Question do
       expect(question.has_accepted_answer?).to eq false
     end
   end
+
+  describe "#destroyable_by?" do
+    let(:author) { FactoryGirl.create(:user) }
+    let(:student) { FactoryGirl.create(:user) }
+    let(:question) { FactoryGirl.create(:question, user: author) }
+    let(:ee) { FactoryGirl.create(:user, role: "admin") }
+
+    context "admin" do
+      it 'returns true' do
+        # expect(question.destroyable_by?(ee)).to be true
+        expect(question).to be_destroyable_by(ee)
+      end
+    end
+
+    context "student who wrote question" do
+      it 'returns true' do
+        # expect(question.destroyable_by?(author)).to be true
+        expect(question).to be_destroyable_by(author)
+      end
+    end
+
+    context "student who didn't write question" do
+      it 'returns false' do
+        expect(question).to_not be_destroyable_by(student)
+      end
+    end
+
+    context "as a visitor" do
+      it 'returns false' do
+        expect(question).to_not be_destroyable_by(nil)
+      end
+    end
+  end
+
+  describe "editable_by?" do
+    let(:author) { FactoryGirl.create(:user) }
+    let(:student) { FactoryGirl.create(:user) }
+    let(:question) { FactoryGirl.create(:question, user: author) }
+    let(:ee) { FactoryGirl.create(:user, role: "admin") }
+
+    context "admin" do
+      it 'returns false if admin didnt write quesiton' do
+        expect(question).to_not be_editable_by(ee)
+      end
+
+      it 'returns true if admin wrote question' do
+        admin_question = FactoryGirl.create(:question, user: ee)
+        expect(admin_question).to be_editable_by(ee)
+      end
+    end
+
+    context "student who wrote question" do
+      it 'returns true' do
+        expect(question).to be_editable_by(author)
+      end
+    end
+
+    context "student who didn't write question" do
+      it 'returns false' do
+        expect(question).to_not be_editable_by(student)
+      end
+    end
+
+    context "as a visitor" do
+      it 'returns false' do
+        expect(question).to_not be_editable_by(nil)
+      end
+    end
+  end
 end

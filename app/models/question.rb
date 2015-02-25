@@ -44,6 +44,22 @@ class Question < ActiveRecord::Base
     where("searchable @@ plainto_tsquery(?)", query)
   end
 
+  def destroyable_by?(user)
+    if user
+      self.user == user || user.admin?
+    else
+      false
+    end
+  end
+
+  def editable_by?(user)
+    if user
+      self.user == user
+    else
+      false
+    end
+  end
+
   private
 
   def reset_question_queue
