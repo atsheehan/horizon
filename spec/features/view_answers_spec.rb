@@ -32,7 +32,5 @@ feature "answering questions" do
       expect(page).to have_content("Failed to save answer.")
       expect(Answer.count).to eq(0)
     end
-
-    scenario "comment on an answer"
   end
 end

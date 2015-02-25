@@ -12,7 +12,8 @@ feature "view submissions" do
 
     scenario "include link to view public submissions" do
       visit lesson_path(lesson)
-      expect(page).to have_link("Submissions", href: lesson_submissions_path(lesson))
+      expect(page).
+        to have_link("Submissions", href: lesson_submissions_path(lesson))
     end
 
     scenario "see my submissions for a lesson" do
@@ -33,8 +34,8 @@ feature "view submissions" do
     end
 
     scenario "see public submissions from other users" do
-      my_submission = FactoryGirl
-        .create(:submission, lesson: lesson, user: user)
+      my_submission = FactoryGirl.
+        create(:submission, lesson: lesson, user: user)
       submissions = FactoryGirl.
         create_list(:submission, 3, lesson: lesson, public: true)
 
@@ -53,8 +54,8 @@ feature "view submissions" do
     end
 
     scenario "hide other public submissions if haven't submitted once" do
-      submission = FactoryGirl
-        .create(:submission, lesson: lesson, public: true)
+      submission = FactoryGirl.
+        create(:submission, lesson: lesson, public: true)
 
       visit lesson_submissions_path(lesson)
 
@@ -67,14 +68,18 @@ feature "view submissions" do
 
     scenario "view submission with multiple files" do
       submission = FactoryGirl.create(:submission, user: user)
-      FactoryGirl.create(:source_file,
-                         submission: submission,
-                         filename: "bar.rb",
-                         body: "b = 2")
-      FactoryGirl.create(:source_file,
-                         submission: submission,
-                         filename: "foo.rb",
-                         body: "a = 1")
+      FactoryGirl.create(
+        :source_file,
+        submission: submission,
+        filename: "bar.rb",
+        body: "b = 2"
+      )
+      FactoryGirl.create(
+        :source_file,
+        submission: submission,
+        filename: "foo.rb",
+        body: "a = 1"
+        )
 
       visit submission_path(submission)
 
@@ -106,8 +111,10 @@ feature "view submissions" do
     end
 
     scenario "view submission from student" do
-      submission = FactoryGirl.create(:submission_with_file,
-                                      lesson: lesson)
+      submission = FactoryGirl.create(
+        :submission_with_file,
+        lesson: lesson
+        )
 
       visit submission_path(submission)
 
@@ -131,7 +138,10 @@ feature "view submissions" do
 
         visit assignment_path(assignment)
 
-        expect(page).to have_link(team_member.user.username, href: submission_path(submission))
+        expect(page).
+          to have_link(team_member.user.username,
+            href: submission_path(submission)
+            )
         expect(page).to have_content("On-Time")
       end
 

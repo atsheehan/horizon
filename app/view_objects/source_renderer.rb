@@ -67,16 +67,21 @@ class SourceRenderer
       <td colspan="2">
         <div class="code-comment-header">
           <span class="code-username">#{comment.user.username}</span>
-          commented on <span class=\"code-timestamp\">#{comment.created_at}</span>
+          commented on <span class=\"code-timestamp\">
+                        #{comment.created_at}
+                      </span>
         </div>
-        <div class="code-comment-body">#{render_safe_markdown(comment.body)}</div>
+        <div class="code-comment-body">
+          #{render_safe_markdown(comment.body)}
+        </div>
       </td>
     </tr>
     HTML
   end
 
   def lexer
-    @lexer ||= Rouge::Lexer.find_fancy(language, source_file.body) || Rouge::Lexers::PlainText
+    @lexer ||= Rouge::Lexer.
+      find_fancy(language, source_file.body) || Rouge::Lexers::PlainText
   end
 
   def formatter

@@ -141,7 +141,7 @@ class Lesson < ActiveRecord::Base
     next_lessons.sort!
 
     while !next_lessons.empty?
-      next_lesson = next_lessons.shift()
+      next_lesson = next_lessons.shift
       ordered.push(next_lesson)
 
       lesson_prereqs.each do |lesson, prereqs|

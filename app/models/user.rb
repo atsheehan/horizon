@@ -1,5 +1,4 @@
 class User < ActiveRecord::Base
-<<<<<<< HEAD
   has_many :submissions,
     dependent: :destroy
 
@@ -18,12 +17,29 @@ class User < ActiveRecord::Base
   has_many :announcements,
     through: :teams
 
-  has_many :assigned_lessons, through: :assignments, source: :lesson
-  has_many :answers
-  has_many :questions
+  has_many :assigned_lessons,
+    through: :assignments,
+    source: :lesson
 
-  has_many :announcement_receipts
-  has_many :question_queues
+  has_many :answers,
+    dependent: :destroy
+
+  has_many :questions,
+    dependent: :destroy
+
+  has_many :announcement_receipts,
+    dependent: :destroy
+
+  has_many :question_queues,
+    dependent: :destroy
+
+  has_many :question_comments,
+    dependent: :destroy
+
+  has_many :answer_comments,
+    dependent: :destroy
+
+  has_many :votes
 
   include Feedster::Actor
   include Feedster::Recipient
@@ -101,17 +117,19 @@ class User < ActiveRecord::Base
 
   def latest_announcements(count)
     announcements.
-      joins("LEFT JOIN announcement_receipts ON announcements.id = announcement_receipts.announcement_id AND announcement_receipts.user_id = #{id}").
+      joins("LEFT JOIN announcement_receipts ON announcements.id = \
+        announcement_receipts.announcement_id AND \
+        announcement_receipts.user_id = #{id}").
       where("announcement_receipts.id IS NULL").
       order(created_at: :desc).limit(count)
   end
 
   def core_assignments
-     assignments.where(required: true).order(due_on: :asc)
+    assignments.where(required: true).order(due_on: :asc)
   end
 
   def non_core_assignments
-     assignments.where(required: false).order(due_on: :asc)
+    assignments.where(required: false).order(due_on: :asc)
   end
 
   private

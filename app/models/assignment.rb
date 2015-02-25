@@ -53,8 +53,8 @@ SELECT
 FROM users
   INNER JOIN team_memberships ON users.id = team_memberships.user_id
   INNER JOIN teams ON teams.id = team_memberships.team_id
-  LEFT OUTER JOIN (SELECT * FROM submissions WHERE lesson_id = ?) subs ON subs.user_id = users.id WHERE teams.id = ?
+  LEFT OUTER JOIN (SELECT * FROM submissions WHERE lesson_id = ?) subs
+ON subs.user_id = users.id WHERE teams.id = ?
 ORDER BY users.username ASC, subs.created_at DESC
 SQL
-
 end

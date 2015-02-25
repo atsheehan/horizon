@@ -13,8 +13,8 @@ feature "comment on submission" do
 
     scenario "comment on another user's public submission" do
       FactoryGirl.create(:submission, lesson: lesson, user: user)
-      submission = FactoryGirl
-        .create(:submission, lesson: lesson, public: true)
+      submission = FactoryGirl.
+        create(:submission, lesson: lesson, public: true)
 
       visit submission_path(submission)
 
@@ -51,7 +51,7 @@ feature "comment on submission" do
 
     it "comment on specific file and line" do
       file = FactoryGirl.create(:source_file,
-                                body: "foo = 1\nbar = 2\nputs foo + bar")
+        body: "foo = 1\nbar = 2\nputs foo + bar")
 
       visit submission_path(file.submission)
 

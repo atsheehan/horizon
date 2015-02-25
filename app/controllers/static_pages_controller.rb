@@ -12,7 +12,4 @@ class StaticPagesController < ApplicationController
     @content = File.read(Rails.root.join("db/pages/getting-started.md"))
   end
 
-  def dailies
-    @content = File.read(Rails.root.join("db/pages/daily-summaries-winter-2014.md"))
-  end
 end
