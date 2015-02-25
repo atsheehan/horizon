@@ -6,6 +6,18 @@
 
 %h2 Lessons
 
+%dl.sub-nav
+  %dt Filter:
+  %dd{ class: ("active" unless params[:type]) }= link_to "All"
+  %dd{ class: ("active" if params[:type] == "article") }
+    = link_to "Articles", lessons_path(type: "article")
+  %dd{ class: ("active" if params[:type] == "challenge") }
+    = link_to "Challenges", lessons_path(type: "challenge")
+  %dd{ class: ("active" if params[:type] == "exercise") }
+    = link_to "Exercises", lessons_path(type: "exercise")
+  %dd{ class: ("active" if params[:type] == "tutorial") }
+    = link_to "Tutorials", lessons_path(type: "tutorial")
+
 - if params[:query]
   .result-count
     - if @lessons.empty?
