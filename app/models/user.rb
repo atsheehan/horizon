@@ -39,7 +39,8 @@ class User < ActiveRecord::Base
   has_many :answer_comments,
     dependent: :destroy
 
-  has_many :votes
+  has_many :votes,
+    dependent: :destroy
 
   include Feedster::Actor
   include Feedster::Recipient
