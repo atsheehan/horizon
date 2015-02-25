@@ -20,6 +20,7 @@ gem "carrierwave"
 gem "fog"
 gem "sidekiq"
 gem "newrelic_rpm"
+gem "flowdock"
 gem "google-api-client"
 gem "redis"
 gem 'draper', '~> 1.3'
@@ -30,17 +31,20 @@ group :development do
 end
 
 group :development, :test do
+  gem "dotenv-rails"
   gem "rspec-rails"
   gem "capybara"
   gem "factory_girl_rails"
   gem "pry-rails"
+  gem "vcr"
   gem "shoulda-matchers"
-  gem "dotenv-rails"
 end
 
 group :test do
   gem "coveralls", require: false
   gem "launchy", require: false
+  gem "mocha", require: false
+  gem "webmock"
   gem "database_cleaner"
 end
 

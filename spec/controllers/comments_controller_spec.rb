@@ -38,9 +38,9 @@ describe CommentsController do
       it "returns a JSON payload with the comment on success" do
         set_auth_headers_for(submission.user)
         post :create,
-             format: :json,
-             submission_id: submission.id,
-             comment: { body: "foo" }
+          format: :json,
+          submission_id: submission.id,
+          comment: { body: "foo" }
 
         expect(response).to be_successful
         body = JSON.parse(response.body)

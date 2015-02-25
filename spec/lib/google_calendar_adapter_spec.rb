@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe GoogleCalendarAdapter do
+describe GoogleCalendarAdapter, :vcr do
   describe "#fetch_events" do
     let(:calendar) do
       GoogleCalendarAdapter.new(ENV["DEFAULT_GOOGLE_CALENDAR_ID"])

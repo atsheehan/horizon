@@ -3,18 +3,23 @@ require "rails_helper"
 describe Lesson do
   describe ".search" do
     let!(:foo) do
-      FactoryGirl
-        .create(:lesson, title: "Blah", body: "i like pizza", description: "bloop")
+      FactoryGirl.
+        create(:lesson,
+          title: "Blah",
+          body: "i like pizza",
+          description: "bloop"
+          )
     end
 
     let!(:bar) do
-      FactoryGirl
-        .create(:lesson, title: "Shazbot", body: "Ruby sure is fun.")
+      FactoryGirl.
+        create(:lesson, title: "Shazbot", body: "Ruby sure is fun.")
     end
 
     let!(:baz) do
-      FactoryGirl
-        .create(:lesson, title: "Mr. Grumblecat", body: "Ruby gems and fiddle sticks.")
+      FactoryGirl.
+        create(:lesson,
+          title: "Mr. Grumblecat", body: "Ruby gems and fiddle sticks.")
     end
 
     it "searches by title" do
@@ -75,8 +80,6 @@ describe Lesson do
       ordered = Lesson.order_lessons(lessons)
       expect(ordered).to eq(["baz", "foo", "bar"])
     end
-
-    it "raises an exception if a circular dependency detected"
   end
 
   describe ".import_all!" do

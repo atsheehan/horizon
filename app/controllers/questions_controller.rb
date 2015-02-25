@@ -4,7 +4,7 @@ class QuestionsController < ApplicationController
       @questions = Question.unanswered
       @filter = "unanswered"
     elsif params[:query] == "queued"
-      @questions = Question.queued.sort_by{ |q| q.question_queue.sort_order }
+      @questions = Question.queued.sort_by { |q| q.question_queue.sort_order }
       @filter = "queued"
     else
       @questions = Question.order(created_at: :desc)
@@ -15,7 +15,11 @@ class QuestionsController < ApplicationController
 
   def show
     @question = Question.find(params[:id]).decorate
+    @answers = AnswerDecorator.decorate_collection(@question.sorted_answers)
     @answer = Answer.new
+    @question_comment = QuestionComment.new
+    @question_comments = @question.question_comments.limit(30)
+    @answer_comment = AnswerComment.new
   end
 
   def new
@@ -43,9 +47,14 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    @question = current_user.questions.find(params[:id])
-    @question.destroy
-    redirect_to questions_path, info: "Successfully deleted question"
+    @question = Question.find(params[:id])
+
+    if @question.destroyable_by?(current_user)
+      @question.update_attributes(visible: false)
+      redirect_to questions_path, info: "Successfully deleted question"
+    else
+      redirect_to questions_path, alert: "You don't have access to delete this."
+    end
   end
 
   def edit

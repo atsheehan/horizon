@@ -3,6 +3,8 @@ require "rails_helper"
 describe Answer do
   let(:question) { FactoryGirl.create(:question) }
 
+  it_behaves_like "a votable object"
+
   describe "#accepted?" do
     it "is true if the answer has been accepted" do
       answer = FactoryGirl.create(:answer, question: question)

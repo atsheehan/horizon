@@ -2,9 +2,9 @@ class CommentsController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @submission = Submission
-      .viewable_by(current_user)
-      .find_by(id: params[:submission_id]) || not_found
+    @submission = Submission.
+      viewable_by(current_user).
+      find_by(id: params[:submission_id]) || not_found
 
     @comment = @submission.comments.build(comment_params)
     @comment.user = current_user

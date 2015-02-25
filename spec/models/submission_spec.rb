@@ -26,9 +26,9 @@ describe Submission do
 
     let!(:inline_comment) do
       FactoryGirl.create(:comment,
-                         submission: submission,
-                         line_number: 1,
-                         source_file: source_file)
+        submission: submission,
+        line_number: 1,
+        source_file: source_file)
     end
 
     describe "#inline_comments" do

@@ -30,8 +30,14 @@ feature "rate lesson" do
     end
 
     scenario "update existing rating" do
-      FactoryGirl.create(:rating, lesson: lesson, user: user,
-        helpfulness: 3, clarity: 1, comment: "So-so.")
+      FactoryGirl.create(
+        :rating,
+        lesson: lesson,
+        user: user,
+        helpfulness: 3,
+        clarity: 1,
+        comment: "So-so."
+        )
 
       visit lesson_path(lesson)
       expect(page).to have_content("So-so.")
@@ -50,8 +56,12 @@ feature "rate lesson" do
     end
 
     scenario "fail to update rating" do
-      FactoryGirl.create(:rating, lesson: lesson,
-        user: user, comment: "So-so.")
+      FactoryGirl.create(
+        :rating,
+        lesson: lesson,
+        user: user,
+        comment: "So-so."
+        )
 
       visit lesson_path(lesson)
       long_comment = "a" * 10_000

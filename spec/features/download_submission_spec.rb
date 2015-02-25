@@ -16,6 +16,7 @@ feature "admin downloads a submission", %q{
   scenario "admin visits submission page, sees link to download" do
     sign_in_as(admin)
     visit submission_path(submission)
-    expect(page).to have_link("Download Submission", href: submission.archive.url)
+    expect(page).
+      to have_link("Download Submission", href: submission.archive.url)
   end
 end

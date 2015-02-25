@@ -25,9 +25,10 @@
   %h2 Questions:
   .questions
     - @questions.each do |question|
-      .question.box
-        %span
-          %h3.title
-            = link_to question.title, question
-        %p.answer_count= pluralize question.answers_count, "answer"
+      - if question.decorate.show?
+        .question.box
+          %span
+            %h3.title
+              = link_to question.title, question
+          %p.answer_count= pluralize question.answers_count, "answer"
 

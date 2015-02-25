@@ -22,9 +22,9 @@ describe QuestionQueuesController do
       end
 
       it 'calls the queue method on the question' do
-        question = double(id: 1)
-        allow(Question).to receive(:find).and_return(question)
-        expect(question).to receive(:queue)
+        question = stub(id: 1)
+        Question.stubs(:find).returns(question)
+        question.expects(:queue)
 
         post :create, question_id: question.id
       end
@@ -34,9 +34,8 @@ describe QuestionQueuesController do
       it 'redirects to the question#show route' do
         session[:user_id] = user.id
 
-        expect{
-          post :create, question_id: question.id
-        }.to raise_error(ActionController::RoutingError)
+        expect { post :create, question_id: question.id }.
+          to raise_error(ActionController::RoutingError)
       end
     end
   end
@@ -44,7 +43,9 @@ describe QuestionQueuesController do
   describe '#update' do
     let(:user) { FactoryGirl.create(:user) }
     let(:question_queue) { FactoryGirl.create(:question_queue) }
-    let(:question) { FactoryGirl.create(:question, question_queue: question_queue, user: user) }
+    let(:question) do
+      FactoryGirl.create(:question, question_queue: question_queue, user: user)
+    end
     let(:experience_engineer) { FactoryGirl.create(:admin) }
 
     before(:each) do
@@ -52,16 +53,20 @@ describe QuestionQueuesController do
     end
 
     it 'redirects to the queue index' do
-      patch :update, id: question_queue.id, question_queue: { status: 'in-progress' }
+      patch :update,
+        id: question_queue.id,
+        question_queue: { status: 'in-progress' }
       expect(response).to redirect_to(questions_path(query: 'queued'))
     end
 
     it 'calls update_in_queue with proper args' do
-      question_queue = double(id: 1)
-      allow(QuestionQueue).to receive(:find).and_return(question_queue)
-      expect(question_queue).to receive(:update_in_queue).with('no-show', experience_engineer)
+      question_queue = stub(id: 1)
+      QuestionQueue.stubs(:find).returns(question_queue)
+      question_queue.expects(:update_in_queue).with('no-show', experience_engineer)
 
-      patch :update, id: question_queue.id, question_queue: { status: 'no-show' }
+      patch :update,
+        id: question_queue.id,
+        question_queue: { status: 'no-show' }
     end
   end
 end

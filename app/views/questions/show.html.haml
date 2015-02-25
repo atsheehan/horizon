@@ -6,40 +6,94 @@
   %li.current= link_to @question.title, question_path(@question)
 
 #question
-  %h2.title
-    = @question.title
-    = @question.queue_status
+  .question-title
+    .question-votes
+      = @question.upvote
+      = @question.display_total_votes
+      = @question.downvote
+    %h2.title
+      = @question.title
+      = @question.queue_status
+  %hr
   .row
     .small-8.columns
       %p.body~ render_safe_markdown(@question.body)
+      %ul.question-comments
+        - @question_comments.each do |comment|
+          %li.qa-comment
+            = comment.body
+            %span.comment-user
+              = " - #{comment.user.name}, #{comment_time(comment.created_at)} "
+            - if comment.user == current_user
+              = link_to question_question_comment_path(@question, comment),
+                method: :delete,
+                class: 'delete-question-comment',
+                data: { confirm: "Are you sure you want to delete comment?" } do
+                %i.fi-x.delete-comment
+
+      %p.add-question-comment= link_to "add comment"
+      #question-comment.hidden
+        = form_for [@question, @question_comment] do |f|
+          = f.text_area :body
+
+          = f.submit "create comment", class: "button tiny success", id: "create-question-comment"
+
     .small-4.columns
       .user
         = link_to @question.user.username, user_path(@question.user)
         asked on
         .created_at= format_datetime(@question.created_at)
-        - if @question.user == current_user
-          = link_to "Edit Question", edit_question_path(@question)
-          %br
-          = link_to "Delete question", question_path(@question), method: :delete
+        %br
+        - if @question.editable_by?(current_user)
+          = link_to "Edit Question", edit_question_path(@question), class: "button success tiny"
+        - if @question.destroyable_by?(current_user)
+          = link_to "Delete question", question_path(@question),
+            method: :delete,
+            class: "button alert tiny",
+            data: { confirm: "Are you sure?" }
 
 #answers
   %h3.answer-count= pluralize(@question.answers.count, "answer")
 
-  - @question.sorted_answers.each do |answer|
+  - @answers.each do |answer|
     - if answer.persisted?
       .row.answer{ class: @question.accepted_answer_id == answer.id ? 'accepted-answer' : ''  }
         .small-8.columns
-          %p.body~ render_safe_markdown(answer.body)
-          - if answer.user == current_user
-            = link_to "Edit Answer", edit_question_answer_path(@question, answer), class: "button tiny success"
-            = link_to "Delete Answer", question_answer_path(@question, answer), method: :delete, class: "button tiny alert"
+          .answer-container
+            .answer-votes
+              = answer.display_upvote
+              = answer.display_total_votes
+              = answer.display_downvote
+
+            %p.body~ render_safe_markdown(answer.body)
+
+          %ul.answer-comments
+            - if answer.answer_comments.present?
+              - answer.answer_comments.each do |comment|
+                %li.qa-comment
+                  = comment.body
+                  %span.comment-user
+                    = " - #{comment.user.name}, #{comment_time(comment.created_at)}"
+                  - if comment.user == current_user
+                    = link_to answer_answer_comment_path(answer, comment),
+                      method: :delete,
+                      class: 'delete-answer-comment',
+                      data: { confirm: "Are you sure you want to delete comment?" } do
+                      %i.fi-x.delete-comment
+
+          %p.add-answer-comment= link_to "add comment"
+          .answer-comment.hidden
+            = form_for [answer, @answer_comment] do |f|
+              = f.text_area :body
+
+              = f.submit "create comment", class: "button tiny success", id: 'create-answer-comment'
 
         .small-4.columns
           .user
             = link_to answer.user.username, user_path(answer.user)
             answered on
             .answered_at= format_datetime(answer.created_at)
-          - if answer.accepted?
+          - if @question.accepted_answer_owned_by_current_user?(answer)
             .accepted
               %i.fi-check.large
               accepted answer
@@ -51,6 +105,12 @@
               = form_for @question do |f|
                 = f.hidden_field :accepted_answer_id, value: answer.id
                 = f.submit "Accept Answer", class: "tiny button"
+          - if answer.user == current_user
+            = link_to "Edit Answer", edit_question_answer_path(@question, answer), class: "button tiny success"
+            = link_to "Delete Answer", question_answer_path(@question, answer),
+              method: :delete,
+              class: "button tiny alert",
+              data: { confirm: "Are you sure?" }
 
 #new-answer
   = form_for [@question, @answer] do |f|

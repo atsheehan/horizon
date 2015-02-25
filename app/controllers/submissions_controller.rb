@@ -3,15 +3,15 @@ class SubmissionsController < ApplicationController
 
   def index
     @lesson = Lesson.find_by!(slug: params[:lesson_slug])
-    @submissions = @lesson
-      .submissions_viewable_by(current_user)
-      .order(featured: :desc)
-      .includes(:user)
+    @submissions = @lesson.
+      submissions_viewable_by(current_user).
+      order(featured: :desc).
+      includes(:user)
   end
 
   def show
-    @submission = Submission
-      .authorized_find(current_user, params[:id]) || not_found
+    @submission = Submission.
+      authorized_find(current_user, params[:id]) || not_found
     @comment = Comment.new
   end
 
