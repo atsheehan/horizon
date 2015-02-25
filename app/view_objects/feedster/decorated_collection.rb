@@ -24,6 +24,9 @@ module Feedster
       @decorator_map ||= {
         'Comment' => {
           'create' => Feedster::CommentCreatedDecorator
+        },
+        'Announcement' => {
+          'create' => Feedster::AnnouncementCreatedDecorator
         }
       }
     end

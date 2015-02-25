@@ -6,6 +6,11 @@ class Announcement < ActiveRecord::Base
   validates :title, presence: true
   validates :description, presence: true
 
+  include Feedster::Subject
+  generates_feed_item :create,
+    actor: ->(c) { User.where(role: "admin").first }, # story to fix this actor
+    recipients: ->(c) { c.team.users }
+
   def dispatch
     if save
       Notifications::AnnouncementNotification.new(self).dispatch
