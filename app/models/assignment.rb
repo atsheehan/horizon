@@ -7,6 +7,11 @@ class Assignment < ActiveRecord::Base
   validates :required, inclusion: [true, false]
   validates :due_on, presence: true
 
+  include Feedster::Subject
+  generates_feed_item :create,
+    actor: ->(c) { User.where(role: "admin").first },
+    recipients: ->(c) { c.team.users }
+
   def submitted?(user)
     lesson.submissions.where(user: user).count > 0
   end
