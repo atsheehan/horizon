@@ -1,6 +1,6 @@
 class LessonsController < ApplicationController
   def index
-    @lessons = filter_lessons(Lesson.order(:position))
+    @lessons = filter_lessons(Lesson.order(:title))
   end
 
   def show

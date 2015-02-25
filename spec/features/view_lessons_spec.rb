@@ -2,9 +2,9 @@ require "rails_helper"
 
 feature "view lessons" do
   scenario "view list of available lessons" do
-    middle_lesson = FactoryGirl.create(:lesson, position: 2)
-    first_lesson = FactoryGirl.create(:lesson, position: 1)
-    last_lesson = FactoryGirl.create(:lesson, position: 3)
+    middle_lesson = FactoryGirl.create(:lesson, title: "Unit Testing")
+    first_lesson = FactoryGirl.create(:lesson, title: "Ajax")
+    last_lesson = FactoryGirl.create(:lesson, title: "Validations")
 
     visit lessons_path
 
