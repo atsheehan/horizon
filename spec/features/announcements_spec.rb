@@ -5,6 +5,7 @@ feature "announcements" do
 
   context "as a team member" do
     let(:team_member) { FactoryGirl.create(:team_membership, team: team) }
+    let!(:ee) { FactoryGirl.create(:user, role: "admin") } # Needed for Actor in Feedster
 
     before :each do
       sign_in_as(team_member.user)
@@ -22,8 +23,10 @@ feature "announcements" do
         expect(page).to have_content(announcement.title)
       end
 
-      old_announcements.each do |announcement|
-        expect(page).to_not have_content(announcement.title)
+      within '.table-announcement' do
+        old_announcements.each do |announcement|
+          expect(page).to_not have_content(announcement.title)
+        end
       end
     end
 
@@ -66,7 +69,9 @@ feature "announcements" do
       click_link announcement.title
       click_on "Got It"
 
-      expect(page).to_not have_content(announcement.title)
+      within '.table-announcement' do
+        expect(page).to_not have_content(announcement.title)
+      end
       expect(page).to have_content("Dashboard")
     end
   end
