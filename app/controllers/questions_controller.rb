@@ -32,7 +32,7 @@ class QuestionsController < ApplicationController
     @question.save
 
     if @question.save
-      @question.watch_question(current_user) # person who created question automatically watches question
+      @question.add_watcher(current_user)
       flash[:info] = "Question saved."
       redirect_to question_path(@question)
     else

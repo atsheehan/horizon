@@ -7,16 +7,20 @@ class QuestionWatchingsController < ApplicationController
 
     if watching.save
       flash[:info] =  "Now watching question."
+    else
+      flash[:alert] = "Already watching question."
     end
     redirect_to questions_path
   end
 
   def destroy
     watching = current_user.question_watchings.find_by!(question_id: params[:question_id])
+
     if watching.destroy
-      redirect_to questions_path, info: "Stopped watching question."
+      flash[:info] = "Stopped watching question."
     else
-      redirect_to questions_path, alert: "You're not watching that question."
+      flash[:alert] = "You're not watching that question."
     end
+    redirect_to questions_path
   end
 end

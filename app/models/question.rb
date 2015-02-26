@@ -49,8 +49,8 @@ class Question < ActiveRecord::Base
     self.user == user || user.admin?
   end
 
-  def watch_question(user)
-    question_watchings.create!(user: user)
+  def add_watcher(user)
+    question_watchings.find_or_create_by!(user: user)
   end
 
   def watched_by?(user)

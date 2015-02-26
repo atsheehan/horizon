@@ -39,6 +39,7 @@ group :development, :test do
   gem "vcr"
   gem "shoulda-matchers"
   gem "fuubar"
+  gem "valid_attribute"
 end
 
 group :test do

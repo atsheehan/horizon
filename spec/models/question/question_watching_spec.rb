@@ -1,6 +1,6 @@
 require 'rails_helper'
 
 describe QuestionWatching do
-  it { should validate_presence_of(:user) }
-  it { should validate_presence_of(:question) }
+  it { should have_valid(:user).when(User.new) }
+  it { should_not have_valid(:user).when(nil) }
 end

@@ -33,13 +33,13 @@ describe Question do
     end
   end
 
-  describe "#watch_question" do
+  describe "#add_watcher" do
     it "successfully creates a QuestionWatching associated with question" do
       user = FactoryGirl.create(:user)
       question = FactoryGirl.create(:question)
       expect(QuestionWatching.count).to eq 0
 
-      question.watch_question(user)
+      question.add_watcher(user)
       expect(QuestionWatching.count).to eq 1
     end
   end

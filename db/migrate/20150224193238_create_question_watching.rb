@@ -6,5 +6,7 @@ class CreateQuestionWatching < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :question_watchings, [:question_id, :user_id], unique: true
   end
 end

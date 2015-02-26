@@ -265,6 +265,41 @@ ALTER SEQUENCE comments_id_seq OWNED BY comments.id;
 
 
 --
+-- Name: feed_items; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE feed_items (
+    id integer NOT NULL,
+    subject_id integer NOT NULL,
+    subject_type character varying(255) NOT NULL,
+    recipient_id integer NOT NULL,
+    actor_id integer NOT NULL,
+    verb character varying(255) NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: feed_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE feed_items_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: feed_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE feed_items_id_seq OWNED BY feed_items.id;
+
+
+--
 -- Name: lessons; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -742,6 +777,13 @@ ALTER TABLE ONLY comments ALTER COLUMN id SET DEFAULT nextval('comments_id_seq':
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY feed_items ALTER COLUMN id SET DEFAULT nextval('feed_items_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY lessons ALTER COLUMN id SET DEFAULT nextval('lessons_id_seq'::regclass);
 
 
@@ -876,6 +918,14 @@ ALTER TABLE ONLY calendars
 
 ALTER TABLE ONLY comments
     ADD CONSTRAINT comments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: feed_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY feed_items
+    ADD CONSTRAINT feed_items_pkey PRIMARY KEY (id);
 
 
 --
@@ -1052,6 +1102,27 @@ CREATE INDEX index_comments_on_user_id ON comments USING btree (user_id);
 
 
 --
+-- Name: index_feed_items_on_actor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_feed_items_on_actor_id ON feed_items USING btree (actor_id);
+
+
+--
+-- Name: index_feed_items_on_recipient_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_feed_items_on_recipient_id ON feed_items USING btree (recipient_id);
+
+
+--
+-- Name: index_feed_items_on_subject_id_and_subject_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_feed_items_on_subject_id_and_subject_type ON feed_items USING btree (subject_id, subject_type);
+
+
+--
 -- Name: index_lessons_on_searchable; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1070,6 +1141,13 @@ CREATE UNIQUE INDEX index_lessons_on_slug ON lessons USING btree (slug);
 --
 
 CREATE INDEX index_lessons_on_visibility ON lessons USING btree (visibility);
+
+
+--
+-- Name: index_question_watchings_on_question_id_and_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_question_watchings_on_question_id_and_user_id ON question_watchings USING btree (question_id, user_id);
 
 
 --
@@ -1298,6 +1376,8 @@ INSERT INTO schema_migrations (version) VALUES ('20141216212826');
 INSERT INTO schema_migrations (version) VALUES ('20141217191055');
 
 INSERT INTO schema_migrations (version) VALUES ('20150102202537');
+
+INSERT INTO schema_migrations (version) VALUES ('20150116001337');
 
 INSERT INTO schema_migrations (version) VALUES ('20150122213444');
 

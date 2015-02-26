@@ -1,6 +1,5 @@
 require 'rails_helper'
 
-
 feature 'question watching' do
   context 'as an authorized user' do
     let(:user) { FactoryGirl.create(:user) }
@@ -33,6 +32,17 @@ feature 'question watching' do
       click_on 'Stop Watching'
       expect(page).to have_content('Watch Question')
       expect(page).to have_content('Stopped watching question.')
+    end
+
+    scenario 'I watch a question when answering on it' do
+      question = FactoryGirl.create(:question)
+      visit question_path(question)
+
+      fill_in "Answer", with: "this is the answer to the question!"
+      click_on "Submit Answer"
+
+      visit questions_path
+      expect(page).to have_content("Stop Watching")
     end
   end
 
