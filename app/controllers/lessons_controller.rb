@@ -1,6 +1,6 @@
 class LessonsController < ApplicationController
   def index
-    @lessons = filter_lessons(Lesson.order(:position))
+    @lessons = filter_lessons(ordered_lessons)
   end
 
   def show
@@ -9,6 +9,14 @@ class LessonsController < ApplicationController
   end
 
   private
+
+  def ordered_lessons
+    if params[:order] == "most_recent"
+      Lesson.order(created_at: :desc)
+    else
+      Lesson.order(:title)
+    end
+  end
 
   def filter_lessons(lessons)
     lessons = visible_filter(current_user, lessons)
