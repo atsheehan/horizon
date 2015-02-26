@@ -55,7 +55,7 @@ feature 'question watching' do
 end
 
 def watch_question
-  question = FactoryGirl.create(:question)
+  FactoryGirl.create(:question)
   visit questions_path
   click_on 'Watch Question'
 end
