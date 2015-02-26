@@ -1,6 +1,10 @@
 require "rails_helper"
 
-describe Lesson do
+RSpec.describe Lesson, type: :model do
+
+  it { should have_many(:lesson_tags) }
+  it { should have_many(:lessons) }
+
   describe ".search" do
     let!(:foo) do
       FactoryGirl.

@@ -6,6 +6,8 @@ class Lesson < ActiveRecord::Base
   has_many :submissions, dependent: :destroy
   has_many :ratings, dependent: :destroy
   has_many :assignments, dependent: :destroy
+  has_many :lesson_tags
+  has_many :lessons, through: :lesson_tags
 
   validates :title, presence: true
   validates :slug, presence: true, uniqueness: true
