@@ -71,6 +71,8 @@ class User < ActiveRecord::Base
 
   before_validation :ensure_authentication_token
 
+  scope :admins, -> { where(role: "admins") }
+
   def to_param
     username
   end

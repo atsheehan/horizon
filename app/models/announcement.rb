@@ -8,7 +8,7 @@ class Announcement < ActiveRecord::Base
 
   include Feedster::Subject
   generates_feed_item :create,
-    actor: ->(c) { User.where(role: "admin").first }, # story to fix this actor
+    actor: ->(c) { User.admins.first }, # story to fix this actor
     recipients: ->(c) { c.team.users }
 
   def dispatch
