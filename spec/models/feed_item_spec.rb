@@ -12,9 +12,6 @@ RSpec.describe FeedItem, :type => :model do
   it { should have_valid(:recipient).when(User.new) }
   it { should_not have_valid(:recipient).when(nil) }
 
-  it { should have_valid(:actor).when(User.new) }
-  it { should_not have_valid(:actor).when(nil) }
-
   it { should have_valid(:verb).when('created') }
   it { should_not have_valid(:verb).when(nil, '') }
 end
