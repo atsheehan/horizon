@@ -110,5 +110,23 @@ RSpec.describe Lesson, type: :model do
       expect(lesson.tags.pluck(:name)).to include("json")
       expect(lesson.tags.pluck(:name)).to include("ajax")
     end
+
+    it "creates associations to existing tags if possible" do
+      old_lesson = FactoryGirl.create(:lesson)
+      old_lesson.generate_tags(["jquery"])
+
+      lesson = FactoryGirl.create(:lesson)
+      lesson.generate_tags(["jquery"])
+
+      expect(lesson.tags).to eq(old_lesson.tags)
+    end
+
+    it "does not create duplicate lesson_tags if run a second time" do
+      lesson = FactoryGirl.create(:lesson)
+      lesson.generate_tags(["jquery"])
+      lesson.generate_tags(["jquery"])
+
+      expect(lesson.lesson_tags.length).to eq(1)
+    end
   end
 end

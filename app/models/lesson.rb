@@ -111,8 +111,8 @@ class Lesson < ActiveRecord::Base
 
   def generate_tags(tags)
     tags.each do |tag_name|
-      tag = Tag.create(name: tag_name)
-      LessonTag.create(tag: tag, lesson: self)
+      tag = Tag.find_or_create_by(name: tag_name)
+      LessonTag.find_or_create_by(tag: tag, lesson: self)
     end
   end
 end
