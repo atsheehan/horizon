@@ -46,6 +46,20 @@ describe Feedster::DecoratedCollection do
       collection = Feedster::DecoratedCollection.new([feed_item])
 
       expected_class = Feedster::AssignmentCreatedDecorator
+    end
+  end
+
+  context 'announcement' do
+    it 'decorates an announcement feed item' do
+      team = FactoryGirl.create(:team)
+      student = FactoryGirl.create(:user)
+      FactoryGirl.create(:team_membership, user: student, team: team)
+      announcement = FactoryGirl.create(:announcement, team: team, title: 'New announcement released!')
+      feed_item = announcement.feed_items.first
+
+      collection = Feedster::DecoratedCollection.new([feed_item])
+
+      expected_class = Feedster::AnnouncementCreatedDecorator
       expect(collection.decorate.first).
         to be_kind_of(expected_class)
     end

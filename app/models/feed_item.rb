@@ -13,9 +13,6 @@ class FeedItem < ActiveRecord::Base
   validates :subject,
     presence: true
 
-  validates :actor,
-    presence: true
-
   validates :recipient,
     presence: true
 

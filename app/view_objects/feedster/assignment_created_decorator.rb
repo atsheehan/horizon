@@ -1,11 +1,12 @@
 module Feedster
   class AssignmentCreatedDecorator < Feedster::Decorator
     def title
+      content_tag(:i, '', class: 'fi-laptop assignment-feed') +
       assignment.lesson.title
     end
 
     def body
-      'This is the assingment body'
+      assignment.lesson.description
     end
 
     def created_at

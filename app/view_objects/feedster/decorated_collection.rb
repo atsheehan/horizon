@@ -27,6 +27,9 @@ module Feedster
         },
         'Assignment' => {
           'create' => Feedster::AssignmentCreatedDecorator
+        },
+        'Announcement' => {
+          'create' => Feedster::AnnouncementCreatedDecorator
         }
       }
     end
