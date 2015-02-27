@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Lesson, type: :model do
 
   it { should have_many(:lesson_tags) }
-  it { should have_many(:lessons) }
+  it { should have_many(:tags) }
 
   describe ".search" do
     let!(:foo) do
@@ -61,31 +61,6 @@ RSpec.describe Lesson, type: :model do
 
   let(:sample_lessons_dir) { Rails.root.join("spec/data/sample_lessons") }
 
-  describe ".order_lessons" do
-    it "orders lessons based on dependency" do
-      lessons = {
-        "bat" => ["bar", "baz"],
-        "foo" => [],
-        "bar" => ["foo"],
-        "baz" => ["bar"]
-      }
-
-      ordered = Lesson.order_lessons(lessons)
-      expect(ordered).to eq(["foo", "bar", "baz", "bat"])
-    end
-
-    it "orders independent lessons lexicographically" do
-      lessons = {
-        "baz" => [],
-        "foo" => [],
-        "bar" => ["foo"]
-      }
-
-      ordered = Lesson.order_lessons(lessons)
-      expect(ordered).to eq(["baz", "foo", "bar"])
-    end
-  end
-
   describe ".import_all!" do
     it "imports lessons from a source directory" do
       Lesson.import_all!(sample_lessons_dir)
@@ -96,6 +71,7 @@ RSpec.describe Lesson, type: :model do
       expect(lesson.description).to eq("bloop.")
       expect(lesson.visibility).to eq("assign")
       expect(lesson.body).to eq("beep boop i'm an expression\n")
+      expect(lesson.tags.pluck(:name)).to include("expressions")
     end
 
     it "updates an existing lesson" do
@@ -122,18 +98,17 @@ RSpec.describe Lesson, type: :model do
       expect(lesson.type).to eq("exercise")
       expect(lesson.archive.url).to_not eq(nil)
     end
+  end
 
-    it "orders the lessons based on dependencies" do
-      Lesson.import_all!(sample_lessons_dir)
+  describe ".generate_tags" do
+    it "creates new associated tag objects from an array" do
+      lesson = FactoryGirl.create(:lesson)
+      tags = ["javascript", "json", "ajax"]
 
-      expressions = Lesson.find_by!(slug: "expressions")
-      data_types = Lesson.find_by!(slug: "data-types")
-      conditionals = Lesson.find_by!(slug: "conditionals")
-      rps = Lesson.find_by!(slug: "rock-paper-scissors")
-
-      expect(expressions.position).to be < (data_types.position)
-      expect(data_types.position).to be < (conditionals.position)
-      expect(conditionals.position).to be < (rps.position)
+      lesson.generate_tags(tags)
+      expect(lesson.tags.pluck(:name)).to include("javascript")
+      expect(lesson.tags.pluck(:name)).to include("json")
+      expect(lesson.tags.pluck(:name)).to include("ajax")
     end
   end
 end

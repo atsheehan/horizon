@@ -309,7 +309,6 @@ CREATE TABLE lessons (
     archive character varying(255),
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    "position" integer NOT NULL,
     visibility character varying(255) DEFAULT 'public'::character varying NOT NULL
 );
 
@@ -1385,4 +1384,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150219185122');
 INSERT INTO schema_migrations (version) VALUES ('20150226194335');
 
 INSERT INTO schema_migrations (version) VALUES ('20150226195210');
+
+INSERT INTO schema_migrations (version) VALUES ('20150227154100');
 
