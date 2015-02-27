@@ -38,7 +38,6 @@ describe Feedster::DecoratedCollection do
     it 'decorates an announcement feed item' do
       team = FactoryGirl.create(:team)
       student = FactoryGirl.create(:user)
-      ee = FactoryGirl.create(:user, role: "admin")
       FactoryGirl.create(:team_membership, user: student, team: team)
       announcement = FactoryGirl.create(:announcement, team: team, title: 'New announcement released!')
       feed_item = announcement.feed_items.first
@@ -50,6 +49,4 @@ describe Feedster::DecoratedCollection do
         to be_kind_of(expected_class)
     end
   end
-
-
 end

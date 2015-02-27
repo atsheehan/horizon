@@ -22,7 +22,6 @@ feature "view dashboard feed", %Q{
     scenario 'sees feed for announcements' do
       team = FactoryGirl.create(:team)
       student = FactoryGirl.create(:user)
-      ee = FactoryGirl.create(:user, role: "admin")
       FactoryGirl.create(:team_membership, user: student, team: team)
       FactoryGirl.create(:announcement, team: team, title: 'New announcement released!')
 
@@ -34,5 +33,15 @@ feature "view dashboard feed", %Q{
       end
     end
   end
-  scenario 'unauthenticated'
+
+  context 'as unauthenticated user' do
+    scenario 'feed items are not displayed' do
+      FactoryGirl.create(:announcement, title: 'New announcement released!')
+
+      visit root_path
+
+      expect(page).to_not have_content('New announcement released!')
+      expect(page).to_not have_selector('.feed-items')
+    end
+  end
 end

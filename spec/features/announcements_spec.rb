@@ -5,7 +5,6 @@ feature "announcements" do
 
   context "as a team member" do
     let(:team_member) { FactoryGirl.create(:team_membership, team: team) }
-    let!(:ee) { FactoryGirl.create(:admin) } # Needed for Actor in Feedster
 
     before :each do
       sign_in_as(team_member.user)
