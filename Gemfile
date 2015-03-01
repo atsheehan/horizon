@@ -24,6 +24,7 @@ gem "flowdock"
 gem "google-api-client"
 gem "redis"
 gem 'draper', '~> 1.3'
+gem 'httparty'
 gem 'airbrake'
 
 group :development do
