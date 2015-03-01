@@ -24,7 +24,10 @@ module Feedster
     def generate_feed_items
       self.feed_generator_config.each do |verb, config|
         if verb == :create && self.id_changed?
-          actor = config[:actor_proc].call(self)
+          actor = nil
+          if config[:actor_proc].present?
+            actor = config[:actor_proc].call(self)
+          end
           recipients = config[:recipients_proc].call(self)
           recipients.each do |recipient|
             self.feed_items.create! do |feed_item|

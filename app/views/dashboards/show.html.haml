@@ -74,9 +74,9 @@
 - if @feed_items.present?
   %h3 Feed
 
-  %ul
+  %ul.feed-items
     - @feed_items.each do |feed_item|
-      %li
+      %li.box
         %h4= feed_item.title
         .feed-body= feed_item.body
         .timestamp= time_ago_in_words(feed_item.created_at)
