@@ -39,7 +39,8 @@ class User < ActiveRecord::Base
   has_many :answer_comments,
     dependent: :destroy
 
-  has_many :votes
+  has_many :votes,
+    dependent: :destroy
 
   include Feedster::Actor
   include Feedster::Recipient
@@ -69,6 +70,8 @@ class User < ActiveRecord::Base
     }
 
   before_validation :ensure_authentication_token
+
+  scope :admins, -> { where(role: "admins") }
 
   def to_param
     username

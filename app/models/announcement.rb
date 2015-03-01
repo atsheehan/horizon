@@ -6,6 +6,10 @@ class Announcement < ActiveRecord::Base
   validates :title, presence: true
   validates :description, presence: true
 
+  include Feedster::Subject
+  generates_feed_item :create,
+    recipients: ->(c) { c.team.users }
+
   def dispatch
     if save
       Notifications::AnnouncementNotification.new(self).dispatch
