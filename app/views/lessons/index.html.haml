@@ -1,10 +1,35 @@
 - content_for(:title) do
   Lessons - Launch Academy
 
+- type = params[:type]
+- order = params[:order]
+
 %ul.breadcrumbs
   %li.current= link_to "Lessons", lessons_path
 
 %h2 Lessons
+
+.clearfix
+  %dl.sub-nav.left
+    %dt Filter:
+    %dd{ class: ("active" unless type) }
+      = link_to "All", lessons_path(order: order)
+    %dd{ class: ("active" if type == "article") }
+      = link_to "Articles", lessons_path(type: "article", order: order)
+    %dd{ class: ("active" if type == "challenge") }
+      = link_to "Challenges", lessons_path(type: "challenge", order: order)
+    %dd{ class: ("active" if type == "exercise") }
+      = link_to "Exercises", lessons_path(type: "exercise", order: order)
+    %dd{ class: ("active" if type == "tutorial") }
+      = link_to "Tutorials", lessons_path(type: "tutorial", order: order)
+
+  %dl.sub-nav.right
+    %dt Order:
+    %dd{ class: ("active" unless order) }
+      = link_to "Name", lessons_path(type: type)
+    %dd{ class: ("active" if order == "most_recent") }
+      = link_to "Most Recent", lessons_path(order: "most_recent", type: type)
+
 
 - if params[:query]
   .result-count

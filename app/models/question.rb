@@ -3,6 +3,8 @@ class Question < ActiveRecord::Base
   belongs_to :question_queue
   belongs_to :accepted_answer, class_name: "Answer"
   has_many :answers, dependent: :destroy
+  has_many :question_comments, dependent: :destroy
+  include Votable
 
   validates :title, presence: true, length: { in: 10..200 }
   validates :body, presence: true, length: { in: 15..10000 }
@@ -12,13 +14,18 @@ class Question < ActiveRecord::Base
 
   scope :queued, ->() {
     joins(:question_queue).
-    where("questions.question_queue_id IS NOT NULL AND question_queues.status NOT LIKE '%done%'")
+      where("questions.question_queue_id IS NOT NULL AND \
+        question_queues.status NOT LIKE '%done%'")
   }
 
   def accepted_answer_belongs_to_question
     if accepted_answer && !answers.include?(accepted_answer)
       errors.add(:accepted_answer_id, "must belong to this question")
     end
+  end
+
+  def has_accepted_answer?
+    accepted_answer_id ? true : false
   end
 
   def sorted_answers
@@ -37,6 +44,22 @@ class Question < ActiveRecord::Base
     where("searchable @@ plainto_tsquery(?)", query)
   end
 
+  def destroyable_by?(user)
+    if user
+      self.user == user || user.admin?
+    else
+      false
+    end
+  end
+
+  def editable_by?(user)
+    if user
+      self.user == user
+    else
+      false
+    end
+  end
+
   private
 
   def reset_question_queue
@@ -46,4 +69,5 @@ class Question < ActiveRecord::Base
   def create_question_queue
     update_attributes(question_queue: QuestionQueue.create)
   end
+
 end

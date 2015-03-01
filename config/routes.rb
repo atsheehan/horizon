@@ -28,6 +28,15 @@ Rails.application.routes.draw do
 
   resources :questions do
     resources :answers, only: [:edit, :update, :create, :destroy]
+    resources :question_comments, only: [:create, :destroy]
+    resources :upvotes, only: :create
+    resources :downvotes, only: :create
+  end
+
+  resources :answers, only: [] do
+    resources :answer_comments, only: [:create, :destroy]
+    resources :upvotes, only: :create
+    resources :downvotes, only: :create
   end
 
   resource :session, only: [:new, :create, :destroy] do
@@ -40,5 +49,4 @@ Rails.application.routes.draw do
   get "/auth/failure", to: "sessions#failure"
 
   get "/start", to: "static_pages#start"
-  get "/dailies", to: "static_pages#dailies"
 end

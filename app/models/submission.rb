@@ -2,8 +2,7 @@ class Submission < ActiveRecord::Base
   belongs_to :user
   belongs_to :lesson
   has_many :comments
-  has_many :files, -> { order :filename },
-           class_name: "SourceFile"
+  has_many :files, -> { order :filename }, class_name: "SourceFile"
 
   mount_uploader :archive, ArchiveUploader
 
@@ -29,8 +28,6 @@ class Submission < ActiveRecord::Base
     if submission &&
         (user.admin? || user.has_completed_lesson?(submission.lesson))
       submission
-    else
-      nil
     end
   end
 

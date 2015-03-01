@@ -30,7 +30,8 @@ feature "view users" do
     end
 
     scenario "view teams they belong to" do
-      team_memberships = FactoryGirl.create_list(:team_membership, 3, user: user)
+      team_memberships = FactoryGirl.
+        create_list(:team_membership, 3, user: user)
 
       visit user_path(user)
 
