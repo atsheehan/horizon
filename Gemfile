@@ -39,6 +39,9 @@ group :development, :test do
   gem "factory_girl_rails"
   gem "pry-rails"
   gem "vcr"
+  gem "shoulda-matchers"
+  gem "fuubar"
+  gem "valid_attribute"
 end
 
 group :test do
