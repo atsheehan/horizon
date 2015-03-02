@@ -128,5 +128,14 @@ RSpec.describe Lesson, type: :model do
 
       expect(lesson.lesson_tags.length).to eq(1)
     end
+
+    it "removes old existing tags if they no longer apply" do
+      lesson = FactoryGirl.create(:lesson)
+      lesson.generate_tags(["jquery", "data-types"])
+      lesson.generate_tags(["jquery"])
+
+      expect(lesson.tags.pluck(:name)).to include("jquery")
+      expect(lesson.tags.pluck(:name)).to_not include("data-types")
+    end
   end
 end

@@ -109,10 +109,15 @@ class Lesson < ActiveRecord::Base
     lesson
   end
 
-  def generate_tags(tags)
-    tags.each do |tag_name|
+  def generate_tags(new_tags)
+    new_tags.each do |tag_name|
       tag = Tag.find_or_create_by(name: tag_name)
       LessonTag.find_or_create_by(tag: tag, lesson: self)
+    end
+
+    tags.each do |tag|
+      lesson_tag = LessonTag.find_by(tag: tag, lesson: self)
+      LessonTag.delete(lesson_tag) unless new_tags.include?(tag.name)
     end
   end
 end

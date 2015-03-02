@@ -23,7 +23,7 @@ feature "View Lesson Tags", %(
 
     visit lesson_path(lesson)
 
-    expect(page).to have_content(lesson.tags)
+    expect(page).to have_content(lesson.tags.pluck(:name))
   end
 
 end
