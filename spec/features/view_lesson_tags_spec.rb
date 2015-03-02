@@ -20,10 +20,13 @@ feature "View Lesson Tags", %(
 
   scenario "student views lesson details and sees tags" do
     lesson = FactoryGirl.create(:lesson)
+    lesson.generate_tags(["jquery", "data-types"])
 
     visit lesson_path(lesson)
 
-    expect(page).to have_content(lesson.tags.pluck(:name))
+    lesson.tags.each do |tag|
+      expect(page).to have_content(tag.name)
+    end
   end
 
 end
