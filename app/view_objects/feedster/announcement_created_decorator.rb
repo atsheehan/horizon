@@ -2,7 +2,8 @@ module Feedster
   class AnnouncementCreatedDecorator < Feedster::Decorator
     def title
       content_tag(:i, '', class: 'fi-alert announcement-feed') +
-      'Staff Announcement: ' + announcement.title
+        'Staff Announcement: '.html_safe +
+        link_to(announcement.title, announcement_path(announcement))
     end
 
     def body

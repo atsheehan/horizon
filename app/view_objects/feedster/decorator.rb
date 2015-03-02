@@ -3,6 +3,8 @@ module Feedster
     include ActionView::Helpers
     include EventHorizon::Application.routes.url_helpers
 
+    attr_accessor :output_buffer
+
     def initialize(feed_item)
       @feed_item = feed_item
     end

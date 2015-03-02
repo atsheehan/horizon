@@ -2,7 +2,7 @@ module Feedster
   class AssignmentCreatedDecorator < Feedster::Decorator
     def title
       content_tag(:i, '', class: 'fi-laptop assignment-feed') +
-      assignment.lesson.title
+      link_to(assignment.lesson.title, assignment_path(assignment))
     end
 
     def body
