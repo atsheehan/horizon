@@ -1,6 +1,9 @@
 require "rails_helper"
 
 describe User do
+  it { should have_many(:received_feed_items).dependent(:destroy) }
+  it { should have_many(:generated_feed_items).dependent(:destroy) }
+
   describe ".find_or_create_from_omniauth" do
     let(:uid) { "123456" }
     let(:provider) { "github" }

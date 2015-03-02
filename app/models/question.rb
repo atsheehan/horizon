@@ -4,6 +4,7 @@ class Question < ActiveRecord::Base
   belongs_to :accepted_answer, class_name: "Answer"
   has_many :answers, dependent: :destroy
   has_many :question_comments, dependent: :destroy
+  has_many :question_watchings, dependent: :destroy
   include Votable
 
   validates :title, presence: true, length: { in: 10..200 }
@@ -58,6 +59,14 @@ class Question < ActiveRecord::Base
     else
       false
     end
+  end
+
+  def add_watcher(user)
+    question_watchings.find_or_create_by!(user: user)
+  end
+
+  def watched_by?(user)
+    question_watchings.find_by(user: user).present?
   end
 
   private
