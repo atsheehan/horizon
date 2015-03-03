@@ -111,10 +111,5 @@ class Lesson < ActiveRecord::Base
 
   def generate_tags(new_tags)
     self.tags = new_tags.map { |tag_name| Tag.find_or_create_by(name: tag_name) }
-
-    tags.each do |tag|
-      lesson_tag = LessonTag.find_by(tag: tag, lesson: self)
-      LessonTag.delete(lesson_tag) unless new_tags.include?(tag.name)
-    end
   end
 end
