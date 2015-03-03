@@ -66,6 +66,10 @@ class Lesson < ActiveRecord::Base
     where(type: type)
   end
 
+  def self.tagged(tag)
+    joins(:tags).where(tags: { name: tag })
+  end
+
   def self.import_all!(lessons_dir)
     lessons = {}
 

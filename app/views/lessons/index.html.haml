@@ -13,22 +13,36 @@
   %dl.sub-nav.left
     %dt Filter:
     %dd{ class: ("active" unless type) }
-      = link_to "All", lessons_path(order: order)
+      = link_to "All", lessons_path(order: order, tagged: @tagged)
     %dd{ class: ("active" if type == "article") }
-      = link_to "Articles", lessons_path(type: "article", order: order)
+      = link_to "Articles", lessons_path(type: "article", order: order, tagged: @tagged)
     %dd{ class: ("active" if type == "challenge") }
-      = link_to "Challenges", lessons_path(type: "challenge", order: order)
+      = link_to "Challenges", lessons_path(type: "challenge", order: order, tagged: @tagged)
     %dd{ class: ("active" if type == "exercise") }
-      = link_to "Exercises", lessons_path(type: "exercise", order: order)
+      = link_to "Exercises", lessons_path(type: "exercise", order: order, tagged: @tagged)
     %dd{ class: ("active" if type == "tutorial") }
-      = link_to "Tutorials", lessons_path(type: "tutorial", order: order)
+      = link_to "Tutorials", lessons_path(type: "tutorial", order: order, tagged: @tagged)
 
   %dl.sub-nav.right
     %dt Order:
     %dd{ class: ("active" unless order) }
-      = link_to "Name", lessons_path(type: type)
+      = link_to "Name", lessons_path(type: type, tagged: @tagged)
     %dd{ class: ("active" if order == "most_recent") }
-      = link_to "Most Recent", lessons_path(order: "most_recent", type: type)
+      = link_to "Most Recent", lessons_path(order: "most_recent", type: type, tagged: @tagged)
+
+
+.clearfix
+  %dl.sub-nav
+    %dt#show-tags= @tagged ? "Hide Tags ↑" : "Show Tags ↓"
+    %dd.right
+      = link_to "Clear Tags", lessons_path(order: order, type: type)
+    %hr
+    .tags{ style: ("display: none;" if !@tagged) }
+      - @tags.each do |tag|
+        %dd{ class: ("active" if @tagged == tag.name) }
+          %span{ class: "radius label #{"secondary" if @tagged != tag.name}" }
+            = link_to tag.name, lessons_path(order: order, type: type, tagged: tag.name)
+
 
 
 - if params[:query]

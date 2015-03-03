@@ -17,7 +17,8 @@
     %dt Tags:
     - @lesson.tags.each do |tag|
       %dd
-        %span.label.radius= tag.name
+        %span.label.radius.secondary
+          = link_to tag.name, lessons_path(tagged: tag.name)
 
 #body
   ~ render_markdown(@lesson.body)
