@@ -1,7 +1,10 @@
 class LessonsController < ApplicationController
   def index
-    @tags = Tag.order(:name).all
     @tagged = params[:tagged]
+    @active_type = params[:type]
+    @order = params[:order]
+    
+    @tags = Tag.order(:name).all
     @lessons = filter_lessons(ordered_lessons)
   end
 
