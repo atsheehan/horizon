@@ -2,6 +2,8 @@ class Tag < ActiveRecord::Base
   has_many :lesson_tags
   has_many :lessons, through: :lesson_tags
 
+  validates :name, presence: true
+
   before_save :process_tag_name
 
   private

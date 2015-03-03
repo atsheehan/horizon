@@ -1212,6 +1212,20 @@ CREATE INDEX index_feed_items_on_subject_id_and_subject_type ON feed_items USING
 
 
 --
+-- Name: index_lesson_tags_on_lesson_id_and_tag_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_lesson_tags_on_lesson_id_and_tag_id ON lesson_tags USING btree (lesson_id, tag_id);
+
+
+--
+-- Name: index_lesson_tags_on_tag_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_lesson_tags_on_tag_id ON lesson_tags USING btree (tag_id);
+
+
+--
 -- Name: index_lessons_on_searchable; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1517,4 +1531,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150226195210');
 INSERT INTO schema_migrations (version) VALUES ('20150227154100');
 
 INSERT INTO schema_migrations (version) VALUES ('20150227173610');
+
+INSERT INTO schema_migrations (version) VALUES ('20150303153620');
 

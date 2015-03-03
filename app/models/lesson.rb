@@ -110,10 +110,7 @@ class Lesson < ActiveRecord::Base
   end
 
   def generate_tags(new_tags)
-    new_tags.each do |tag_name|
-      tag = Tag.find_or_create_by(name: tag_name)
-      LessonTag.find_or_create_by(tag: tag, lesson: self)
-    end
+    self.tags = new_tags.map { |tag_name| Tag.find_or_create_by(name: tag_name) }
 
     tags.each do |tag|
       lesson_tag = LessonTag.find_by(tag: tag, lesson: self)

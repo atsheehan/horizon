@@ -29,6 +29,11 @@ FactoryGirl.define do
     name "jquery"
   end
 
+  factory :lesson_tag do
+    lesson
+    tag
+  end
+
   factory :comment do
     user
     submission
