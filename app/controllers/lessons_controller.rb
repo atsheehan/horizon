@@ -1,5 +1,7 @@
 class LessonsController < ApplicationController
   def index
+    @active_type = params[:type]
+    @order = params[:order]
     @lessons = filter_lessons(ordered_lessons)
   end
 

@@ -1,5 +1,6 @@
 class Lesson < ActiveRecord::Base
   SUBMITTABLE_TYPES = ["challenge", "exercise"]
+  LESSON_TYPES = ["article", "tutorial", "challenge", "exercise"]
 
   self.inheritance_column = :_type_disabled
 
@@ -10,9 +11,7 @@ class Lesson < ActiveRecord::Base
   validates :title, presence: true
   validates :slug, presence: true, uniqueness: true
   validates :body, presence: true
-  validates :type, presence: true, inclusion: [
-    "article", "tutorial", "challenge", "exercise"
-  ]
+  validates :type, presence: true, inclusion: LESSON_TYPES
 
   validates :position, presence: true, numericality: {
     greater_than_or_equal_to: 1
