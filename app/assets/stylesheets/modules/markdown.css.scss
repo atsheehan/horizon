@@ -12,8 +12,8 @@
 
 .lesson-container #body {
   p, blockquote, ul, ol, dl, table, pre {
-    margin-top: 0;
     margin-bottom: 16px;
+    margin-top: 0;
   }
 
   ul, ol {
@@ -55,13 +55,13 @@
   }
 
   h6 {
-    font-size: 1em;
     color: #777;
+    font-size: 1em;
   }
 
   blockquote {
-    padding: 0 15px;
     color: #777;
+    padding: 0 15px;
     border-left: 4px solid $border-color;
   }
 
