@@ -1,10 +1,10 @@
 .lesson-container {
-  max-width: 60em;
   margin: 1em auto;
+  max-width: 60em;
   padding: 0 2em;
 
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
+  border-left: 1px solid $border-color;
+  border-right: 1px solid $border-color;
 
 }
 
@@ -29,14 +29,14 @@
     padding-bottom: 0.3em;
     font-size: 2.25em;
     line-height: 1.2;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid $border-color;
   }
 
   h2 {
     padding-bottom: 0.3em;
     font-size: 1.75em;
     line-height: 1.225;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid $border-color;
   }
 
   h3 {
@@ -60,14 +60,14 @@
   blockquote {
     padding: 0 15px;
     color: #777;
-    border-left: 4px solid #ddd;
+    border-left: 4px solid $border-color;
   }
 
   hr {
     height: 4px;
     padding: 0;
     margin: 16px 0;
-    background-color: #e7e7e7;
+    background-color: $border-color;
     border: 0 none;
   }
 }
