@@ -93,14 +93,14 @@
             = link_to answer.user.username, user_path(answer.user)
             answered on
             .answered_at= format_datetime(answer.created_at)
-          - if @question.accepted_answer_owned_by_current_user?(answer)
+          - if @question.can_unaccept?
             .accepted
               %i.fi-check.large
               accepted answer
               = form_for @question do |f|
                 = f.hidden_field :accepted_answer_id, value: nil
                 = f.submit "Unaccept answer", class: "tiny button", id: "unaccept-answer"
-          - elsif @question.user == current_user
+          - elsif @question.can_accept?
             .accept-form
               = form_for @question do |f|
                 = f.hidden_field :accepted_answer_id, value: answer.id
