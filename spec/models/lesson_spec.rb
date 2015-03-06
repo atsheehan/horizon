@@ -138,4 +138,32 @@ RSpec.describe Lesson, type: :model do
       expect(lesson.tags.pluck(:name)).to_not include("data-types")
     end
   end
+
+  describe "filtering" do
+    it "filters by visibility for user" do
+      user = FactoryGirl.create(:user)
+      public_lesson = FactoryGirl.create(:lesson)
+      private_lesson = FactoryGirl.create(:lesson, visibility: "assign")
+
+      expect(Lesson.visible_for(user)).to include(public_lesson)
+      expect(Lesson.visible_for(user)).to_not include(private_lesson)
+    end
+
+    it "filters by type" do
+      article = FactoryGirl.create(:article)
+      challenge = FactoryGirl.create(:challenge)
+
+      expect(Lesson.type("article")).to include(article)
+      expect(Lesson.type("article")).to_not include(challenge)
+    end
+
+    it "filters by tag" do
+      lesson = FactoryGirl.create(:lesson)
+      ajax_lesson = FactoryGirl.create(:lesson)
+      ajax_lesson.generate_tags(["ajax"])
+
+      expect(Lesson.tagged("ajax")).to include(ajax_lesson)
+      expect(Lesson.tagged("ajax")).to_not include(lesson)
+    end
+  end
 end

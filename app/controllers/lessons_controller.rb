@@ -1,7 +1,10 @@
 class LessonsController < ApplicationController
   def index
+    @tagged = params[:tagged]
     @active_type = params[:type]
     @order = params[:order]
+    
+    @tags = Tag.order(:name).all
     @lessons = filter_lessons(ordered_lessons)
   end
 
@@ -24,7 +27,16 @@ class LessonsController < ApplicationController
     lessons = visible_filter(current_user, lessons)
     lessons = type_filter(params[:type], lessons)
     lessons = submittable_filter(params[:submittable], lessons)
+    lessons = tag_filter(params[:tagged], lessons)
     lessons
+  end
+
+  def tag_filter(tag, lessons)
+    if tag
+      lessons.tagged(tag)
+    else
+      lessons
+    end
   end
 
   def submittable_filter(flag, lessons)
