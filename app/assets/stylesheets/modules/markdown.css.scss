@@ -11,7 +11,7 @@
 }
 
 .lesson-container #body {
-  p, blockquote, ul, ol, dl, table {
+  p, blockquote, ul, ol, dl, table, pre {
     margin-top: 0;
     margin-bottom: 16px;
   }
@@ -71,5 +71,12 @@
     margin: 16px 0;
     background-color: $border-color;
     border: 0 none;
+  }
+
+  pre {
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
   }
 }
