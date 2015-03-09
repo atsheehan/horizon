@@ -9,7 +9,6 @@ FactoryGirl.define do
     sequence(:slug) { |n| "article-#{n}" }
     description "Describes the article."
     body "# Article Foo\n\nThis is an article."
-    sequence(:position) { |n| n }
     visibility "public"
 
     factory :article do
@@ -24,6 +23,15 @@ FactoryGirl.define do
           Rails.root.join("spec/data/one_file.tar.gz"))
       end
     end
+  end
+
+  factory :tag do
+    name "jquery"
+  end
+
+  factory :lesson_tag do
+    lesson
+    tag
   end
 
   factory :comment do
@@ -158,7 +166,7 @@ FactoryGirl.define do
 
   factory :announcement do
     sequence(:title) { |n| "Announcement #{n}" }
-    description %"Here is a very nice description for a very nice announcement.
+    description "Here is a very nice description for a very nice announcement.
       The students shall cheer and rejoice when they see it."
     team
   end

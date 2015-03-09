@@ -28,6 +28,7 @@ feature "lesson visibility" do
     end
 
     scenario "view assigned lessons" do
+      FactoryGirl.create(:user, role: "admin")
       FactoryGirl.create(:assignment,
         team: team_member.team,
         lesson: private_lesson)

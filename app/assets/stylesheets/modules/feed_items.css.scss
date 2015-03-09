@@ -1,0 +1,21 @@
+.feed-items {
+  list-style: none;
+}
+
+.feed-items .box {
+  padding: 0 1em 1em 1em;
+  background: #eee;
+}
+
+.announcement-feed, .assignment-feed {
+  font-size: 2em;
+  margin-right: 0.5em;
+}
+
+.announcement-feed {
+  color: #c0392b;
+}
+
+.assignment-feed {
+  color: #2980b9;
+}

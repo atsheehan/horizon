@@ -24,6 +24,8 @@ gem "flowdock"
 gem "google-api-client"
 gem "redis"
 gem 'draper', '~> 1.3'
+gem 'httparty'
+gem 'airbrake'
 
 group :development do
   gem "spring"
@@ -38,6 +40,8 @@ group :development, :test do
   gem "pry-rails"
   gem "vcr"
   gem "shoulda-matchers"
+  gem "fuubar"
+  gem "valid_attribute"
 end
 
 group :test do
@@ -50,5 +54,4 @@ end
 
 group :production do
   gem "rails_12factor"
-  gem "bugsnag"
 end

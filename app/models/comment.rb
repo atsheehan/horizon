@@ -13,6 +13,11 @@ class Comment < ActiveRecord::Base
   validates :source_file, presence: true, if: -> { line_number.present? }
   validates :line_number, presence: true, if: -> { source_file.present? }
 
+  include Feedster::Subject
+  generates_feed_item :create,
+    actor: ->(c) { c.user },
+    recipients: ->(c) { [c.submission.user] }
+
   def self.pending
     where(delivered: false)
   end
