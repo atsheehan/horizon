@@ -5,6 +5,42 @@ RSpec.describe Lesson, type: :model do
   it { should have_many(:lesson_tags) }
   it { should have_many(:tags) }
 
+  describe ".visible_for" do
+    let(:user) { FactoryGirl.create(:user) }
+
+    context "lesson is publicaly visible" do
+      it "returns publicaly visible lesson" do
+        lesson = FactoryGirl.create(:lesson)
+        FactoryGirl.create(:lesson, visibility: 'assign')
+        expect(Lesson.visible_for(user)).to match_array [lesson]
+      end
+    end
+
+    context "lesson is assigned to a user" do
+      it "returns lesson assigned to that user" do
+        assignment = FactoryGirl.create(:assignment)
+        FactoryGirl.create(:team_membership, team: assignment.team, user: user)
+        FactoryGirl.create(:lesson, visibility: 'assign')
+        expect(Lesson.visible_for(user)).to match_array [assignment.lesson]
+      end
+    end
+
+    context "lesson query has a joined table" do
+      it "returns visible lessons and lessons assigned to that user" do
+        assignment = FactoryGirl.create(:assignment)
+        FactoryGirl.create(:team_membership, team: assignment.team, user: user)
+        lesson1 = FactoryGirl.create(:lesson, visibility: 'assign')
+        lesson2 = FactoryGirl.create(:lesson)
+        assignment.lesson.generate_tags(["jquery"])
+        lesson1.generate_tags(["jquery"])
+        lesson2.generate_tags(["jquery"])
+        expect(Lesson.tagged("jquery").visible_for(user)).to match_array [
+          assignment.lesson, lesson2
+        ]
+      end
+    end
+  end
+
   describe ".search" do
     let!(:foo) do
       FactoryGirl.

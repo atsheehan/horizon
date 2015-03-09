@@ -46,7 +46,7 @@ class Lesson < ActiveRecord::Base
   end
 
   def self.visible_for(user)
-    where("visibility = 'public' OR id IN (?)", user.assigned_lesson_ids)
+    where("visibility = 'public' OR lessons.id IN (?)", user.assigned_lesson_ids)
   end
 
   def self.submittable
@@ -65,8 +65,8 @@ class Lesson < ActiveRecord::Base
     where(type: type)
   end
 
-  def self.tagged(tag)
-    joins(:tags).where(tags: { name: tag })
+  def self.tagged(tag_name)
+    joins(:tags).where(tags: { name: tag_name })
   end
 
   def self.import_all!(lessons_dir)
