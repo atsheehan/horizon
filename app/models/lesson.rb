@@ -1,22 +1,19 @@
 class Lesson < ActiveRecord::Base
   SUBMITTABLE_TYPES = ["challenge", "exercise"]
+  LESSON_TYPES = ["article", "tutorial", "challenge", "exercise"]
 
   self.inheritance_column = :_type_disabled
 
   has_many :submissions, dependent: :destroy
   has_many :ratings, dependent: :destroy
   has_many :assignments, dependent: :destroy
+  has_many :lesson_tags
+  has_many :tags, through: :lesson_tags
 
   validates :title, presence: true
   validates :slug, presence: true, uniqueness: true
   validates :body, presence: true
-  validates :type, presence: true, inclusion: [
-    "article", "tutorial", "challenge", "exercise"
-  ]
-
-  validates :position, presence: true, numericality: {
-    greater_than_or_equal_to: 1
-  }
+  validates :type, presence: true, inclusion: LESSON_TYPES
 
   validates :visibility, presence: true, inclusion: [
     "public", "assign"
@@ -49,7 +46,7 @@ class Lesson < ActiveRecord::Base
   end
 
   def self.visible_for(user)
-    where("visibility = 'public' OR id IN (?)", user.assigned_lesson_ids)
+    where("visibility = 'public' OR lessons.id IN (?)", user.assigned_lesson_ids)
   end
 
   def self.submittable
@@ -68,24 +65,20 @@ class Lesson < ActiveRecord::Base
     where(type: type)
   end
 
+  def self.tagged(tag_name)
+    joins(:tags).where(tags: { name: tag_name })
+  end
+
   def self.import_all!(lessons_dir)
     lessons = {}
-    dependencies = {}
 
     Dir.entries(lessons_dir).each do |filename|
       path = File.join(lessons_dir, filename)
 
       if File.directory?(path) && !filename.start_with?(".")
-        lesson, lesson_dependencies = import(path)
+        lesson = import(path)
         lessons.merge!(lesson.slug => lesson)
-        dependencies.merge!(lesson_dependencies)
       end
-    end
-
-    order_lessons(dependencies).each_with_index do |slug, position|
-      lesson = lessons[slug]
-      lesson.position = position + 1
-      lesson.save!
     end
   end
 
@@ -100,7 +93,6 @@ class Lesson < ActiveRecord::Base
     lesson.title = attributes["title"]
     lesson.description = attributes["description"]
     lesson.type = attributes["type"]
-    lesson.position = attributes["position"]
     lesson.visibility = attributes["visibility"] || "public"
 
     if lesson.accepts_submissions?
@@ -112,49 +104,15 @@ class Lesson < ActiveRecord::Base
       end
     end
 
-    if attributes["depends"]
-      dependencies = attributes["depends"].split(",").map(&:strip)
-    else
-      dependencies = []
-    end
+    lesson.save!
 
-    [lesson, { lesson.slug => dependencies }]
+    if attributes["tags"]
+      lesson.generate_tags(attributes["tags"].split(", "))
+    end
+    lesson
   end
 
-  def self.order_lessons(lesson_prereqs)
-    # This method uses the topological sort algorithm to produce a
-    # linear ordering of lessons given their dependencies.  The
-    # lessons_prereqs param is a hash where the key is the lesson slug
-    # and the value is an array of dependencies:
-    #
-    # lesson_prereqs = { "foo" => ["bar"], "bar" => ["baz"], "baz" => [] }
-
-    ordered = []
-    next_lessons = []
-
-    lesson_prereqs.each do |lesson, prereqs|
-      if prereqs.empty?
-        next_lessons.push(lesson)
-      end
-    end
-
-    next_lessons.sort!
-
-    while !next_lessons.empty?
-      next_lesson = next_lessons.shift
-      ordered.push(next_lesson)
-
-      lesson_prereqs.each do |lesson, prereqs|
-        if prereqs.include?(next_lesson)
-          prereqs.delete(next_lesson)
-
-          if prereqs.empty?
-            next_lessons.push(lesson)
-          end
-        end
-      end
-    end
-
-    ordered
+  def generate_tags(new_tags)
+    self.tags = new_tags.map { |tag_name| Tag.find_or_create_by(name: tag_name) }
   end
 end

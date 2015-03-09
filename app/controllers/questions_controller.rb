@@ -32,6 +32,7 @@ class QuestionsController < ApplicationController
     @question.save
 
     if @question.save
+      @question.add_watcher(current_user)
       flash[:info] = "Question saved."
       redirect_to question_path(@question)
     else

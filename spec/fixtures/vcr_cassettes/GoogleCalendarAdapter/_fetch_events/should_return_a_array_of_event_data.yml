@@ -3978,7 +3978,7 @@ http_interactions:
     headers:
       User-Agent:
       - |-
-        HorizonDashboard/0.0.1 google-api-ruby-client/0.8.2 Mac OS X/10.10.1
+        HorizonDashboard/0.0.1 google-api-ruby-client/0.8.2 Mac OS X/10.9.5
          (gzip)
       Accept-Encoding:
       - gzip

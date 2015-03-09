@@ -1,6 +1,46 @@
 require "rails_helper"
 
-describe Lesson do
+RSpec.describe Lesson, type: :model do
+
+  it { should have_many(:lesson_tags) }
+  it { should have_many(:tags) }
+
+  describe ".visible_for" do
+    let(:user) { FactoryGirl.create(:user) }
+
+    context "lesson is publicaly visible" do
+      it "returns publicaly visible lesson" do
+        lesson = FactoryGirl.create(:lesson)
+        FactoryGirl.create(:lesson, visibility: 'assign')
+        expect(Lesson.visible_for(user)).to match_array [lesson]
+      end
+    end
+
+    context "lesson is assigned to a user" do
+      it "returns lesson assigned to that user" do
+        assignment = FactoryGirl.create(:assignment)
+        FactoryGirl.create(:team_membership, team: assignment.team, user: user)
+        FactoryGirl.create(:lesson, visibility: 'assign')
+        expect(Lesson.visible_for(user)).to match_array [assignment.lesson]
+      end
+    end
+
+    context "lesson query has a joined table" do
+      it "returns visible lessons and lessons assigned to that user" do
+        assignment = FactoryGirl.create(:assignment)
+        FactoryGirl.create(:team_membership, team: assignment.team, user: user)
+        lesson1 = FactoryGirl.create(:lesson, visibility: 'assign')
+        lesson2 = FactoryGirl.create(:lesson)
+        assignment.lesson.generate_tags(["jquery"])
+        lesson1.generate_tags(["jquery"])
+        lesson2.generate_tags(["jquery"])
+        expect(Lesson.tagged("jquery").visible_for(user)).to match_array [
+          assignment.lesson, lesson2
+        ]
+      end
+    end
+  end
+
   describe ".search" do
     let!(:foo) do
       FactoryGirl.
@@ -57,31 +97,6 @@ describe Lesson do
 
   let(:sample_lessons_dir) { Rails.root.join("spec/data/sample_lessons") }
 
-  describe ".order_lessons" do
-    it "orders lessons based on dependency" do
-      lessons = {
-        "bat" => ["bar", "baz"],
-        "foo" => [],
-        "bar" => ["foo"],
-        "baz" => ["bar"]
-      }
-
-      ordered = Lesson.order_lessons(lessons)
-      expect(ordered).to eq(["foo", "bar", "baz", "bat"])
-    end
-
-    it "orders independent lessons lexicographically" do
-      lessons = {
-        "baz" => [],
-        "foo" => [],
-        "bar" => ["foo"]
-      }
-
-      ordered = Lesson.order_lessons(lessons)
-      expect(ordered).to eq(["baz", "foo", "bar"])
-    end
-  end
-
   describe ".import_all!" do
     it "imports lessons from a source directory" do
       Lesson.import_all!(sample_lessons_dir)
@@ -92,6 +107,7 @@ describe Lesson do
       expect(lesson.description).to eq("bloop.")
       expect(lesson.visibility).to eq("assign")
       expect(lesson.body).to eq("beep boop i'm an expression\n")
+      expect(lesson.tags.pluck(:name)).to include("expressions")
     end
 
     it "updates an existing lesson" do
@@ -118,18 +134,72 @@ describe Lesson do
       expect(lesson.type).to eq("exercise")
       expect(lesson.archive.url).to_not eq(nil)
     end
+  end
 
-    it "orders the lessons based on dependencies" do
-      Lesson.import_all!(sample_lessons_dir)
+  describe ".generate_tags" do
+    it "creates new associated tag objects from an array" do
+      lesson = FactoryGirl.create(:lesson)
+      tags = ["javascript", "json", "ajax"]
 
-      expressions = Lesson.find_by!(slug: "expressions")
-      data_types = Lesson.find_by!(slug: "data-types")
-      conditionals = Lesson.find_by!(slug: "conditionals")
-      rps = Lesson.find_by!(slug: "rock-paper-scissors")
+      lesson.generate_tags(tags)
+      expect(lesson.tags.pluck(:name)).to include("javascript")
+      expect(lesson.tags.pluck(:name)).to include("json")
+      expect(lesson.tags.pluck(:name)).to include("ajax")
+    end
 
-      expect(expressions.position).to be < (data_types.position)
-      expect(data_types.position).to be < (conditionals.position)
-      expect(conditionals.position).to be < (rps.position)
+    it "creates associations to existing tags if possible" do
+      old_lesson = FactoryGirl.create(:lesson)
+      old_lesson.generate_tags(["jquery"])
+
+      lesson = FactoryGirl.create(:lesson)
+      lesson.generate_tags(["jquery"])
+
+      expect(lesson.tags).to eq(old_lesson.tags)
+    end
+
+    it "does not create duplicate lesson_tags if run a second time" do
+      lesson = FactoryGirl.create(:lesson)
+      lesson.generate_tags(["jquery"])
+      lesson.generate_tags(["jquery"])
+
+      expect(lesson.lesson_tags.length).to eq(1)
+    end
+
+    it "removes old existing tags if they no longer apply" do
+      lesson = FactoryGirl.create(:lesson)
+      lesson.generate_tags(["jquery", "data-types"])
+      lesson.generate_tags(["jquery"])
+
+      expect(lesson.tags.pluck(:name)).to include("jquery")
+      expect(lesson.tags.pluck(:name)).to_not include("data-types")
+    end
+  end
+
+  describe "filtering" do
+    it "filters by visibility for user" do
+      user = FactoryGirl.create(:user)
+      public_lesson = FactoryGirl.create(:lesson)
+      private_lesson = FactoryGirl.create(:lesson, visibility: "assign")
+
+      expect(Lesson.visible_for(user)).to include(public_lesson)
+      expect(Lesson.visible_for(user)).to_not include(private_lesson)
+    end
+
+    it "filters by type" do
+      article = FactoryGirl.create(:article)
+      challenge = FactoryGirl.create(:challenge)
+
+      expect(Lesson.type("article")).to include(article)
+      expect(Lesson.type("article")).to_not include(challenge)
+    end
+
+    it "filters by tag" do
+      lesson = FactoryGirl.create(:lesson)
+      ajax_lesson = FactoryGirl.create(:lesson)
+      ajax_lesson.generate_tags(["ajax"])
+
+      expect(Lesson.tagged("ajax")).to include(ajax_lesson)
+      expect(Lesson.tagged("ajax")).to_not include(lesson)
     end
   end
 end

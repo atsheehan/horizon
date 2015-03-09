@@ -1,6 +1,11 @@
 class LessonsController < ApplicationController
   def index
-    @lessons = filter_lessons(Lesson.order(:position))
+    @tagged = params[:tagged]
+    @active_type = params[:type]
+    @order = params[:order]
+    
+    @tags = Tag.order(:name).all
+    @lessons = filter_lessons(ordered_lessons)
   end
 
   def show
@@ -10,11 +15,28 @@ class LessonsController < ApplicationController
 
   private
 
+  def ordered_lessons
+    if params[:order] == "most_recent"
+      Lesson.order(created_at: :desc)
+    else
+      Lesson.order(:title)
+    end
+  end
+
   def filter_lessons(lessons)
     lessons = visible_filter(current_user, lessons)
     lessons = type_filter(params[:type], lessons)
     lessons = submittable_filter(params[:submittable], lessons)
+    lessons = tag_filter(params[:tagged], lessons)
     lessons
+  end
+
+  def tag_filter(tag, lessons)
+    if tag
+      lessons.tagged(tag)
+    else
+      lessons
+    end
   end
 
   def submittable_filter(flag, lessons)

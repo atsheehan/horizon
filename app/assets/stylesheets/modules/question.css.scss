@@ -67,24 +67,12 @@
   background: #eee;
 }
 
-/* .question { */
-  /* text-align: center; */
-/* } */
-
-/* .question:before { */
-  /* content: ''; */
-  /* display: inline-block; */
-  /* height: 100%; */
-  /* vertical-align: middle; */
-  /* margin-right: -0.25em; [> Adjusts for spacing <] */
-/* } */
-
 .questions .title {
   display: inline-block;
   vertical-align: middle;
-  /* margin-top: .5em; */
 }
 
-.question-data {
-  /* margin-top: -0.75em; */
+.watching {
+  display: inline-block;
+  margin-top: 3em;
 }

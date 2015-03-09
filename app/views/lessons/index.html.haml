@@ -6,6 +6,34 @@
 
 %h2 Lessons
 
+.clearfix
+  %dl.sub-nav.left
+    %dt Filter:
+    %dd{ class: ("active" unless @active_type) }
+      = link_to "All", lessons_path(order: @order, tagged: @tagged)
+    - Lesson::LESSON_TYPES.each do |type|
+      %dd{ class: ("active" if type == @active_type) }
+        = link_to type.capitalize.pluralize, lessons_path(type: type, order: @order, tagged: @tagged)
+
+  %dl.sub-nav.right
+    %dt Order:
+    %dd{ class: ("active" unless @order) }
+      = link_to "Name", lessons_path(type: @active_type, tagged: @tagged)
+    %dd{ class: ("active" if @order == "most_recent") }
+      = link_to "Most Recent", lessons_path(order: "most_recent", type: @active_type, tagged: @tagged)
+
+.clearfix
+  %dl.sub-nav
+    %dt#show-tags= @tagged ? "Hide Tags ↑" : "Show Tags ↓"
+    %dd.right
+      = link_to "Clear Tags", lessons_path(order: @order, type: @active_type)
+    %hr
+    .tags{ style: ("display: none;" if !@tagged) }
+      - @tags.each do |tag|
+        %dd{ class: ("active" if @tagged == tag.name) }
+          %span{ class: "radius label #{"secondary" if @tagged != tag.name}" }
+            = link_to tag.name, lessons_path(order: @order, type: @active_type, tagged: tag.name)
+
 - if params[:query]
   .result-count
     - if @lessons.empty?
