@@ -48,13 +48,27 @@ PORT=3000
 DEFAULT_GOOGLE_CALENDAR_ID=
 GOOGLE_SERVICE_ACCOUNT_EMAIL=
 GOOGLE_P12_PEM=
+AIRBRAKE_TOKEN=
+FLOWDOCK_TEST_TOKEN=
+FLOWDOCK_TOKEN=
 ```
 
 The `GITHUB_KEY` and `GITHUB_SECRET` are required for user authentication via GitHub OAuth. If you have access to the [Launch Academy application settings][launch-github-apps], you can find these values in the `horizon-dev` application. If you don't have access, you can create your own application in your [GitHub application settings][personal-github-apps].
 
 The `AWS_ACCESS_KEY`, `AWS_SECRET_KEY`, and `S3_BUCKET` are used when uploading challenges and submissions to Amazon S3. These are not required in test and development modes unless you explicitly change the [CarrierWave configuration file][carrierwave-config] to use `storage :fog`.
 
+Set `FLOWDOCK_TEST_TOKEN` and `FLOWDOCK_TOKEN` to Flowdock chat rooms ("flows") for test and production, respectively. API tokens can be found by clicking the gear next to a chat room name, on the "Inbox Sources" tab.
+
 The `DEFAULT_GOOGLE_CALENDAR_ID`, `GOOGLE_SERVICE_ACCOUNT_EMAIL`, and `GOOGLE_P12_PEM` variables are used for the Calendar on the Horizon Dashboard.
+
+#### Set up your Google Developer Account
+
+* Visit [console.developers.google.com][google-dev]
+* Create a new project
+* APIs & auth > APIs > Turn on Calendar API
+* APIs & auth > Credentials > Create new Client ID, Generate new P12 key. Save the p12 file in the root project path.
+* Save the email address as GOOGLE_SERVICE_ACCOUNT_EMAIL in .env
+* Add this email to the list of allowed emails for the default calendar at [calendar.google.com](google-calendar)
 
 At this point you should be able to start the web server and visit the application at [http://localhost:3000][localhost]:
 
@@ -136,3 +150,5 @@ Travis-CI does not like the method above for storing private keys. Encrypting th
 [carrierwave-config]: https://github.com/LaunchAcademy/event_horizon/blob/master/config/initializers/carrierwave.rb
 [localhost]: http://localhost:3000
 [travis-ci-encrypting-files]: http://docs.travis-ci.com/user/encrypting-files/#Using-OpenSSL
+[google-dev]: https://console.developers.google.com
+[google-calendar]: https://www.google.com/calendar
