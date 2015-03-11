@@ -112,13 +112,14 @@
               class: "button tiny alert",
               data: { confirm: "Are you sure?" }
 
-#new-answer
-  = form_for [@question, @answer] do |f|
-    = field_set_tag "Answer Question" do
+- if current_user
+  #new-answer
+    = form_for [@question, @answer] do |f|
+      = field_set_tag "Answer Question" do
 
-      = f.label :body, "Answer"
-      = f.text_area :body, rows: 10
+        = f.label :body, "Answer"
+        = f.text_area :body, rows: 10
 
-      = f.submit "Submit Answer", class: "button"
-      - if current_user.try(:role) == 'admin'
-        = link_to "Let's Talk!", question_queues_path(question_id: @question), method: :post, class: "button alert"
+        = f.submit "Submit Answer", class: "button"
+        - if current_user.try(:role) == 'admin'
+          = link_to "Let's Talk!", question_queues_path(question_id: @question), method: :post, class: "button alert"

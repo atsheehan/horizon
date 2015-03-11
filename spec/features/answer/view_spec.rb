@@ -33,4 +33,14 @@ feature "answering questions" do
       expect(Answer.count).to eq(0)
     end
   end
+
+  context "as an unauthenticated user" do
+    scenario "should not see answer submission form" do
+      question = FactoryGirl.create(:question)
+      visit question_path(question)
+
+      expect(page).to_not have_content("Answer Question")
+      expect(page).to_not have_link("Submit Answer")
+    end
+  end
 end
