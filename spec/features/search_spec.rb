@@ -45,4 +45,36 @@ feature "search" do
     expect(page).to have_content("No results found for \"baz\".")
     expect(page).to_not have_content("Blah")
   end
+
+  context "filtering lessons" do
+    let!(:article) { FactoryGirl.create(:lesson, title: "Blah Article", body: "foo") }
+    let!(:challenge) { FactoryGirl.create(:challenge, title: "Blah Challenge", body: "foo") }
+    let!(:question) { FactoryGirl.
+      create(:question,
+      title: "What is the meaning to life?",
+      body: "code and foo and someother stuff that fills up the body"
+      ) }
+
+    scenario "results are filtered by lesson type" do
+      visit root_path
+      fill_in "query", with: "foo"
+      click_button "Search"
+      click_link "Articles"
+
+      expect(page).to have_content article.title
+      expect(page).to_not have_content challenge.title
+      expect(page).to_not have_content question.title
+    end
+
+    scenario "results are filtered by lesson vs. question" do
+      visit root_path
+      fill_in "query", with: "foo"
+      click_button "Search"
+      click_link "Questions"
+
+      expect(page).to_not have_content article.title
+      expect(page).to_not have_content challenge.title
+      expect(page).to have_content question.title
+    end
+  end
 end
