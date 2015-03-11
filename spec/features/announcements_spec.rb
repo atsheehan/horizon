@@ -65,7 +65,10 @@ feature "announcements" do
       visit dashboard_path
       expect(page).to have_content(announcement.title)
 
-      click_link announcement.title
+      within '.table-announcement' do
+        click_link announcement.title
+      end
+
       click_on "Got It"
 
       within '.table-announcement' do
