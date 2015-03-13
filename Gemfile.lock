@@ -151,6 +151,9 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.1)
     jwt (1.0.0)
+    kaminari (0.16.1)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     kgio (2.9.2)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -346,6 +349,7 @@ DEPENDENCIES
   httparty
   jbuilder
   jquery-rails
+  kaminari
   launchy
   mocha
   newrelic_rpm
