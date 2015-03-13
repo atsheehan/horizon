@@ -1,0 +1,34 @@
+class QuestionFilter
+  CATEGORIES = ["code syntax", "code review", "problem breakdown", "best practices", "other"]
+
+  def initialize(query)
+    @query = query
+  end
+
+  def filter
+    if newest?
+      Question.order(created_at: :desc)
+    elsif unanswered?
+      Question.unanswered
+    elsif queued?
+      Question.queued.sort_by { |q| q.question_queue.sort_order }
+    else
+      Question.where(category: @query)
+    end
+  end
+
+  private
+
+  def newest?
+    @query == "newest"
+  end
+
+  def unanswered?
+    @query == "unanswered"
+  end
+
+  def queued?
+    @query == "queued"
+  end
+end
+

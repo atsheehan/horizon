@@ -19,6 +19,10 @@ class Question < ActiveRecord::Base
         question_queues.status NOT LIKE '%done%'")
   }
 
+  def self.filtered(query)
+    QuestionFilter.new(query).filter
+  end
+
   def accepted_answer_belongs_to_question
     if accepted_answer && !answers.include?(accepted_answer)
       errors.add(:accepted_answer_id, "must belong to this question")
