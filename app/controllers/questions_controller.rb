@@ -20,7 +20,6 @@ class QuestionsController < ApplicationController
   def create
     @question = Question.new(create_params)
     @question.user = current_user
-    @question.save
 
     if @question.save
       @question.add_watcher(current_user)

@@ -18,11 +18,11 @@
 
 %dl.category-filters.sub-nav
   %dt Categories:
-  %dd{ class: ("active" if @filter == "code syntax") }= link_to "Code Syntax", questions_path(query: "code syntax")
-  %dd{ class: ("active" if @filter == "code review") }= link_to "Code Review", questions_path(query: "code review")
-  %dd{ class: ("active" if @filter == "problem breakdown") }= link_to "Problem Breakdown", questions_path(query: "problem breakdown")
-  %dd{ class: ("active" if @filter == "best practices") }= link_to "Best Practices", questions_path(query: "best practices")
-  %dd{ class: ("active" if @filter == "other") }= link_to "Other", questions_path(query: "other")
+  %dd{ class: ("active" if @filter == "code syntax") }= link_to "Code syntax", questions_path(query: "Code syntax")
+  %dd{ class: ("active" if @filter == "code review") }= link_to "Code review", questions_path(query: "Code review")
+  %dd{ class: ("active" if @filter == "problem breakdown") }= link_to "Problem breakdown", questions_path(query: "Problem breakdown")
+  %dd{ class: ("active" if @filter == "best practices") }= link_to "Best practices", questions_path(query: "Best practices")
+  %dd{ class: ("active" if @filter == "other") }= link_to "Other", questions_path(query: "Other")
 
 %h2= questions_header(@filter)
 

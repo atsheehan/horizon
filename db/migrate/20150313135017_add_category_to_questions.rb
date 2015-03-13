@@ -1,5 +1,5 @@
 class AddCategoryToQuestions < ActiveRecord::Migration
   def change
-    add_column :questions, :category, :string, default: 'other'
+    add_column :questions, :category, :string, default: 'Other'
   end
 end

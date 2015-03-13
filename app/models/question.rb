@@ -10,6 +10,7 @@ class Question < ActiveRecord::Base
   validates :title, presence: true, length: { in: 10..200 }
   validates :body, presence: true, length: { in: 15..10000 }
   validates :user, presence: true
+  validates :category, inclusion: { in: QuestionFilter::CATEGORIES }
 
   validate :accepted_answer_belongs_to_question
 

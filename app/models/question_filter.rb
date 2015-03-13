@@ -1,5 +1,5 @@
 class QuestionFilter
-  CATEGORIES = ["code syntax", "code review", "problem breakdown", "best practices", "other"]
+  CATEGORIES = ["Code syntax", "Code review", "Problem breakdown", "Best practices", "Other"]
 
   def initialize(query)
     @query = query

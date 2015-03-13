@@ -2,23 +2,23 @@ require 'rails_helper'
 
 feature 'Question Categories' do
   scenario 'Are listed on the question page' do
-    FactoryGirl.create(:question, title: 'Code Syntax Question Title', category: 'code syntax')
-    FactoryGirl.create(:question, title: 'Code Reivew Question Title', category: 'code review')
-    FactoryGirl.create(:question, title: 'Problem Breakdown Question Title', category: 'problem breakdown')
-    FactoryGirl.create(:question, title: 'Best Practices Question Title', category: 'best practices')
-    FactoryGirl.create(:question, title: 'Other Question Title', category: 'other')
+    FactoryGirl.create(:question, title: 'Code Syntax Question Title', category: 'Code syntax')
+    FactoryGirl.create(:question, title: 'Code Reivew Question Title', category: 'Code review')
+    FactoryGirl.create(:question, title: 'Problem Breakdown Question Title', category: 'Problem breakdown')
+    FactoryGirl.create(:question, title: 'Best Practices Question Title', category: 'Best practices')
+    FactoryGirl.create(:question, title: 'Other Question Title', category: 'Other')
 
     visit questions_path
     within '.category-filters' do
-      expect(page).to have_content 'Code Syntax'
-      expect(page).to have_content 'Code Review'
-      expect(page).to have_content 'Problem Breakdown'
-      expect(page).to have_content 'Best Practices'
+      expect(page).to have_content 'Code syntax'
+      expect(page).to have_content 'Code review'
+      expect(page).to have_content 'Problem breakdown'
+      expect(page).to have_content 'Best practices'
       expect(page).to have_content 'Other'
     end
 
     within '.category-filters' do
-      click_on 'Code Syntax'
+      click_on 'Code syntax'
     end
 
     within '.questions' do

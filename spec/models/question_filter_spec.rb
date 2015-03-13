@@ -33,11 +33,11 @@ describe QuestionFilter do
 
     context 'category filter' do
       it "returns quesitons with 'other' category" do
-        other = FactoryGirl.create(:question, category: 'other')
-        review = FactoryGirl.create(:question, category: 'code review')
+        other = FactoryGirl.create(:question, category: 'Other')
+        review = FactoryGirl.create(:question, category: 'Code review')
 
-        expect(QuestionFilter.new('other').filter.first).to eq (other)
-        expect(QuestionFilter.new('other').filter.first).to_not eq (review)
+        expect(QuestionFilter.new('Other').filter.first).to eq (other)
+        expect(QuestionFilter.new('Other').filter.first).to_not eq (review)
       end
     end
   end

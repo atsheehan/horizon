@@ -18,7 +18,7 @@
       = f.text_area :body, rows: 15
 
       = f.label :category
-      = f.select :category, QuestionFilter::CATEGORIES.map { |q| q.capitalize }, selected: "Other", include_blank: false
+      = f.select :category, QuestionFilter::CATEGORIES, selected: "Other", include_blank: false
 
       = f.submit "Ask Question", class: "button"
 

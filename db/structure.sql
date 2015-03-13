@@ -483,7 +483,7 @@ CREATE TABLE questions (
     question_queue_id integer,
     vote_cache integer DEFAULT 0,
     visible boolean DEFAULT true,
-    category character varying(255) DEFAULT 'other'::character varying
+    category character varying(255) DEFAULT 'Other'::character varying
 );
 
 

@@ -179,6 +179,7 @@ FactoryGirl.define do
   factory :question do
     sequence(:title) { |n| "Question #{n}" }
     body "This is definitely a question."
+    category "Other"
     user
   end
 
