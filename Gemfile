@@ -26,6 +26,7 @@ gem "redis"
 gem 'draper', '~> 1.3'
 gem 'httparty'
 gem 'airbrake'
+gem 'kaminari'
 
 group :development do
   gem "spring"
