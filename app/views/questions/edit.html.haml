@@ -17,4 +17,7 @@
       = f.label :body, "Body"
       = f.text_area :body
 
+      = f.label :category
+      = f.select :category, QuestionFilter::CATEGORIES, selected: @question.category, include_blank: false
+
       = f.submit "Update Question", class: "button"

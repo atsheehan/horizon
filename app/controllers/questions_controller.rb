@@ -59,6 +59,6 @@ class QuestionsController < ApplicationController
   end
 
   def update_params
-    params.require(:question).permit(:accepted_answer_id, :title, :body)
+    params.require(:question).permit(:accepted_answer_id, :title, :body, :category)
   end
 end
