@@ -32,9 +32,12 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    question = current_user.questions.find(params[:id])
+    # if user, allowed to answer
+    question = Question.find(params[:id])
     question.update(update_params)
-    redirect_to question_path(question), info: "Your question has been updated."
+    redirect_to question_path(question), info: "Question updated."
+    # else
+    # redirect with an unauthorized message
   end
 
   def destroy

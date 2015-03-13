@@ -38,7 +38,7 @@ feature "modifying questions" do
       expect(page).to have_content("accepted answer")
 
       click_on "Unaccept answer"
-      expect(page).to have_content("Your question has been updated.")
+      expect(page).to have_content("Question updated.")
     end
   end
 end

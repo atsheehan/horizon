@@ -8,21 +8,6 @@ feature "answering questions" do
       sign_in_as(user)
     end
 
-    scenario "accept an answer" do
-      question = FactoryGirl.create(:question, user: user)
-      answer = FactoryGirl.create(:answer, question: question)
-
-      visit question_path(question)
-
-      click_button "Accept Answer"
-
-      expect(page).to have_content("Your question has been updated.")
-      expect(page).to have_content("accepted answer")
-
-      question.reload
-      expect(question.accepted_answer).to eq(answer)
-    end
-
     scenario "edit answer" do
       question = FactoryGirl.create(:question, user: user)
       FactoryGirl.create(:answer, question: question, user: user)

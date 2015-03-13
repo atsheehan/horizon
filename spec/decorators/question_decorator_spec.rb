@@ -3,23 +3,68 @@ require 'rails_helper'
 describe QuestionDecorator do
   include Draper::ViewHelpers
 
-  describe '#accepted_answer_owned_by_current_user?' do
+  describe '#can_accept?' do
     let(:author) { FactoryGirl.create(:user) }
     let(:question) { FactoryGirl.create(:question, user: author).decorate }
-    let(:answer) { stub(accepted?: true) }
 
-    context 'answer is accepted' do
+    context 'no current_user' do
+      it 'should return false' do
+        helpers.stubs(:current_user).returns(nil)
+        expect(question.can_accept?).to eq false
+      end
+    end
+
+    context 'user is admin' do
+      it 'should return true' do
+        helpers.stubs(:current_user).returns(FactoryGirl.create(:admin))
+        expect(question.can_accept?).to eq true
+      end
+    end
+
+    context 'user is not admin' do
       context 'user owns question' do
         it 'should return true' do
           helpers.stubs(:current_user).returns(author)
-          expect(question.accepted_answer_owned_by_current_user?(answer)).to eq true
+          expect(question.can_accept?).to eq true
         end
       end
 
       context 'user does not own question' do
         it 'should return false' do
           helpers.stubs(:current_user).returns(FactoryGirl.create(:user))
-          expect(question.accepted_answer_owned_by_current_user?(answer)).to eq false
+          expect(question.can_accept?).to eq false
+        end
+      end
+    end
+  end
+
+  describe '#can_unaccept?' do
+    let(:author) { FactoryGirl.create(:user) }
+    let(:question) { FactoryGirl.create(:question, user: author).decorate }
+
+    before(:each) do
+      answer = FactoryGirl.create(:answer, question: question)
+      question.update_attributes(accepted_answer: answer)
+    end
+
+    context 'answer is accepted' do
+      context 'user is admin' do
+        it 'should return true' do
+          helpers.stubs(:current_user).returns(FactoryGirl.create(:admin))
+          expect(question.can_unaccept?).to eq true
+        end
+      end
+      context 'user owns question' do
+        it 'should return true' do
+          helpers.stubs(:current_user).returns(author)
+          expect(question.can_unaccept?).to eq true
+        end
+      end
+
+      context 'user does not own question' do
+        it 'should return false' do
+          helpers.stubs(:current_user).returns(FactoryGirl.create(:user))
+          expect(question.can_unaccept?).to eq false
         end
       end
     end
@@ -27,7 +72,7 @@ describe QuestionDecorator do
     context 'answer is not accepted' do
       it 'should return false' do
         answer = stub(accepted?: false)
-        expect(question.accepted_answer_owned_by_current_user?(answer)).to eq false
+        expect(question.can_unaccept?).to eq false
       end
     end
   end
