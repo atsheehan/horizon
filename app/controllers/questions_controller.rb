@@ -1,16 +1,7 @@
 class QuestionsController < ApplicationController
   def index
-    if params[:query] == "unanswered"
-      @questions = Question.unanswered
-      @filter = "unanswered"
-    elsif params[:query] == "queued"
-      @questions = Question.queued.sort_by { |q| q.question_queue.sort_order }
-      @filter = "queued"
-    else
-      @questions = Question.order(created_at: :desc)
-      @filter = "newest"
-    end
-    @questions = QuestionDecorator.decorate_collection(@questions)
+    @filter = params[:query] || 'newest'
+    @questions = QuestionDecorator.decorate_collection(Question.filtered(@filter))
   end
 
   def show
@@ -29,7 +20,6 @@ class QuestionsController < ApplicationController
   def create
     @question = Question.new(create_params)
     @question.user = current_user
-    @question.save
 
     if @question.save
       @question.add_watcher(current_user)
@@ -65,7 +55,7 @@ class QuestionsController < ApplicationController
   private
 
   def create_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, :category)
   end
 
   def update_params

@@ -10,6 +10,7 @@ class Question < ActiveRecord::Base
   validates :title, presence: true, length: { in: 10..200 }
   validates :body, presence: true, length: { in: 15..10000 }
   validates :user, presence: true
+  validates :category, inclusion: { in: QuestionFilter::CATEGORIES }
 
   validate :accepted_answer_belongs_to_question
 
@@ -18,6 +19,10 @@ class Question < ActiveRecord::Base
       where("questions.question_queue_id IS NOT NULL AND \
         question_queues.status NOT LIKE '%done%'")
   }
+
+  def self.filtered(query)
+    QuestionFilter.new(query).filter
+  end
 
   def accepted_answer_belongs_to_question
     if accepted_answer && !answers.include?(accepted_answer)

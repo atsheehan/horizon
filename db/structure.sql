@@ -482,7 +482,8 @@ CREATE TABLE questions (
     searchable tsvector,
     question_queue_id integer,
     vote_cache integer DEFAULT 0,
-    visible boolean DEFAULT true
+    visible boolean DEFAULT true,
+    category character varying(255) DEFAULT 'Other'::character varying
 );
 
 
@@ -1533,4 +1534,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150227154100');
 INSERT INTO schema_migrations (version) VALUES ('20150227173610');
 
 INSERT INTO schema_migrations (version) VALUES ('20150303153620');
+
+INSERT INTO schema_migrations (version) VALUES ('20150313135017');
 

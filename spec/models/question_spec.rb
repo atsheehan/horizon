@@ -3,6 +3,16 @@ require "rails_helper"
 describe Question do
   it_behaves_like "a votable object"
 
+  describe '.filtered' do
+    it 'delegates to the QuestionFilter filter method' do
+      question_filter = stub
+      newest = stub
+      QuestionFilter.expects(:new).with("newest").returns(question_filter)
+      question_filter.expects(:filter).returns(newest)
+      expect(Question.filtered("newest")).to eq newest
+    end
+  end
+
   describe 'scopes' do
     describe 'queued' do
       it 'returns questions that are in the question_queue and not done' do

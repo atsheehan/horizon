@@ -11,11 +11,14 @@
   = form_for @question do |f|
     = field_set_tag "Ask Question" do
 
-      = f.label :title, "Title"
+      = f.label :title
       = f.text_field :title
 
-      = f.label :body, "Body"
+      = f.label :body
       = f.text_area :body, rows: 15
+
+      = f.label :category
+      = f.select :category, QuestionFilter::CATEGORIES, selected: "Other", include_blank: false
 
       = f.submit "Ask Question", class: "button"
 

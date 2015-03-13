@@ -16,40 +16,15 @@ describe QuestionsController do
   end
 
   describe "#index" do
-    context 'query param is unanswered' do
-      it 'only returns unanswered questions and sets filter to unanswered' do
-        unanswered = stub
-        Question.stubs(:unanswerd).returns(unanswered)
-        QuestionDecorator.stubs(:decorate_collection).returns(unanswered)
-        get :index, query: 'unanswered'
-        expect(assigns(:questions)).to eq unanswered
-        expect(assigns(:filter)).to eq 'unanswered'
-      end
-    end
+    it 'assigns a questions and filters instance variables' do
+      questions = stub
+      filtered = stub
+      Question.stubs(:filtered).returns(filtered)
+      QuestionDecorator.stubs(:decorate_collection).with(filtered).returns(questions)
 
-    context 'query param is queued' do
-      it 'only returns queued questions and sets filter to queued' do
-        question_queue = stub
-        questions = stub
-        queued = stub(sort_by: questions)
-        Question.stubs(:queued).returns(queued)
-        QuestionDecorator.stubs(:decorate_collection).with(questions).returns(question_queue)
-
-        get :index, query: 'queued'
-        expect(assigns(:questions)).to eq question_queue
-        expect(assigns(:filter)).to eq 'queued'
-      end
-    end
-
-    context 'query param not passed' do
-      it 'returns * questions orderedby created at and sets filter to newest' do
-        newest = stub
-        Question.stubs(:order).with(created_at: :desc).returns(newest)
-        QuestionDecorator.stubs(:decorate_collection).returns(newest)
-        get :index
-        expect(assigns(:questions)).to eq newest
-        expect(assigns(:filter)).to eq 'newest'
-      end
+      get :index, query: 'unanswered'
+      expect(assigns(:questions)).to eq questions
+      expect(assigns(:filter)).to eq 'unanswered'
     end
   end
 
