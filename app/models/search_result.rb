@@ -8,7 +8,7 @@ class SearchResult
   end
 
   def lessons
-    user ? filtered_lessons.visible_for(user) : filtered_lessons.public
+    !user.guest? ? filtered_lessons.visible_for(user) : filtered_lessons.public
   end
 
   def questions

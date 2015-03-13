@@ -52,7 +52,7 @@ describe QuestionsController do
       put :update, id: question.id, question: { accepted_answer_id: answer.id }
 
       question.reload
-      expect(question.visible).to eq(true)
+      expect(question.accepted_answer_id).to eq nil
     end
   end
 end

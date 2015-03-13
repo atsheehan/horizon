@@ -4,6 +4,52 @@ describe User do
   it { should have_many(:received_feed_items).dependent(:destroy) }
   it { should have_many(:generated_feed_items).dependent(:destroy) }
 
+  describe '.build_for_views' do
+    context 'user from session exists' do
+      it 'returns that user from the DB' do
+        user = FactoryGirl.create(:user)
+        expect(User.build_for_views(user.id)).to eq user
+      end
+    end
+
+    context 'user from session does not exist' do
+      it 'returns a Guest' do
+        expect(User.build_for_views(nil)).to be_kind_of(Guest)
+      end
+    end
+  end
+
+  describe '#can_edit?' do
+    let(:user) { FactoryGirl.create(:user, role: role) }
+    let(:question) { FactoryGirl.create(:question, user: user) }
+
+    context 'user is an admin' do
+      let(:role) { "admin" }
+
+      it 'returns true' do
+        expect(user.can_edit?(question)).to eq true
+      end
+    end
+
+    context 'user is not an admin' do
+      let(:role) { "member" }
+
+      context 'user created the question' do
+        it 'returns true' do
+          expect(user.can_edit?(question)).to eq true
+        end
+      end
+
+      context 'user did not create the question' do
+        let(:other_user) { FactoryGirl.create(:user) }
+
+        it 'returns false' do
+          expect(other_user.can_edit?(question)).to eq false
+        end
+      end
+    end
+  end
+
   describe ".find_or_create_from_omniauth" do
     let(:uid) { "123456" }
     let(:provider) { "github" }

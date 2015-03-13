@@ -32,18 +32,20 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    # if user, allowed to answer
     question = Question.find(params[:id])
-    question.update(update_params)
-    redirect_to question_path(question), info: "Question updated."
-    # else
-    # redirect with an unauthorized message
+
+    if current_user.can_edit?(question)
+      question.update(update_params)
+      redirect_to question_path(question), info: "Question updated."
+    else
+      redirect_to question_path(question), alert: "You don't have access to edit this."
+    end
   end
 
   def destroy
     @question = Question.find(params[:id])
 
-    if @question.destroyable_by?(current_user)
+    if current_user.can_edit?(@question)
       @question.update_attributes(visible: false)
       redirect_to questions_path, info: "Successfully deleted question"
     else

@@ -46,7 +46,7 @@
         %br
         - if @question.editable_by?(current_user)
           = link_to "Edit Question", edit_question_path(@question), class: "button success tiny"
-        - if @question.destroyable_by?(current_user)
+        - if current_user.can_edit?(@question)
           = link_to "Delete question", question_path(@question),
             method: :delete,
             class: "button alert tiny",
@@ -112,7 +112,7 @@
               class: "button tiny alert",
               data: { confirm: "Are you sure?" }
 
-- if current_user
+- unless current_user.guest?
   #new-answer
     = form_for [@question, @answer] do |f|
       = field_set_tag "Answer Question" do

@@ -19,7 +19,7 @@ describe SearchResult do
     let(:type) { nil }
 
     context "no user" do
-      let(:user) { nil }
+      let(:user) { Guest.new }
 
       it 'returns only public lessons' do
         public_lessons = [FactoryGirl.create(:lesson)].map{|l|l.id}
@@ -124,7 +124,7 @@ describe SearchResult do
   end
 
   describe '#total' do
-    let(:search_result) { SearchResult.new('javascript', type, nil) }
+    let(:search_result) { SearchResult.new('javascript', type, Guest.new) }
 
     context "type filter is not set" do
       let(:type) { nil }

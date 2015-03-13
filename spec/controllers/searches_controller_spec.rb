@@ -8,7 +8,7 @@ describe SearchesController do
       questions = stub(:questions)
       results = stub(:results)
 
-      SearchResult.expects(:new).with('active record', 'challenge', nil).returns(search_result)
+      SearchResult.expects(:new).with('active record', 'challenge', anything).returns(search_result)
 
       search_result.stubs(:type).returns('challenge')
       search_result.stubs(:lessons).returns(lessons)

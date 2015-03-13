@@ -2,7 +2,7 @@ class AnswerDecorator < Draper::Decorator
   delegate_all
 
   def display_upvote
-    if h.current_user
+    if !h.current_user.guest?
       h.link_to(h.answer_upvotes_path(object), method: :post, id: "upvote") do
         h.content_tag(:i, '', class: "fi-arrow-up upvote #{upvote_cast?}")
       end
@@ -10,7 +10,7 @@ class AnswerDecorator < Draper::Decorator
   end
 
   def display_downvote
-    if h.current_user
+    if !h.current_user.guest?
       h.link_to(h.answer_downvotes_path(object), method: :post, id: "downvote") do
         h.content_tag(:i, '', class: "fi-arrow-down downvote #{downvote_cast?}")
       end

@@ -76,14 +76,10 @@ class User < ActiveRecord::Base
 
   scope :admins, -> { where(role: "admins") }
 
-  def to_param
-    username
-  end
-
   def self.find_or_create_from_omniauth(auth)
     account_keys = { uid: auth["uid"], provider: auth["provider"] }
 
-    user = User.find_or_initialize_by(account_keys)
+    user = find_or_initialize_by(account_keys)
     user.email = auth["info"]["email"]
     user.username = auth["info"]["nickname"]
     user.name = auth["info"]["name"]
@@ -91,10 +87,30 @@ class User < ActiveRecord::Base
     user
   end
 
+  def self.build_for_views(id)
+    if id.present?
+      find_by(id: id)
+    else
+      Guest.new
+    end
+  end
+
+  def guest?
+    false
+  end
+
+  def to_param
+    username
+  end
+
   def ensure_authentication_token
     if token.blank?
       self.token = SecureRandom.urlsafe_base64
     end
+  end
+
+  def can_edit?(question)
+    self == question.user || admin?
   end
 
   def admin?

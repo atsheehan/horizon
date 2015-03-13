@@ -6,7 +6,7 @@ class QuestionDecorator < Draper::Decorator
   end
 
   def upvote
-    if h.current_user
+    if !h.current_user.guest?
       h.link_to(h.question_upvotes_path(object), method: :post, id: "upvote") do
         h.content_tag(:i, '', class: "fi-arrow-up upvote #{upvote_cast?}")
       end
@@ -16,7 +16,7 @@ class QuestionDecorator < Draper::Decorator
   end
 
   def downvote
-    if h.current_user
+    if !h.current_user.guest?
       h.link_to(h.question_downvotes_path(object), method: :post, id: "downvote") do
         h.content_tag(:i, '', class: "fi-arrow-down downvote #{downvote_cast?}")
       end
@@ -46,7 +46,7 @@ class QuestionDecorator < Draper::Decorator
   end
 
   def admin_access?
-    h.current_user.role == 'admin' if h.current_user
+    h.current_user.role == 'admin' if !h.current_user.guest?
   end
 
   def open?

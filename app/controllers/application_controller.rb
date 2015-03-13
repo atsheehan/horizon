@@ -30,9 +30,9 @@ class ApplicationController < ActionController::Base
 
   def authenticate_via_headers
     authenticate_with_http_basic do |username, token|
-      user = User.find_by("lower(username) = ?", username.downcase)
+      user = User.find_by("lower(username) = ?", username.downcase) || Guest.new
 
-      if !user.nil? && token == user.token
+      if !user.guest? && token == user.token
         set_current_user(user)
       else
         request_http_basic_authentication

@@ -3,17 +3,21 @@ class LessonsController < ApplicationController
     @tagged = params[:tagged]
     @active_type = params[:type]
     @order = params[:order]
-    
+
     @tags = Tag.order(:name).all
     @lessons = filter_lessons(ordered_lessons)
   end
 
   def show
     @lesson = Lesson.find_by!(slug: params[:slug])
-    @rating = @lesson.ratings.find_or_initialize_by(user: current_user)
+    @rating = rating_for_current_user
   end
 
   private
+
+  def rating_for_current_user
+    current_user.guest? ? nil : @lesson.ratings.find_or_initialize_by(user: current_user)
+  end
 
   def ordered_lessons
     if params[:order] == "most_recent"
@@ -56,7 +60,7 @@ class LessonsController < ApplicationController
   end
 
   def visible_filter(user, lessons)
-    if user
+    if !user.guest?
       lessons.visible_for(user)
     else
       lessons.public
