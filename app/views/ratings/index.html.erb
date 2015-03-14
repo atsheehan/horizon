@@ -1,0 +1,24 @@
+<h1>Ratings</h1>
+
+<table>
+  <tr>
+    <th>Lesson</th>
+    <th>User</th>
+    <th>Clarity</th>
+    <th>Helpfulness</th>
+    <th>Comments</th>
+  </tr>
+  <% @ratings.each do |rating| %>
+    <tr>
+      <td><%= rating.lesson.title %></td>
+      <td><%= rating.user.name %></td>
+      <td><%= rating.clarity %></td>
+      <td><%= rating.helpfulness %></td>
+      <td><%= rating.comment %></td>
+    </tr>
+  <% end %>
+
+</table>
+<div class="text-center">
+  <%= paginate @ratings %>
+</div>

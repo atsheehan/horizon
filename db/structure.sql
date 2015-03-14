@@ -95,6 +95,39 @@ ALTER SEQUENCE announcements_id_seq OWNED BY announcements.id;
 
 
 --
+-- Name: answer_comments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE answer_comments (
+    id integer NOT NULL,
+    body text NOT NULL,
+    answer_id integer NOT NULL,
+    user_id integer NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: answer_comments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE answer_comments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: answer_comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE answer_comments_id_seq OWNED BY answer_comments.id;
+
+
+--
 -- Name: answers; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -105,7 +138,8 @@ CREATE TABLE answers (
     body text NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    searchable tsvector
+    searchable tsvector,
+    vote_cache integer DEFAULT 0
 );
 
 
@@ -239,7 +273,7 @@ CREATE TABLE feed_items (
     subject_id integer NOT NULL,
     subject_type character varying(255) NOT NULL,
     recipient_id integer NOT NULL,
-    actor_id integer NOT NULL,
+    actor_id integer,
     verb character varying(255) NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
@@ -299,6 +333,36 @@ ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
 
 
 --
+-- Name: lesson_tags; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE lesson_tags (
+    id integer NOT NULL,
+    lesson_id integer NOT NULL,
+    tag_id integer NOT NULL
+);
+
+
+--
+-- Name: lesson_tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE lesson_tags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: lesson_tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE lesson_tags_id_seq OWNED BY lesson_tags.id;
+
+
+--
 -- Name: lessons; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -313,7 +377,6 @@ CREATE TABLE lessons (
     archive character varying(255),
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    "position" integer NOT NULL,
     visibility character varying(255) DEFAULT 'public'::character varying NOT NULL
 );
 
@@ -335,6 +398,39 @@ CREATE SEQUENCE lessons_id_seq
 --
 
 ALTER SEQUENCE lessons_id_seq OWNED BY lessons.id;
+
+
+--
+-- Name: question_comments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE question_comments (
+    id integer NOT NULL,
+    body text NOT NULL,
+    question_id integer NOT NULL,
+    user_id integer NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: question_comments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE question_comments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: question_comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE question_comments_id_seq OWNED BY question_comments.id;
 
 
 --
@@ -372,6 +468,38 @@ ALTER SEQUENCE question_queues_id_seq OWNED BY question_queues.id;
 
 
 --
+-- Name: question_watchings; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE question_watchings (
+    id integer NOT NULL,
+    question_id integer NOT NULL,
+    user_id integer NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: question_watchings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE question_watchings_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: question_watchings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE question_watchings_id_seq OWNED BY question_watchings.id;
+
+
+--
 -- Name: questions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -385,7 +513,10 @@ CREATE TABLE questions (
     accepted_answer_id integer,
     answers_count integer DEFAULT 0 NOT NULL,
     searchable tsvector,
-    question_queue_id integer
+    question_queue_id integer,
+    vote_cache integer DEFAULT 0,
+    visible boolean DEFAULT true,
+    category character varying(255) DEFAULT 'Other'::character varying
 );
 
 
@@ -522,6 +653,36 @@ ALTER SEQUENCE submissions_id_seq OWNED BY submissions.id;
 
 
 --
+-- Name: tags; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE tags (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    description character varying(255)
+);
+
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE tags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE tags_id_seq OWNED BY tags.id;
+
+
+--
 -- Name: team_memberships; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -597,8 +758,8 @@ CREATE TABLE users (
     updated_at timestamp without time zone,
     role character varying(255) DEFAULT 'member'::character varying NOT NULL,
     token character varying(255) NOT NULL,
-    first_name character varying(255) NOT NULL,
-    last_name character varying(255) NOT NULL
+    first_name character varying(255),
+    last_name character varying(255)
 );
 
 
@@ -622,6 +783,40 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
+-- Name: votes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE votes (
+    id integer NOT NULL,
+    votable_id integer NOT NULL,
+    user_id integer NOT NULL,
+    votable_type character varying(255) NOT NULL,
+    score integer DEFAULT 0,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: votes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE votes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: votes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE votes_id_seq OWNED BY votes.id;
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -633,6 +828,13 @@ ALTER TABLE ONLY announcement_receipts ALTER COLUMN id SET DEFAULT nextval('anno
 --
 
 ALTER TABLE ONLY announcements ALTER COLUMN id SET DEFAULT nextval('announcements_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY answer_comments ALTER COLUMN id SET DEFAULT nextval('answer_comments_id_seq'::regclass);
 
 
 --
@@ -681,6 +883,13 @@ ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY lesson_tags ALTER COLUMN id SET DEFAULT nextval('lesson_tags_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY lessons ALTER COLUMN id SET DEFAULT nextval('lessons_id_seq'::regclass);
 
 
@@ -688,7 +897,21 @@ ALTER TABLE ONLY lessons ALTER COLUMN id SET DEFAULT nextval('lessons_id_seq'::r
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY question_comments ALTER COLUMN id SET DEFAULT nextval('question_comments_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY question_queues ALTER COLUMN id SET DEFAULT nextval('question_queues_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY question_watchings ALTER COLUMN id SET DEFAULT nextval('question_watchings_id_seq'::regclass);
 
 
 --
@@ -723,6 +946,13 @@ ALTER TABLE ONLY submissions ALTER COLUMN id SET DEFAULT nextval('submissions_id
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY team_memberships ALTER COLUMN id SET DEFAULT nextval('team_memberships_id_seq'::regclass);
 
 
@@ -741,6 +971,13 @@ ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regcl
 
 
 --
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY votes ALTER COLUMN id SET DEFAULT nextval('votes_id_seq'::regclass);
+
+
+--
 -- Name: announcement_receipts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -754,6 +991,14 @@ ALTER TABLE ONLY announcement_receipts
 
 ALTER TABLE ONLY announcements
     ADD CONSTRAINT announcements_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: answer_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY answer_comments
+    ADD CONSTRAINT answer_comments_pkey PRIMARY KEY (id);
 
 
 --
@@ -805,6 +1050,14 @@ ALTER TABLE ONLY identities
 
 
 --
+-- Name: lesson_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY lesson_tags
+    ADD CONSTRAINT lesson_tags_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: lessons_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -813,11 +1066,27 @@ ALTER TABLE ONLY lessons
 
 
 --
+-- Name: question_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY question_comments
+    ADD CONSTRAINT question_comments_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: question_queues_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY question_queues
     ADD CONSTRAINT question_queues_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: question_watchings_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY question_watchings
+    ADD CONSTRAINT question_watchings_pkey PRIMARY KEY (id);
 
 
 --
@@ -853,6 +1122,14 @@ ALTER TABLE ONLY submissions
 
 
 --
+-- Name: tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY tags
+    ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: team_memberships_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -874,6 +1151,14 @@ ALTER TABLE ONLY teams
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: votes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY votes
+    ADD CONSTRAINT votes_pkey PRIMARY KEY (id);
 
 
 --
@@ -989,6 +1274,20 @@ CREATE INDEX index_identities_on_user_id ON identities USING btree (user_id);
 
 
 --
+-- Name: index_lesson_tags_on_lesson_id_and_tag_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_lesson_tags_on_lesson_id_and_tag_id ON lesson_tags USING btree (lesson_id, tag_id);
+
+
+--
+-- Name: index_lesson_tags_on_tag_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_lesson_tags_on_tag_id ON lesson_tags USING btree (tag_id);
+
+
+--
 -- Name: index_lessons_on_searchable; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1007,6 +1306,13 @@ CREATE UNIQUE INDEX index_lessons_on_slug ON lessons USING btree (slug);
 --
 
 CREATE INDEX index_lessons_on_visibility ON lessons USING btree (visibility);
+
+
+--
+-- Name: index_question_watchings_on_question_id_and_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_question_watchings_on_question_id_and_user_id ON question_watchings USING btree (question_id, user_id);
 
 
 --
@@ -1261,5 +1567,31 @@ INSERT INTO schema_migrations (version) VALUES ('20150212145515');
 
 INSERT INTO schema_migrations (version) VALUES ('20150212145738');
 
+INSERT INTO schema_migrations (version) VALUES ('20150214174452');
+
+INSERT INTO schema_migrations (version) VALUES ('20150215023727');
+
 INSERT INTO schema_migrations (version) VALUES ('20150216154949');
+
+INSERT INTO schema_migrations (version) VALUES ('20150216231227');
+
+INSERT INTO schema_migrations (version) VALUES ('20150219181529');
+
+INSERT INTO schema_migrations (version) VALUES ('20150219184301');
+
+INSERT INTO schema_migrations (version) VALUES ('20150219185122');
+
+INSERT INTO schema_migrations (version) VALUES ('20150224193238');
+
+INSERT INTO schema_migrations (version) VALUES ('20150226194335');
+
+INSERT INTO schema_migrations (version) VALUES ('20150226195210');
+
+INSERT INTO schema_migrations (version) VALUES ('20150227154100');
+
+INSERT INTO schema_migrations (version) VALUES ('20150227173610');
+
+INSERT INTO schema_migrations (version) VALUES ('20150303153620');
+
+INSERT INTO schema_migrations (version) VALUES ('20150313135017');
 

@@ -1,5 +1,10 @@
 class RatingsController < ApplicationController
   before_action :authenticate_user!
+  before_action :authorize_admin!, only: [:index]
+
+  def index
+    @ratings = Rating.order(:created_at).page(params[:page])
+  end
 
   def create
     @lesson = Lesson.find_by!(slug: params[:lesson_slug])

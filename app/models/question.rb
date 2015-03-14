@@ -3,22 +3,35 @@ class Question < ActiveRecord::Base
   belongs_to :question_queue
   belongs_to :accepted_answer, class_name: "Answer"
   has_many :answers, dependent: :destroy
+  has_many :question_comments, dependent: :destroy
+  has_many :question_watchings, dependent: :destroy
+  include Votable
 
   validates :title, presence: true, length: { in: 10..200 }
   validates :body, presence: true, length: { in: 15..10000 }
   validates :user, presence: true
+  validates :category, inclusion: { in: QuestionFilter::CATEGORIES }
 
   validate :accepted_answer_belongs_to_question
 
   scope :queued, ->() {
     joins(:question_queue).
-    where("questions.question_queue_id IS NOT NULL AND question_queues.status NOT LIKE '%done%'")
+      where("questions.question_queue_id IS NOT NULL AND \
+        question_queues.status NOT LIKE '%done%'")
   }
+
+  def self.filtered(query)
+    QuestionFilter.new(query).filter
+  end
 
   def accepted_answer_belongs_to_question
     if accepted_answer && !answers.include?(accepted_answer)
       errors.add(:accepted_answer_id, "must belong to this question")
     end
+  end
+
+  def has_accepted_answer?
+    accepted_answer_id ? true : false
   end
 
   def sorted_answers
@@ -35,6 +48,22 @@ class Question < ActiveRecord::Base
 
   def self.search(query)
     where("searchable @@ plainto_tsquery(?)", query)
+  end
+
+  def editable_by?(user)
+    self.user == user
+  end
+
+  def add_watcher(user)
+    question_watchings.find_or_create_by!(user: user)
+  end
+
+  def watched_by?(user)
+    if user.guest?
+      false
+    else
+      question_watchings.find_by(user: user).present?
+    end
   end
 
   private

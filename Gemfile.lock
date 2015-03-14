@@ -35,6 +35,9 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     addressable (2.3.6)
+    airbrake (4.1.0)
+      builder
+      multi_json
     arel (5.0.1.20140414130214)
     ast (2.0.0)
     astrolabe (1.3.0)
@@ -43,9 +46,6 @@ GEM
       addressable (>= 2.3.1)
       extlib (>= 0.9.15)
       multi_json (>= 1.0.0)
-    bugsnag (2.5.0)
-      httparty (>= 0.6, < 1.0)
-      multi_json (~> 1.0)
     builder (3.2.2)
     capybara (2.3.0)
       mime-types (>= 1.16)
@@ -68,6 +68,8 @@ GEM
       simplecov (>= 0.7)
       term-ansicolor
       thor
+    crack (0.4.2)
+      safe_yaml (~> 1.0.0)
     crass (0.2.1)
     database_cleaner (1.4.0)
     diff-lcs (1.2.5)
@@ -90,6 +92,9 @@ GEM
       activesupport (>= 3.0.0)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
+    flowdock (0.5.0)
+      httparty (~> 0.7)
+      multi_json
     fog (1.23.0)
       fog-brightbox
       fog-core (~> 1.23)
@@ -117,6 +122,9 @@ GEM
     foundation-rails (5.3.0.1)
       railties (>= 3.1.0)
       sass (>= 3.2.0)
+    fuubar (2.0.0)
+      rspec (~> 3.0)
+      ruby-progressbar (~> 1.4)
     google-api-client (0.8.2)
       activesupport (>= 3.2)
       addressable (~> 2.3)
@@ -150,6 +158,9 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.1)
     jwt (1.2.1)
+    kaminari (0.16.3)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     kgio (2.9.2)
     launchcop (0.0.3)
       rubocop
@@ -158,10 +169,13 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    metaclass (0.0.4)
     method_source (0.8.2)
     mime-types (1.25.1)
     mini_portile (0.6.0)
     minitest (5.3.5)
+    mocha (1.1.0)
+      metaclass (~> 0.0.1)
     multi_json (1.10.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
@@ -238,6 +252,10 @@ GEM
       mime-types (>= 1.16)
     retriable (1.4.1)
     rouge (1.4.0)
+    rspec (3.0.0)
+      rspec-core (~> 3.0.0)
+      rspec-expectations (~> 3.0.0)
+      rspec-mocks (~> 3.0.0)
     rspec-core (3.0.2)
       rspec-support (~> 3.0.0)
     rspec-expectations (3.0.2)
@@ -261,6 +279,7 @@ GEM
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.4)
     ruby-progressbar (1.7.1)
+    safe_yaml (1.0.4)
     sanitize (3.0.3)
       crass (~> 0.2.0)
       nokogiri (>= 1.4.4)
@@ -321,6 +340,10 @@ GEM
       rack
       raindrops (~> 0.7)
     valid_attribute (2.0.0)
+    vcr (2.9.3)
+    webmock (1.20.4)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
     xpath (2.0.0)
       nokogiri (~> 1.3)
 
@@ -328,7 +351,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bugsnag
+  airbrake
   capybara
   carrierwave
   coveralls
@@ -336,14 +359,19 @@ DEPENDENCIES
   dotenv-rails
   draper (~> 1.3)
   factory_girl
+  flowdock
   fog
   foundation-rails
+  fuubar
   google-api-client
   haml-rails
+  httparty
   jbuilder
   jquery-rails
+  kaminari
   launchcop
   launchy
+  mocha
   newrelic_rpm
   omniauth-github
   omniauth-launch-pass!
@@ -364,3 +392,5 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
   unicorn
   valid_attribute
+  vcr
+  webmock

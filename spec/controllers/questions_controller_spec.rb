@@ -3,42 +3,28 @@ require "rails_helper"
 describe QuestionsController do
   let(:user) { FactoryGirl.create(:user) }
 
+  describe "#destroy" do
+    let(:question) { FactoryGirl.create(:question) }
+
+    it 'sets the question visible attribute to false' do
+      session[:user_id] = question.user.id
+      expect(question.visible).to eq true
+
+      delete :destroy, id: question.id
+      expect(question.reload.visible).to eq false
+    end
+  end
+
   describe "#index" do
-    context 'query param is unanswered' do
-      it 'only returns unanswered questions and sets filter to unanswered' do
-        unanswered = double
-        allow(Question).to receive(:unanswered).and_return(unanswered)
-        allow(QuestionDecorator).to receive(:decorate_collection).and_return(unanswered)
-        get :index, query: 'unanswered'
-        expect(assigns(:questions)).to eq unanswered
-        expect(assigns(:filter)).to eq 'unanswered'
-      end
-    end
+    it 'assigns a questions and filters instance variables' do
+      questions = stub
+      filtered = stub
+      Question.stubs(:filtered).returns(filtered)
+      QuestionDecorator.stubs(:decorate_collection).with(filtered).returns(questions)
 
-    context 'query param is queued' do
-      it 'only returns queued questions and sets filter to queued' do
-        queued = double
-        unsorted_queue = double(sort_by: queued)
-        allow(Question).to receive(:queued).and_return(unsorted_queue)
-        allow(QuestionDecorator).to receive(:decorate_collection).and_return(queued)
-        get :index, query: 'queued'
-        expect(assigns(:questions)).to eq queued
-        expect(assigns(:filter)).to eq 'queued'
-      end
-    end
-
-    context 'query param not passed' do
-      it 'returns all questions ordered by created at and sets filter to newest' do
-        newest = double
-        allow(Question).
-          to receive(:order).
-          with(created_at: :desc).
-          and_return(newest)
-        allow(QuestionDecorator).to receive(:decorate_collection).and_return(newest)
-        get :index
-        expect(assigns(:questions)).to eq newest
-        expect(assigns(:filter)).to eq 'newest'
-      end
+      get :index, query: 'unanswered'
+      expect(assigns(:questions)).to eq questions
+      expect(assigns(:filter)).to eq 'unanswered'
     end
   end
 
@@ -63,14 +49,10 @@ describe QuestionsController do
       question = FactoryGirl.create(:question)
       answer = FactoryGirl.create(:answer, question: question)
 
-      expect {
-        put :update, id: question.id, question: {
-          accepted_answer_id: answer.id
-        }
-      }.to raise_error(ActiveRecord::RecordNotFound)
+      put :update, id: question.id, question: { accepted_answer_id: answer.id }
 
       question.reload
-      expect(question.accepted_answer).to_not eq(answer)
+      expect(question.accepted_answer_id).to eq nil
     end
   end
 end

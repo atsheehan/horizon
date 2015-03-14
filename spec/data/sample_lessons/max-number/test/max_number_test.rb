@@ -33,7 +33,8 @@ describe 'max_number' do
   def disable_instance_methods(klass, method_names)
     method_names.each do |method|
       klass.any_instance.stub(method) do
-        raise ScriptError.new("The `#{method}` method cannot be used for this test.")
+        raise ScriptError.
+          new("The `#{method}` method cannot be used for this test.")
       end
     end
   end

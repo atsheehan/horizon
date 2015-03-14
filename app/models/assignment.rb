@@ -7,6 +7,10 @@ class Assignment < ActiveRecord::Base
   validates :required, inclusion: [true, false]
   validates :due_on, presence: true
 
+  include Feedster::Subject
+  generates_feed_item :create,
+    recipients: ->(c) { c.team.users }
+
   def submitted?(user)
     lesson.submissions.where(user: user).count > 0
   end
@@ -53,8 +57,8 @@ SELECT
 FROM users
   INNER JOIN team_memberships ON users.id = team_memberships.user_id
   INNER JOIN teams ON teams.id = team_memberships.team_id
-  LEFT OUTER JOIN (SELECT * FROM submissions WHERE lesson_id = ?) subs ON subs.user_id = users.id WHERE teams.id = ?
+  LEFT OUTER JOIN (SELECT * FROM submissions WHERE lesson_id = ?) subs
+ON subs.user_id = users.id WHERE teams.id = ?
 ORDER BY users.username ASC, subs.created_at DESC
 SQL
-
 end

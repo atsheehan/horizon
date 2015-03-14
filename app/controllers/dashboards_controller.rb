@@ -7,5 +7,7 @@ class DashboardsController < ApplicationController
     @upcoming_core_assignments = current_user.core_assignments
     @calendar_events = Calendar.events(current_user.calendars)
     @teams = current_user.teams
+    @feed_items = Feedster::DecoratedCollection.new(
+      current_user.received_feed_items.order('created_at DESC').limit(25)).decorate
   end
 end

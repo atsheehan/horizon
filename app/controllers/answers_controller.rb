@@ -7,11 +7,12 @@ class AnswersController < ApplicationController
     @answer.user = current_user
 
     if @answer.save
+      @answer.question.add_watcher(current_user)
       flash[:info] = "Answer saved."
       redirect_to question_path(@question)
     else
       flash[:alert] = "Failed to save answer."
-      render "questions/show"
+      redirect_to question_path(@question)
     end
   end
 

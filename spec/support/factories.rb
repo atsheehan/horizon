@@ -1,11 +1,14 @@
 FactoryGirl.define do
+  factory :vote do
+    user
+  end
+
   factory :lesson do
     type "article"
     sequence(:title) { |n| "Article #{n}" }
     sequence(:slug) { |n| "article-#{n}" }
     description "Describes the article."
     body "# Article Foo\n\nThis is an article."
-    sequence(:position) { |n| n }
     visibility "public"
 
     factory :article do
@@ -20,6 +23,15 @@ FactoryGirl.define do
           Rails.root.join("spec/data/one_file.tar.gz"))
       end
     end
+  end
+
+  factory :tag do
+    name "jquery"
+  end
+
+  factory :lesson_tag do
+    lesson
+    tag
   end
 
   factory :comment do
@@ -40,7 +52,7 @@ FactoryGirl.define do
   factory :submission do
     association :lesson, factory: :challenge
     user
-    self.public false
+    public false
 
     archive do
       Rack::Test::UploadedFile.new(Rails.root.join("spec/data/one_file.tar.gz"))
@@ -95,8 +107,7 @@ FactoryGirl.define do
   end
 
   factory :identity do
-    association :user,
-      factory: :user_without_identity
+    association :user, factory: :user_without_identity
 
     provider 'github'
     sequence(:uid) { |n| n.to_s }
@@ -118,11 +129,6 @@ FactoryGirl.define do
     role "member"
 
     factory :user do
-
-      after(:create) do |user|
-        create(:github_identity, user: user)
-      end
-
       factory :admin do
         role "admin"
       end
@@ -176,7 +182,8 @@ FactoryGirl.define do
 
   factory :announcement do
     sequence(:title) { |n| "Announcement #{n}" }
-    description "Here is a very nice description for a very nice announcement. The students shall cheer and rejoice when they see it."
+    description "Here is a very nice description for a very nice announcement.
+      The students shall cheer and rejoice when they see it."
     team
   end
 
@@ -188,6 +195,7 @@ FactoryGirl.define do
   factory :question do
     sequence(:title) { |n| "Question #{n}" }
     body "This is definitely a question."
+    category "Other"
     user
   end
 

@@ -3,13 +3,22 @@
 %ul.breadcrumbs
   %li.current Search
 
-
 - if params[:query]
   .result-count
     - if @lessons.empty? && @questions.empty?
       = "No results found for \"#{params[:query]}\"."
     - else
       = "Found #{@results} result(s) for \"#{params[:query]}\"."
+
+%dl.sub-nav{ class: "mtl" }
+  %dt Filter:
+  %dd{ class: ("active" unless @active_type) }
+    = link_to "All", searches_path(query: params[:query])
+  - Lesson::LESSON_TYPES.each do |type|
+    %dd{ class: ("active" if type == @active_type) }
+      = link_to type.capitalize.pluralize, searches_path(type: type, query: params[:query])
+  %dd{ class: ("active" if "question" == @active_type) }
+    = link_to "Questions", searches_path(type: "question", query: params[:query])
 
 - if @lessons.present?
   %h2 Lessons:
@@ -25,9 +34,9 @@
   %h2 Questions:
   .questions
     - @questions.each do |question|
-      .question.box
-        %span
-          %h3.title
-            = link_to question.title, question
-        %p.answer_count= pluralize question.answers_count, "answer"
-
+      - if question.decorate.show?
+        .question.box
+          %span
+            %h3.title
+              = link_to question.title, question
+          %p.answer_count= pluralize question.answers_count, "answer"

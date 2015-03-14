@@ -24,7 +24,6 @@ describe LessonsController do
 
       it "filters based on type" do
         challenge = FactoryGirl.create(:lesson, type: "challenge")
-        article = FactoryGirl.create(:lesson, type: "article")
 
         get :index, format: :json, type: "challenge"
         result = JSON.parse(response.body)
@@ -36,7 +35,6 @@ describe LessonsController do
       it "filters based on submittable lessons" do
         challenge = FactoryGirl.create(:lesson, type: "challenge")
         exercise = FactoryGirl.create(:lesson, type: "exercise")
-        article = FactoryGirl.create(:lesson, type: "article")
 
         get :index, format: :json, submittable: "1"
         result = JSON.parse(response.body)

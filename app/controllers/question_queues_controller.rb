@@ -10,7 +10,8 @@ class QuestionQueuesController < ApplicationController
 
   def update
     @question_queue = QuestionQueue.find(params[:id])
-    @question_queue.update_in_queue(question_queue_params[:status], current_user)
+    @question_queue.
+      update_in_queue(question_queue_params[:status], current_user)
 
     redirect_to questions_path(query: 'queued')
   end

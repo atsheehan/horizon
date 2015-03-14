@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  include Feedster::Actor
+  include Feedster::Recipient
+
   has_many :submissions, dependent: :destroy
   has_many :ratings, dependent: :destroy
   has_many :team_memberships, dependent: :destroy
@@ -6,13 +9,16 @@ class User < ActiveRecord::Base
   has_many :assignments, through: :teams
   has_many :announcements, through: :teams
   has_many :assigned_lessons, through: :assignments, source: :lesson
-  has_many :answers
-  has_many :questions
-  has_many :announcement_receipts
-  has_many :question_queues
+  has_many :answers, dependent: :destroy
+  has_many :questions, dependent: :destroy
+  has_many :announcement_receipts, dependent: :destroy
+  has_many :question_queues, dependent: :destroy
+  has_many :question_comments, dependent: :destroy
+  has_many :question_watchings, dependent: :destroy
+  has_many :answer_comments, dependent: :destroy
 
-  has_many :identities,
-    dependent: :destroy
+  has_many :identities, dependent: :destroy
+  has_many :votes
 
   validates :username, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true
@@ -21,8 +27,26 @@ class User < ActiveRecord::Base
 
   before_validation :ensure_authentication_token
 
+  scope :admins, -> { where(role: "admins") }
+
+  def self.build_for_views(id)
+    if id.present?
+      find_by(id: id)
+    else
+      Guest.new
+    end
+  end
+
   def name
     [first_name, last_name].join(" ").strip
+  end
+
+  def to_param
+    username
+  end
+
+  def guest?
+    false
   end
 
   def to_param
@@ -33,6 +57,10 @@ class User < ActiveRecord::Base
     if token.blank?
       self.token = SecureRandom.urlsafe_base64
     end
+  end
+
+  def can_edit?(question)
+    self == question.user || admin?
   end
 
   def admin?
@@ -80,17 +108,19 @@ class User < ActiveRecord::Base
 
   def latest_announcements(count)
     announcements.
-      joins("LEFT JOIN announcement_receipts ON announcements.id = announcement_receipts.announcement_id AND announcement_receipts.user_id = #{id}").
+      joins("LEFT JOIN announcement_receipts ON announcements.id = \
+        announcement_receipts.announcement_id AND \
+        announcement_receipts.user_id = #{id}").
       where("announcement_receipts.id IS NULL").
       order(created_at: :desc).limit(count)
   end
 
   def core_assignments
-     assignments.where(required: true).order(due_on: :asc)
+    assignments.where(required: true).order(due_on: :asc)
   end
 
   def non_core_assignments
-     assignments.where(required: false).order(due_on: :asc)
+    assignments.where(required: false).order(due_on: :asc)
   end
 
   private

@@ -11,8 +11,10 @@ feature "announcements" do
     end
 
     scenario "view latest 5 announcements on dashboard" do
-      old_announcements = FactoryGirl.create_list(:announcement, 2, team: team, created_at: 1.day.ago)
-      recent_announcements = FactoryGirl.create_list(:announcement, 5, team: team)
+      old_announcements = FactoryGirl.
+        create_list(:announcement, 2, team: team, created_at: 1.day.ago)
+      recent_announcements = FactoryGirl.
+        create_list(:announcement, 5, team: team)
 
       visit dashboard_path
 
@@ -20,8 +22,10 @@ feature "announcements" do
         expect(page).to have_content(announcement.title)
       end
 
-      old_announcements.each do |announcement|
-        expect(page).to_not have_content(announcement.title)
+      within '.table-announcement' do
+        old_announcements.each do |announcement|
+          expect(page).to_not have_content(announcement.title)
+        end
       end
     end
 
@@ -43,7 +47,8 @@ feature "announcements" do
 
     scenario "there is a link to announcements page from dashboard" do
       announcement1 = FactoryGirl.create(:announcement, team: team)
-      announcement2 = FactoryGirl.create(:announcement, team: team, title: "This is an announcement")
+      announcement2 = FactoryGirl.
+        create(:announcement, team: team, title: "This is an announcement")
 
       visit dashboard_path
       button = "Read all announcements for " + team.name
@@ -60,10 +65,15 @@ feature "announcements" do
       visit dashboard_path
       expect(page).to have_content(announcement.title)
 
-      click_link announcement.title
+      within '.table-announcement' do
+        click_link announcement.title
+      end
+
       click_on "Got It"
 
-      expect(page).to_not have_content(announcement.title)
+      within '.table-announcement' do
+        expect(page).to_not have_content(announcement.title)
+      end
       expect(page).to have_content("Dashboard")
     end
   end
@@ -75,7 +85,7 @@ feature "announcements" do
       sign_in_as(admin)
     end
 
-    scenario "create a new announcement" do
+    scenario "create a new announcement", :vcr do
       visit team_announcements_path(team)
 
       fill_in "Title", with: "Free donuts on the counter."

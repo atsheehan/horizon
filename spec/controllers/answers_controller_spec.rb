@@ -6,9 +6,11 @@ describe AnswersController do
       answer = FactoryGirl.create(:answer)
       session[:user_id] = answer.user.id
 
-      expect{
-        delete :destroy, id: answer.id, question_id: answer.question.id
-      }.to change{Answer.count}.by(-1)
+      expect {
+        delete :destroy,
+          id: answer.id,
+          question_id: answer.question.id
+      }.to change { Answer.count }.by(-1)
     end
   end
 end

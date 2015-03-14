@@ -7,12 +7,19 @@
   - if @lesson.accepts_submissions?
     %li= link_to "Submissions", lesson_submissions_path(@lesson)
 
-.lesson-type{ class: @lesson.type }= @lesson.type
+.lesson-container.clearfix
+  .lesson-type{ class: @lesson.type }= @lesson.type
+  %h2.lesson-title= @lesson.title
 
-%h2.lesson-title= @lesson.title
+  - if @lesson.tags.any?
+    %dl.sub-nav
+      %dt Tags:
+      - @lesson.tags.each do |tag|
+        %dd
+          %span.label.radius= tag.name
 
-#body
-  ~ render_markdown(@lesson.body)
+  #body
+    ~ render_markdown(@lesson.body)
 
 - if user_signed_in?
   #rating

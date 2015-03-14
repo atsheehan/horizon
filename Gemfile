@@ -24,9 +24,13 @@ gem "carrierwave"
 gem "fog"
 gem "sidekiq"
 gem "newrelic_rpm"
+gem "flowdock"
 gem "google-api-client"
 gem "redis"
 gem 'draper', '~> 1.3'
+gem 'httparty'
+gem 'airbrake'
+gem 'kaminari'
 
 group :development do
   gem "spring"
@@ -38,19 +42,23 @@ group :development, :test do
   gem "capybara"
   gem "factory_girl"
   gem "pry-rails"
+  gem "vcr"
   gem "shoulda-matchers"
   gem "dotenv-rails"
   gem 'launchcop'
+  gem "fuubar"
+  gem "valid_attribute"
 end
 
 group :test do
   gem "valid_attribute"
   gem "coveralls", require: false
   gem "launchy", require: false
+  gem "mocha", require: false
+  gem "webmock"
   gem "database_cleaner"
 end
 
 group :production do
   gem "rails_12factor"
-  gem "bugsnag"
 end

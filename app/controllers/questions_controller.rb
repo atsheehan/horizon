@@ -1,21 +1,16 @@
 class QuestionsController < ApplicationController
   def index
-    if params[:query] == "unanswered"
-      @questions = Question.unanswered
-      @filter = "unanswered"
-    elsif params[:query] == "queued"
-      @questions = Question.queued.sort_by{ |q| q.question_queue.sort_order }
-      @filter = "queued"
-    else
-      @questions = Question.order(created_at: :desc)
-      @filter = "newest"
-    end
-    @questions = QuestionDecorator.decorate_collection(@questions)
+    @filter = params[:query] || 'newest'
+    @questions = QuestionDecorator.decorate_collection(Question.filtered(@filter))
   end
 
   def show
     @question = Question.find(params[:id]).decorate
+    @answers = AnswerDecorator.decorate_collection(@question.sorted_answers)
     @answer = Answer.new
+    @question_comment = QuestionComment.new
+    @question_comments = @question.question_comments.limit(30)
+    @answer_comment = AnswerComment.new
   end
 
   def new
@@ -25,9 +20,9 @@ class QuestionsController < ApplicationController
   def create
     @question = Question.new(create_params)
     @question.user = current_user
-    @question.save
 
     if @question.save
+      @question.add_watcher(current_user)
       flash[:info] = "Question saved."
       redirect_to question_path(@question)
     else
@@ -37,15 +32,25 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    question = current_user.questions.find(params[:id])
-    question.update(update_params)
-    redirect_to question_path(question), info: "Your question has been updated."
+    question = Question.find(params[:id])
+
+    if current_user.can_edit?(question)
+      question.update(update_params)
+      redirect_to question_path(question), info: "Question updated."
+    else
+      redirect_to question_path(question), alert: "You don't have access to edit this."
+    end
   end
 
   def destroy
-    @question = current_user.questions.find(params[:id])
-    @question.destroy
-    redirect_to questions_path, info: "Successfully deleted question"
+    @question = Question.find(params[:id])
+
+    if current_user.can_edit?(@question)
+      @question.update_attributes(visible: false)
+      redirect_to questions_path, info: "Successfully deleted question"
+    else
+      redirect_to questions_path, alert: "You don't have access to delete this."
+    end
   end
 
   def edit
@@ -55,10 +60,10 @@ class QuestionsController < ApplicationController
   private
 
   def create_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, :category)
   end
 
   def update_params
-    params.require(:question).permit(:accepted_answer_id, :title, :body)
+    params.require(:question).permit(:accepted_answer_id, :title, :body, :category)
   end
 end

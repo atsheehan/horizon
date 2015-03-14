@@ -45,7 +45,10 @@ class SessionsController < ApplicationController
 
   private
   def find_or_build_user
-    if current_user
+    if current_user.guest?
+      identity = Identity.find_or_create_from_omniauth(auth_hash)
+      identity.user
+    else
       current_user.identities.find_or_create_by!(
         provider: auth_hash['provider'],
         uid: auth_hash['uid']
@@ -54,9 +57,6 @@ class SessionsController < ApplicationController
         "Please sign in with Launch Pass moving forward!"
 
       current_user
-    else
-      identity = Identity.find_or_create_from_omniauth(auth_hash)
-      identity.user
     end
   end
 
