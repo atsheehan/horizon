@@ -7,10 +7,12 @@ class NormalizeName < ActiveRecord::Migration
     User.reset_column_information
 
     User.find_each do |user|
-      split_name = user.name.split(" ", 2)
-      user.first_name = split_name[0]
-      user.last_name = split_name[1]
-      user.save!
+      if user.name.present?
+        split_name = user.name.split(" ", 2)
+        user.first_name = split_name[0]
+        user.last_name = split_name[1]
+        user.save!
+      end
     end
 
     remove_column :users, :name
