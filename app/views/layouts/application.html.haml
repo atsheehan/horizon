@@ -40,7 +40,7 @@
                   %li= link_to "Sign Out", session_path, method: :delete
                   %li= link_to "Dailies", "https://gist.github.com/vikram7/9ef873367000e7caae9e"
             - else
-              %li= link_to "Sign In With GitHub", new_session_path
+              %li= link_to "Sign In", new_session_path
 
           %ul.left
             %li= link_to "Browse", lessons_path
@@ -63,6 +63,10 @@
     .row
       .small-12.columns
         #content
+          - if requires_launch_pass?
+            .panel.alert-box.warning
+              Please associate your Launch Pass account!
+              = link_to 'Sign In With Launch Pass', '/auth/launch_pass'
           ~ yield
 
     = javascript_include_tag "application"

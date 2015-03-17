@@ -2,9 +2,14 @@ require "base64"
 
 module AuthenticationHelper
   def sign_in_as(user)
+    unless user.identities.first.present?
+      FactoryGirl.create(:identity, user: user)
+    end
+
+    identity = user.reload.identities.first
     OmniAuth.config.mock_auth[:github] = {
-      "provider" => user.provider,
-      "uid" => user.uid,
+      "provider" => identity.provider,
+      "uid" => identity.uid,
       "info" => {
         "nickname" => user.username,
         "email" => user.email,
@@ -15,7 +20,7 @@ module AuthenticationHelper
       }
     }
 
-    visit root_path
+    visit new_session_path
     click_link "Sign In With GitHub"
   end
 
@@ -23,7 +28,7 @@ module AuthenticationHelper
     click_link "Account"
     click_link "Sign Out"
   end
-  
+
   def set_auth_headers_for(user)
     credentials = Base64.strict_encode64("#{user.username}:#{user.token}")
     request.env["HTTP_AUTHORIZATION"] = "Basic #{credentials}"

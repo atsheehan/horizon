@@ -1,6 +1,7 @@
 require "rails_helper"
 
 describe User do
+  it { should have_many(:identities).dependent(:destroy) }
   it { should have_many(:received_feed_items).dependent(:destroy) }
   it { should have_many(:generated_feed_items).dependent(:destroy) }
 
@@ -50,45 +51,6 @@ describe User do
     end
   end
 
-  describe ".find_or_create_from_omniauth" do
-    let(:uid) { "123456" }
-    let(:provider) { "github" }
-
-    let(:auth_hash) do
-      {
-        "provider" => provider,
-        "uid" => uid,
-        "info" => {
-          "nickname" => "boblob",
-          "email" => "bob@example.com",
-          "name" => "Bob Loblaw"
-        }
-      }
-    end
-
-    it "creates a new user" do
-      user = User.find_or_create_from_omniauth(auth_hash)
-
-      expect(user.uid).to eq(uid)
-      expect(user.provider).to eq(provider)
-
-      expect(user.email).to eq("bob@example.com")
-      expect(user.username).to eq("boblob")
-      expect(user.name).to eq("Bob Loblaw")
-
-      expect(User.count).to eq(1)
-    end
-
-    it "finds an existing user" do
-      FactoryGirl.create(:user, uid: uid, provider: provider)
-
-      user = User.find_or_create_from_omniauth(auth_hash)
-      expect(user.uid).to eq(uid)
-
-      expect(User.count).to eq(1)
-    end
-  end
-
   describe "token authentication" do
     it "generates a random token when first saving" do
       user = FactoryGirl.build(:user)
@@ -102,10 +64,35 @@ describe User do
       user = FactoryGirl.create(:user)
       original_token = user.token
 
-      user.name = "Tony Montana"
+      user.first_name = "Tony"
+      user.last_name = "Montana"
       user.save!
 
       expect(user.token).to eq(original_token)
+    end
+  end
+
+  context "requiring launch pass" do
+    it "is required if I authenticate via github and I have connected" do
+      user = FactoryGirl.create(:github_identity).user
+      FactoryGirl.create(:launch_pass_identity, user: user)
+      expect(user.require_launch_pass?({
+        'provider' => 'github'
+      })).to be(true)
+    end
+
+    it "is not required if I have only authenticated via github" do
+      user = FactoryGirl.create(:github_identity).user
+      expect(user.require_launch_pass?({
+        'provider' => 'github'
+      })).to be(false)
+    end
+
+    it "is not required if I authenticate via launch pass and I'm connected" do
+      user = FactoryGirl.create(:launch_pass_identity).user
+      expect(user.require_launch_pass?({
+        'provider' => 'launch_pass'
+      })).to be(false)
     end
   end
 end

@@ -1,7 +1,11 @@
 require 'rails_helper'
 
 feature 'Queue Index' do
-  let(:ee) { FactoryGirl.create(:admin, name: 'Joe Shoe') }
+  let(:ee) do
+    FactoryGirl.create(:admin,
+      first_name: 'Joe',
+      last_name: 'Shoe')
+  end
 
   scenario "I can take a Question through the Question Queue" do
     student = FactoryGirl.create(:user)

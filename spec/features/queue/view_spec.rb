@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'viewing questions in the Queue' do
   let(:student) { FactoryGirl.create(:user) }
-  let(:ee) { FactoryGirl.create(:user, name: 'Joe Shoe') }
+  let(:ee) { FactoryGirl.create(:user) }
 
   scenario 'I can see Question Queue status on Questions' do
     qq1 = FactoryGirl.create(:question_queue, status: 'done')
@@ -18,7 +18,7 @@ feature 'viewing questions in the Queue' do
 
     visit questions_path
     expect(page).to have_content("Queued")
-    expect(page).to have_content("Assigned to Joe Shoe")
+    expect(page).to have_content("Assigned to #{ee.name}")
     expect(page).to have_content("Done")
   end
 end

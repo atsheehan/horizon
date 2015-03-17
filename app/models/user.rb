@@ -1,91 +1,33 @@
 class User < ActiveRecord::Base
-  has_many :submissions,
-    dependent: :destroy
-
-  has_many :ratings,
-    dependent: :destroy
-
-  has_many :team_memberships,
-    dependent: :destroy
-
-  has_many :teams,
-    through: :team_memberships
-
-  has_many :assignments,
-    through: :teams
-
-  has_many :announcements,
-    through: :teams
-
-  has_many :assigned_lessons,
-    through: :assignments,
-    source: :lesson
-
-  has_many :answers,
-    dependent: :destroy
-
-  has_many :questions,
-    dependent: :destroy
-
-  has_many :announcement_receipts,
-    dependent: :destroy
-
-  has_many :question_queues,
-    dependent: :destroy
-
-  has_many :question_comments,
-    dependent: :destroy
-
-  has_many :question_watchings,
-    dependent: :destroy
-
-  has_many :answer_comments,
-    dependent: :destroy
-
-  has_many :votes
-
   include Feedster::Actor
   include Feedster::Recipient
 
-  validates :username,
-    presence: true,
-    uniqueness: true
+  has_many :submissions, dependent: :destroy
+  has_many :ratings, dependent: :destroy
+  has_many :team_memberships, dependent: :destroy
+  has_many :teams, through: :team_memberships
+  has_many :assignments, through: :teams
+  has_many :announcements, through: :teams
+  has_many :assigned_lessons, through: :assignments, source: :lesson
+  has_many :answers, dependent: :destroy
+  has_many :questions, dependent: :destroy
+  has_many :announcement_receipts, dependent: :destroy
+  has_many :question_queues, dependent: :destroy
+  has_many :question_comments, dependent: :destroy
+  has_many :question_watchings, dependent: :destroy
+  has_many :answer_comments, dependent: :destroy
 
-  validates :email,
-    presence: true,
-    uniqueness: true
+  has_many :identities, dependent: :destroy
+  has_many :votes
 
-  validates :uid,
-    presence: true,
-    uniqueness: { scope: :provider }
-
-  validates :provider,
-    presence: true
-
-  validates :token,
-    presence: true
-
-  validates :role,
-    presence: true,
-    inclusion: {
-      in: ["member", "admin"]
-    }
-
+  validates :username, presence: true, uniqueness: true
+  validates :email, presence: true, uniqueness: true
+  validates :token, presence: true
+  validates :role, presence: true, inclusion: { in: ["member", "admin"] }
 
   before_validation :ensure_authentication_token
 
   scope :admins, -> { where(role: "admins") }
-
-  def self.find_or_create_from_omniauth(auth)
-    account_keys = { uid: auth["uid"], provider: auth["provider"] }
-
-    user = find_or_initialize_by(account_keys)
-    user.email = auth["info"]["email"]
-    user.username = auth["info"]["nickname"]
-    user.name = auth["info"]["name"]
-    user.save!
-    user
-  end
 
   def self.build_for_views(id)
     if id.present?
@@ -93,6 +35,14 @@ class User < ActiveRecord::Base
     else
       Guest.new
     end
+  end
+
+  def name
+    [first_name, last_name].join(" ").strip
+  end
+
+  def to_param
+    username
   end
 
   def guest?
@@ -119,6 +69,25 @@ class User < ActiveRecord::Base
 
   def has_completed_lesson?(lesson)
     lesson.submissions.has_submission_from?(self)
+  end
+
+  def authorized_member?(auth_hash)
+    if auth_hash["provider"] == 'github'
+      belongs_to_org?(github_organization, auth_hash["credentials"]["token"])
+    else
+      if auth_hash["info"] && teams = auth_hash["info"]["teams"]
+        offerings = auth_hash["info"]["product_offerings"]
+        teams.any? { |team| team["name"] == 'Admins' } ||
+          !offerings.empty?
+      else
+        false
+      end
+    end
+  end
+
+  def require_launch_pass?(auth_hash)
+    auth_hash['provider'] == 'github' &&
+      identities.where(provider: 'launch_pass').count > 0
   end
 
   def belongs_to_org?(organization, oauth_token)
@@ -162,5 +131,9 @@ class User < ActiveRecord::Base
 
   def github_orgs_url(token)
     URI("https://api.github.com/users/#{username}/orgs?access_token=#{token}")
+  end
+
+  def github_organization
+    ENV["GITHUB_ORG"]
   end
 end

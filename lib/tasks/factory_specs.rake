@@ -4,5 +4,9 @@ if defined?(RSpec)
     RSpec::Core::RakeTask.new(:factories) do |t|
       t.pattern = "./spec/factories/factories_spec.rb"
     end
+
+    RSpec::Core::RakeTask.new(:units) do |t|
+      t.pattern = Dir['spec/*/**/*_spec.rb'].reject{ |f| f['/features'] }
+    end
   end
 end
