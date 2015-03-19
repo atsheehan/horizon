@@ -13,7 +13,7 @@ class QuestionFilter
     elsif queued?
       Question.queued.sort_by { |q| q.question_queue.sort_order }
     else
-      Question.where(category: @query)
+      Question.where(category: @query).order(created_at: :desc)
     end
   end
 
@@ -31,4 +31,3 @@ class QuestionFilter
     @query == "queued"
   end
 end
-
