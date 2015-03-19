@@ -51,7 +51,6 @@ group :development, :test do
 end
 
 group :test do
-  gem "valid_attribute"
   gem "coveralls", require: false
   gem "launchy", require: false
   gem "mocha", require: false
@@ -59,6 +58,6 @@ group :test do
   gem "database_cleaner"
 end
 
-group :production do
+group :production, :staging do
   gem "rails_12factor"
 end
