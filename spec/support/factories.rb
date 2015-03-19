@@ -98,6 +98,13 @@ FactoryGirl.define do
           Rails.root.join("spec/data/binary_file.tar.gz"))
       end
     end
+
+    factory :submission_with_gitignore do
+      archive do
+        Rack::Test::UploadedFile.new(
+          Rails.root.join("spec/data/has_gitignore.tar.gz"))
+      end
+    end
   end
 
   factory :source_file do

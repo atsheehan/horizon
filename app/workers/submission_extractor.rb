@@ -14,6 +14,13 @@ class SubmissionExtractor
       system("tar zxf #{archive_path} -C #{tmpdir}")
       system("rm #{archive_path}")
 
+      gitignore_file = File.join(tmpdir, ".gitignore")
+      if File.exist?(gitignore_file)
+        @gitignore = File.readlines(gitignore_file).map { |l| l.chomp! }
+      else
+        @gitignore = []
+      end
+
       SourceFile.transaction do
         valid_source_files(tmpdir).each do |filename|
           filepath = File.join(tmpdir, filename)
@@ -79,6 +86,6 @@ class SubmissionExtractor
   end
 
   def ignored_files
-    [".git", ".DS_Store", /\._.*/, /.*~/]
+    [".git", ".DS_Store", /\._.*/, /.*~/] + @gitignore
   end
 end
