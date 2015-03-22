@@ -23,7 +23,7 @@
           %li.qa-comment
             = comment.body
             %span.comment-user
-              = " - #{comment.user.name}, #{comment_time(comment.created_at)} "
+              = " - #{comment.user.username}, #{comment_time(comment.created_at)} "
             - if comment.user == current_user
               = link_to question_question_comment_path(@question, comment),
                 method: :delete,
@@ -73,7 +73,7 @@
                 %li.qa-comment
                   = comment.body
                   %span.comment-user
-                    = " - #{comment.user.name}, #{comment_time(comment.created_at)}"
+                    = " - #{comment.user.username}, #{comment_time(comment.created_at)}"
                   - if comment.user == current_user
                     = link_to answer_answer_comment_path(answer, comment),
                       method: :delete,
