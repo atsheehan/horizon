@@ -1,45 +1,53 @@
 require "rails_helper"
 
 describe User do
+  it { should have_many(:identities).dependent(:destroy) }
   it { should have_many(:received_feed_items).dependent(:destroy) }
   it { should have_many(:generated_feed_items).dependent(:destroy) }
 
-  describe ".find_or_create_from_omniauth" do
-    let(:uid) { "123456" }
-    let(:provider) { "github" }
-
-    let(:auth_hash) do
-      {
-        "provider" => provider,
-        "uid" => uid,
-        "info" => {
-          "nickname" => "boblob",
-          "email" => "bob@example.com",
-          "name" => "Bob Loblaw"
-        }
-      }
+  describe '.build_for_views' do
+    context 'user from session exists' do
+      it 'returns that user from the DB' do
+        user = FactoryGirl.create(:user)
+        expect(User.build_for_views(user.id)).to eq user
+      end
     end
 
-    it "creates a new user" do
-      user = User.find_or_create_from_omniauth(auth_hash)
+    context 'user from session does not exist' do
+      it 'returns a Guest' do
+        expect(User.build_for_views(nil)).to be_kind_of(Guest)
+      end
+    end
+  end
 
-      expect(user.uid).to eq(uid)
-      expect(user.provider).to eq(provider)
+  describe '#can_edit?' do
+    let(:user) { FactoryGirl.create(:user, role: role) }
+    let(:question) { FactoryGirl.create(:question, user: user) }
 
-      expect(user.email).to eq("bob@example.com")
-      expect(user.username).to eq("boblob")
-      expect(user.name).to eq("Bob Loblaw")
+    context 'user is an admin' do
+      let(:role) { "admin" }
 
-      expect(User.count).to eq(1)
+      it 'returns true' do
+        expect(user.can_edit?(question)).to eq true
+      end
     end
 
-    it "finds an existing user" do
-      FactoryGirl.create(:user, uid: uid, provider: provider)
+    context 'user is not an admin' do
+      let(:role) { "member" }
 
-      user = User.find_or_create_from_omniauth(auth_hash)
-      expect(user.uid).to eq(uid)
+      context 'user created the question' do
+        it 'returns true' do
+          expect(user.can_edit?(question)).to eq true
+        end
+      end
 
-      expect(User.count).to eq(1)
+      context 'user did not create the question' do
+        let(:other_user) { FactoryGirl.create(:user) }
+
+        it 'returns false' do
+          expect(other_user.can_edit?(question)).to eq false
+        end
+      end
     end
   end
 
@@ -56,10 +64,35 @@ describe User do
       user = FactoryGirl.create(:user)
       original_token = user.token
 
-      user.name = "Tony Montana"
+      user.first_name = "Tony"
+      user.last_name = "Montana"
       user.save!
 
       expect(user.token).to eq(original_token)
+    end
+  end
+
+  context "requiring launch pass" do
+    it "is required if I authenticate via github and I have connected" do
+      user = FactoryGirl.create(:github_identity).user
+      FactoryGirl.create(:launch_pass_identity, user: user)
+      expect(user.require_launch_pass?({
+        'provider' => 'github'
+      })).to be(true)
+    end
+
+    it "is not required if I have only authenticated via github" do
+      user = FactoryGirl.create(:github_identity).user
+      expect(user.require_launch_pass?({
+        'provider' => 'github'
+      })).to be(false)
+    end
+
+    it "is not required if I authenticate via launch pass and I'm connected" do
+      user = FactoryGirl.create(:launch_pass_identity).user
+      expect(user.require_launch_pass?({
+        'provider' => 'launch_pass'
+      })).to be(false)
     end
   end
 end

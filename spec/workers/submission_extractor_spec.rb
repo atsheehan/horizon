@@ -45,6 +45,18 @@ describe SubmissionExtractor do
       expect(submission.files[0].filename).to eq(".important")
     end
 
+    it "ignores files and folders in the .gitignore file" do
+      submission = FactoryGirl.create(:submission_with_gitignore)
+
+      extractor.perform(submission.id)
+
+      expect(submission.files.count).to eq(2)
+      expect(submission.files.pluck(:filename)).to include("code.rb")
+      expect(submission.files.pluck(:filename)).to include(".gitignore")
+      expect(submission.files.pluck(:filename)).to_not include(".env")
+      expect(submission.files.pluck(:filename)).to_not include("tmp/ignore_me.txt")
+    end
+
     it "uses a placeholder for large files" do
       submission = FactoryGirl.create(:submission_with_large_file)
 
@@ -67,4 +79,5 @@ describe SubmissionExtractor do
         to eq("Binary file (14695 bytes)")
     end
   end
+
 end

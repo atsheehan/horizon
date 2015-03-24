@@ -11,6 +11,10 @@ gem "jquery-rails"
 gem "haml-rails"
 gem "foundation-rails"
 gem "omniauth-github"
+gem "omniauth-launch-pass",
+  github: 'launchacademy/omniauth-launch-pass'
+  #path: '../omniauth-launch-pass'
+
 gem "redcarpet"
 gem "rouge"
 gem "sanitize"
@@ -34,13 +38,14 @@ group :development do
 end
 
 group :development, :test do
-  gem "dotenv-rails"
   gem "rspec-rails"
   gem "capybara"
-  gem "factory_girl_rails"
+  gem "factory_girl"
   gem "pry-rails"
   gem "vcr"
   gem "shoulda-matchers"
+  gem "dotenv-rails"
+  gem 'launchcop'
   gem "fuubar"
   gem "valid_attribute"
 end
@@ -53,6 +58,6 @@ group :test do
   gem "database_cleaner"
 end
 
-group :production do
+group :production, :staging do
   gem "rails_12factor"
 end

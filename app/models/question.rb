@@ -50,20 +50,8 @@ class Question < ActiveRecord::Base
     where("searchable @@ plainto_tsquery(?)", query)
   end
 
-  def destroyable_by?(user)
-    if user
-      self.user == user || user.admin?
-    else
-      false
-    end
-  end
-
   def editable_by?(user)
-    if user
-      self.user == user
-    else
-      false
-    end
+    self.user == user
   end
 
   def add_watcher(user)
@@ -71,7 +59,11 @@ class Question < ActiveRecord::Base
   end
 
   def watched_by?(user)
-    question_watchings.find_by(user: user).present?
+    if user.guest?
+      false
+    else
+      question_watchings.find_by(user: user).present?
+    end
   end
 
   private
@@ -83,5 +75,4 @@ class Question < ActiveRecord::Base
   def create_question_queue
     update_attributes(question_queue: QuestionQueue.create)
   end
-
 end

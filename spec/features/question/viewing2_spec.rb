@@ -104,7 +104,7 @@ feature "questions" do
 
       click_button "Update Question"
 
-      expect(page).to have_content("Your question has been updated.")
+      expect(page).to have_content("Question updated.")
       expect(page).to have_content(title)
       expect(page).to have_content(body)
     end

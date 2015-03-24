@@ -49,14 +49,10 @@ describe QuestionsController do
       question = FactoryGirl.create(:question)
       answer = FactoryGirl.create(:answer, question: question)
 
-      expect {
-        put :update, id: question.id, question: {
-          accepted_answer_id: answer.id
-        }
-      }.to raise_error(ActiveRecord::RecordNotFound)
+      put :update, id: question.id, question: { accepted_answer_id: answer.id }
 
       question.reload
-      expect(question.accepted_answer).to_not eq(answer)
+      expect(question.accepted_answer_id).to eq nil
     end
   end
 end

@@ -4,6 +4,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
   add_flash_types :info
 
+  before_action :check_launch_pass_identity
+  helper_method :requires_launch_pass?
+
   protected
 
   include SessionHelper
@@ -30,9 +33,9 @@ class ApplicationController < ActionController::Base
 
   def authenticate_via_headers
     authenticate_with_http_basic do |username, token|
-      user = User.find_by("lower(username) = ?", username.downcase)
+      user = User.find_by("lower(username) = ?", username.downcase) || Guest.new
 
-      if !user.nil? && token == user.token
+      if !user.guest? && token == user.token
         set_current_user(user)
       else
         request_http_basic_authentication
@@ -53,5 +56,14 @@ class ApplicationController < ActionController::Base
     rescue ActionController::RedirectBackError
       redirect_to root_path
     end
+  end
+
+  def check_launch_pass_identity
+    @requires_launch_pass = !current_user.guest? &&
+      current_user.identities.where(provider: 'launch_pass').count == 0
+  end
+
+  def requires_launch_pass?
+    @requires_launch_pass
   end
 end

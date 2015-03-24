@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/launchacademy/omniauth-launch-pass.git
+  revision: deebaa2f2759f404b46a10ae7a73992325923ae6
+  specs:
+    omniauth-launch-pass (0.0.1)
+      omniauth-oauth2 (~> 1.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -32,6 +39,9 @@ GEM
       builder
       multi_json
     arel (5.0.1.20140414130214)
+    ast (2.0.0)
+    astrolabe (1.3.0)
+      parser (>= 2.2.0.pre.3, < 3.0)
     autoparse (0.3.3)
       addressable (>= 2.3.1)
       extlib (>= 0.9.15)
@@ -80,10 +90,7 @@ GEM
     extlib (0.9.16)
     factory_girl (4.4.0)
       activesupport (>= 3.0.0)
-    factory_girl_rails (4.4.1)
-      factory_girl (~> 4.4.0)
-      railties (>= 3.0.0)
-    faraday (0.9.0)
+    faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
     flowdock (0.5.0)
       httparty (~> 0.7)
@@ -135,12 +142,12 @@ GEM
       activesupport (>= 4.0.1)
       haml (>= 3.1, < 5.0)
       railties (>= 4.0.1)
-    hashie (2.1.2)
+    hashie (3.4.0)
     hike (1.2.3)
-    httparty (0.13.3)
+    httparty (0.13.1)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
-    i18n (0.7.0)
+    i18n (0.6.9)
     inflecto (0.0.2)
     ipaddress (0.8.0)
     jbuilder (2.1.3)
@@ -150,11 +157,13 @@ GEM
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     json (1.8.1)
-    jwt (1.0.0)
-    kaminari (0.16.1)
+    jwt (1.2.1)
+    kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
     kgio (2.9.2)
+    launchcop (0.0.3)
+      rubocop
     launchy (2.4.3)
       addressable (~> 2.3)
     mail (2.5.4)
@@ -163,8 +172,8 @@ GEM
     metaclass (0.0.4)
     method_source (0.8.2)
     mime-types (1.25.1)
-    mini_portile (0.6.2)
-    minitest (5.5.1)
+    mini_portile (0.6.0)
+    minitest (5.3.5)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     multi_json (1.10.1)
@@ -174,29 +183,32 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (2.9.1)
     newrelic_rpm (3.9.5.251)
-    nokogiri (1.6.5)
-      mini_portile (~> 0.6.0)
+    nokogiri (1.6.2.1)
+      mini_portile (= 0.6.0)
     nokogumbo (1.1.12)
       nokogiri
-    oauth2 (0.9.4)
+    oauth2 (1.0.0)
       faraday (>= 0.8, < 0.10)
       jwt (~> 1.0)
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (~> 1.2)
-    omniauth (1.2.1)
-      hashie (>= 1.2, < 3)
+    omniauth (1.2.2)
+      hashie (>= 1.2, < 4)
       rack (~> 1.0)
     omniauth-github (1.1.2)
       omniauth (~> 1.0)
       omniauth-oauth2 (~> 1.1)
-    omniauth-oauth2 (1.1.2)
+    omniauth-oauth2 (1.2.0)
       faraday (>= 0.8, < 0.10)
       multi_json (~> 1.3)
-      oauth2 (~> 0.9.3)
+      oauth2 (~> 1.0)
       omniauth (~> 1.2)
+    parser (2.2.0.3)
+      ast (>= 1.1, < 3.0)
     pg (0.17.1)
     polyglot (0.3.5)
+    powerpack (0.1.0)
     pry (0.10.0)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -206,7 +218,7 @@ GEM
     quiet_assets (1.0.3)
       railties (>= 3.1, < 5.0)
     rack (1.5.2)
-    rack-test (0.6.3)
+    rack-test (0.6.2)
       rack (>= 1.0)
     rails (4.1.4)
       actionmailer (= 4.1.4)
@@ -228,10 +240,11 @@ GEM
       activesupport (= 4.1.4)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
+    rainbow (2.0.0)
     raindrops (0.13.0)
-    rake (10.4.2)
+    rake (10.3.2)
     redcarpet (3.1.2)
-    redis (3.2.0)
+    redis (3.1.0)
     redis-namespace (1.5.1)
       redis (~> 3.0, >= 3.0.4)
     request_store (1.1.0)
@@ -259,6 +272,12 @@ GEM
       rspec-mocks (~> 3.0.0)
       rspec-support (~> 3.0.0)
     rspec-support (3.0.2)
+    rubocop (0.29.1)
+      astrolabe (~> 1.3)
+      parser (>= 2.2.0.1, < 3.0)
+      powerpack (~> 0.1)
+      rainbow (>= 1.99.1, < 3.0)
+      ruby-progressbar (~> 1.4)
     ruby-progressbar (1.7.1)
     safe_yaml (1.0.4)
     sanitize (3.0.3)
@@ -311,7 +330,7 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    tzinfo (1.2.2)
+    tzinfo (1.2.1)
       thread_safe (~> 0.1)
     uglifier (2.5.1)
       execjs (>= 0.3.0)
@@ -339,7 +358,7 @@ DEPENDENCIES
   database_cleaner
   dotenv-rails
   draper (~> 1.3)
-  factory_girl_rails
+  factory_girl
   flowdock
   fog
   foundation-rails
@@ -350,10 +369,12 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   kaminari
+  launchcop
   launchy
   mocha
   newrelic_rpm
   omniauth-github
+  omniauth-launch-pass!
   pg
   pry-rails
   quiet_assets

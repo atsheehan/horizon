@@ -58,14 +58,22 @@ describe Question do
     let(:user) { FactoryGirl.create(:user) }
     let(:question) { FactoryGirl.create(:question) }
 
-    it "returns true if user is watching question" do
-      QuestionWatching.create(user: user, question: question)
-      expect(question.watched_by?(user)).to eq true
+    context 'guest' do
+      it "returns false" do
+        expect(question.watched_by?(Guest.new)).to eq false
+      end
     end
 
+    context 'not a guest' do
+      it "returns true if user is watching question" do
+        QuestionWatching.create(user: user, question: question)
+        expect(question.watched_by?(user)).to eq true
+      end
 
-    it "returns false if user is not watching this question" do
-      expect(question.watched_by?(user)).to eq false
+
+      it "returns false if user is not watching this question" do
+        expect(question.watched_by?(user)).to eq false
+      end
     end
   end
 
@@ -130,39 +138,6 @@ describe Question do
     end
   end
 
-  describe "#destroyable_by?" do
-    let(:author) { FactoryGirl.create(:user) }
-    let(:student) { FactoryGirl.create(:user) }
-    let(:question) { FactoryGirl.create(:question, user: author) }
-    let(:ee) { FactoryGirl.create(:user, role: "admin") }
-
-    context "admin" do
-      it 'returns true' do
-        # expect(question.destroyable_by?(ee)).to be true
-        expect(question).to be_destroyable_by(ee)
-      end
-    end
-
-    context "student who wrote question" do
-      it 'returns true' do
-        # expect(question.destroyable_by?(author)).to be true
-        expect(question).to be_destroyable_by(author)
-      end
-    end
-
-    context "student who didn't write question" do
-      it 'returns false' do
-        expect(question).to_not be_destroyable_by(student)
-      end
-    end
-
-    context "as a visitor" do
-      it 'returns false' do
-        expect(question).to_not be_destroyable_by(nil)
-      end
-    end
-  end
-
   describe "editable_by?" do
     let(:author) { FactoryGirl.create(:user) }
     let(:student) { FactoryGirl.create(:user) }
@@ -194,7 +169,7 @@ describe Question do
 
     context "as a visitor" do
       it 'returns false' do
-        expect(question).to_not be_editable_by(nil)
+        expect(question).to_not be_editable_by(Guest.new)
       end
     end
   end

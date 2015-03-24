@@ -300,6 +300,39 @@ ALTER SEQUENCE feed_items_id_seq OWNED BY feed_items.id;
 
 
 --
+-- Name: identities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE identities (
+    id integer NOT NULL,
+    uid character varying(255) NOT NULL,
+    provider character varying(255) NOT NULL,
+    user_id integer NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: identities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE identities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: identities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
+
+
+--
 -- Name: lesson_tags; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -719,15 +752,14 @@ ALTER SEQUENCE teams_id_seq OWNED BY teams.id;
 
 CREATE TABLE users (
     id integer NOT NULL,
-    uid character varying(255) NOT NULL,
-    provider character varying(255) NOT NULL,
     email character varying(255) NOT NULL,
     username character varying(255) NOT NULL,
-    name character varying(255),
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     role character varying(255) DEFAULT 'member'::character varying NOT NULL,
-    token character varying(255) NOT NULL
+    token character varying(255) NOT NULL,
+    first_name character varying(255),
+    last_name character varying(255)
 );
 
 
@@ -838,6 +870,13 @@ ALTER TABLE ONLY comments ALTER COLUMN id SET DEFAULT nextval('comments_id_seq':
 --
 
 ALTER TABLE ONLY feed_items ALTER COLUMN id SET DEFAULT nextval('feed_items_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_seq'::regclass);
 
 
 --
@@ -1000,6 +1039,14 @@ ALTER TABLE ONLY comments
 
 ALTER TABLE ONLY feed_items
     ADD CONSTRAINT feed_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: identities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY identities
+    ADD CONSTRAINT identities_pkey PRIMARY KEY (id);
 
 
 --
@@ -1213,6 +1260,20 @@ CREATE INDEX index_feed_items_on_subject_id_and_subject_type ON feed_items USING
 
 
 --
+-- Name: index_identities_on_uid_and_provider; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_identities_on_uid_and_provider ON identities USING btree (uid, provider);
+
+
+--
+-- Name: index_identities_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_identities_on_user_id ON identities USING btree (user_id);
+
+
+--
 -- Name: index_lesson_tags_on_lesson_id_and_tag_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1336,13 +1397,6 @@ CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
 --
 
 CREATE UNIQUE INDEX index_users_on_lowercase_username ON users USING btree (lower((username)::text));
-
-
---
--- Name: index_users_on_uid_and_provider; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE UNIQUE INDEX index_users_on_uid_and_provider ON users USING btree (uid, provider);
 
 
 --
@@ -1505,6 +1559,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150210202615');
 
 INSERT INTO schema_migrations (version) VALUES ('20150210203036');
 
+INSERT INTO schema_migrations (version) VALUES ('20150211121322');
+
 INSERT INTO schema_migrations (version) VALUES ('20150212144048');
 
 INSERT INTO schema_migrations (version) VALUES ('20150212145515');
@@ -1514,6 +1570,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150212145738');
 INSERT INTO schema_migrations (version) VALUES ('20150214174452');
 
 INSERT INTO schema_migrations (version) VALUES ('20150215023727');
+
+INSERT INTO schema_migrations (version) VALUES ('20150216154949');
 
 INSERT INTO schema_migrations (version) VALUES ('20150216231227');
 

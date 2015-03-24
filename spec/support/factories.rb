@@ -98,6 +98,13 @@ FactoryGirl.define do
           Rails.root.join("spec/data/binary_file.tar.gz"))
       end
     end
+
+    factory :submission_with_gitignore do
+      archive do
+        Rack::Test::UploadedFile.new(
+          Rails.root.join("spec/data/has_gitignore.tar.gz"))
+      end
+    end
   end
 
   factory :source_file do
@@ -106,44 +113,60 @@ FactoryGirl.define do
     body "2 + 2 == 5\n"
   end
 
-  factory :user do
-    provider "github"
+  factory :identity do
+    association :user, factory: :user_without_identity
+
+    provider 'github'
     sequence(:uid) { |n| n.to_s }
+
+
+    factory :github_identity
+
+    factory :launch_pass_identity do
+      provider 'launch_pass'
+      sequence(:uid) { |n| n.to_s }
+    end
+  end
+
+  factory :user_without_identity, class: User do
     sequence(:username) { |n| "george_michael_#{n}" }
     sequence(:email) { |n| "gm#{n}@example.com" }
-    sequence(:name) { |n| "George Michael #{n}" }
+    first_name "George"
+    sequence(:last_name) { |n| "Michael #{n}" }
     role "member"
 
-    factory :admin do
-      role "admin"
-    end
-
-    factory :user_with_assignment_submission do
-      after(:create) do |user|
-        team_membership = create(:team_membership, user: user)
-        assignment = create(:assignment, team: team_membership.team)
-        create(:submission, lesson: assignment.lesson, user: user)
+    factory :user do
+      factory :admin do
+        role "admin"
       end
-    end
 
-    ignore do
-      calendar_args nil
-    end
-
-    factory :user_with_calendar do
-      after(:create) do |user, evaluator|
-        calendar = build(:calendar, evaluator.calendar_args)
-        team = create(:team, calendar: calendar)
-        create(:team_membership, team: team, user: user)
+      factory :user_with_assignment_submission do
+        after(:create) do |user|
+          team_membership = create(:team_membership , user: user)
+          assignment = create(:assignment, team: team_membership.team)
+          create(:submission, lesson: assignment.lesson, user: user)
+        end
       end
-    end
 
-    factory :user_with_multiple_assignment_submissions do
-      after(:create) do |user|
-        team_membership = create(:team_membership, user: user)
-        core = create(:assignment, team: team_membership.team)
-        create(:assignment, required: false, team: team_membership.team)
-        create(:submission, lesson: core.lesson, user: user)
+      ignore do
+        calendar_args nil
+      end
+
+      factory :user_with_calendar do
+        after(:create) do |user, evaluator|
+          calendar = build(:calendar, evaluator.calendar_args)
+          team = create(:team, calendar: calendar)
+          create(:team_membership, team: team, user: user)
+        end
+      end
+
+      factory :user_with_multiple_assignment_submissions do
+        after(:create) do |user|
+          team_membership = create(:team_membership , user: user)
+          core = create(:assignment, team: team_membership.team)
+          create(:assignment, required: false, team: team_membership.team)
+          create(:submission, lesson: core.lesson, user: user)
+        end
       end
     end
   end
