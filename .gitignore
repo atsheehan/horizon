@@ -37,3 +37,4 @@
 # Ignore tags
 /tag
 *.swo
+*.DS_Store
